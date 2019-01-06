@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -26,20 +25,22 @@ import com.appliance.utils.MD5;
 public class DemoController {
 
 	@Autowired
-	private DemoService DemoService;
+	private DemoService demoService;
 
 	/**
 	 * 测试MD5转换和返回字符串
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/hello", method = RequestMethod.GET, produces = { "application/json" })
+	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public String helloWorld() {
-		String md5 = MD5.md5("Hello World!");// 测试MD5
-		return md5;
+		// 测试MD5
+		return MD5.md5("undefined")+" Hello World!";
 	}
 
 	/**
 	 * 测试返回json
+	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/demoToString", method = RequestMethod.GET, produces = { "application/json" })
@@ -47,46 +48,46 @@ public class DemoController {
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
 		demopojo.setPassword(MD5.md5("123456"));
-		String demoPojotoString = JSONObject.toJSONString(demopojo);// 转为json格式
-		return demoPojotoString;
+		// 转为json格式
+		return JSONObject.toJSONString(demopojo);
 	}
 
 	/**
 	 * 测试连接数据库并获取值
+	 * 
 	 * @param httpSession
 	 * @param DemoDto
 	 * @return
 	 */
 	@RequestMapping(value = "/demoLogin", method = RequestMethod.POST, produces = { "application/json" })
-	public String demoLogin(HttpSession httpSession, @RequestBody DemoDto DemoDto) {
-		int i = DemoService.demoLogin(DemoDto);
+	public String demoLogin(HttpSession httpSession, @RequestBody DemoDto demoDto) {
+		int i = demoService.demoLogin(demoDto);
 		if (i == 1) {
-			String login = "登陆成功";
-			return login;
+			return "登陆成功";
 		}
-		String login = "登陆失败";
-		return login;
+		return "登陆失败";
 	}
 
 	/**
 	 * 测试POI导出功能
+	 * 
 	 * @param httpSession
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/demoExecl")
-	public String demoExecl(HttpSession httpSession,HttpServletResponse response) throws IOException {
+	public String demoExecl(HttpSession httpSession, HttpServletResponse response) throws IOException {
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
 		demopojo.setPassword(MD5.md5("123456"));
 		List<DemoPojo> listDemopojo = new ArrayList<>();
 		listDemopojo.add(demopojo);
-		String fileName = "账户密码"; 
+		String fileName = "账户密码";
 		// 列名
-		String columnNames[] = { "用户","密码" };
+		String[] columnNames = { "用户", "密码" };
 		// map中的key
-		String keys[] = { "user","password" };
+		String[] keys = { "user", "password" };
 		ExportPOIUtils.start_download(response, fileName, listDemopojo, columnNames, keys);
 		return "导出出现问题，请检查导出工具";
 	}

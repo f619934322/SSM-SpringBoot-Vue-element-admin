@@ -11,12 +11,12 @@ import com.appliance.service.DemoService;
 @Service
 public class DemoServiceImpl implements DemoService{
 	@Autowired
-	private DemoMapper DemoMapper;
+	private DemoMapper demoMapper;
 	
 	@Override
-	public int demoLogin(DemoDto DemoDto) {
-		DemoPojo demoLogin = DemoMapper.demoLogin(DemoDto);
-		if(DemoDto.getPassword().equals(demoLogin.getPassword())) {
+	public int demoLogin(DemoDto demoDto) {
+		DemoPojo demoLogin = demoMapper.demoLogin(demoDto);
+		if(demoDto.getPassword().equals(demoLogin.getPassword())) {
 			return 1;
 		}
 		return 0;

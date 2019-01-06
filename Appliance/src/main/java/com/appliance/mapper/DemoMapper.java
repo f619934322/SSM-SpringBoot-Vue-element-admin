@@ -5,5 +5,5 @@ import com.appliance.pojo.dto.DemoDto;
 
 public interface DemoMapper {
 
-	DemoPojo demoLogin(DemoDto DemoDto);
+	DemoPojo demoLogin(DemoDto demoDto);
 }
