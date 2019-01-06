@@ -14,14 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
 import com.appliance.utils.ExportPOIUtils;
 import com.appliance.utils.MD5;
-
-import net.minidev.json.JSONArray;
 
 @RestController
 @RequestMapping("/demo")
