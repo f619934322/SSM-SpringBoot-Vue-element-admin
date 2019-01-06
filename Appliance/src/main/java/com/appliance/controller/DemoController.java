@@ -60,7 +60,7 @@ public class DemoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/demoLogin", method = RequestMethod.POST, produces = { "application/json" })
-	public String demoLogin(HttpSession httpSession, @RequestBody DemoDto demoDto) {
+	public String demoLogin(HttpSession httpSession, HttpServletResponse response, @RequestBody DemoDto demoDto) {
 		int i = demoService.demoLogin(demoDto);
 		if (i == 1) {
 			return "登陆成功";
