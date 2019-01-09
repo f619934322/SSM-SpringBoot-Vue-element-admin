@@ -14,16 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.model.BaseResponse;
 import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
 import com.appliance.utils.ExportPOIUtils;
 import com.appliance.utils.MD5;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-@RequestMapping("/demo")
+@RequestMapping("/appliance/demo")
 public class DemoController {
 
+
+	
 	@Autowired
 	private DemoService demoService;
 
@@ -44,7 +50,7 @@ public class DemoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/demoToString", method = RequestMethod.GET, produces = { "application/json" })
-	public String demoToString() {
+	public List<DemoPojo> demoToString() {
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
 		demopojo.setPassword(MD5.md5("123456"));
@@ -54,8 +60,10 @@ public class DemoController {
 		List<DemoPojo> listDemoPojo = new ArrayList<>();
 		listDemoPojo.add(demopojo);
 		listDemoPojo.add(demopojo2);
-		// 转为json格式,由于用了RestController注解，所以不一定需要toJSONString方法将对象转换为JSON，Controller层的方法返回类型可以写为对象
-		return JSON.toJSONString(listDemoPojo);//用fastjson来转换为JSON,可以转换list和object
+		// 转为json格式,由于用了RestController注解，所以不一定需要toJSONString方法将对象和List转换为JSON，Controller层的方法返回类型可以写为对象和List
+		// 考虑到整体框架需要比较合理的格式，未来的Controller方法返回类型写为String,此方法做Demo
+		return listDemoPojo;// 可用fastjson来转换为JSON,可以转换list和object
+							// 范例：JSON.toString(Object)/JSON.toString(ArrayList)
 	}
 
 	/**
@@ -67,11 +75,11 @@ public class DemoController {
 	 */
 	@RequestMapping(value = "/demoLogin", method = RequestMethod.POST, produces = { "application/json" })
 	public String demoLogin(HttpSession httpSession, HttpServletResponse response, @RequestBody DemoDto demoDto) {
-		int i = demoService.demoLogin(demoDto);
-		if (i == 1) {
-			return "登陆成功";
-		}
-		return "登陆失败";
+		log.info("执行demoLogin");
+		BaseResponse<DemoPojo> result = demoService.demoLogin(demoDto);
+		String resultToString =  JSON.toJSONString(result);
+		log.info("demoLogin返回的JSON: {}", resultToString); 
+		return resultToString;
 	}
 
 	/**

@@ -1,8 +1,15 @@
 package com.appliance.service;
 
+import com.appliance.model.BaseResponse;
+import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 
 public interface DemoService {
 
-	public int demoLogin(DemoDto DemoDto);
+	/**
+	 * 测试用service
+	 * @param DemoDto
+	 * @return
+	 */
+	public BaseResponse<DemoPojo> demoLogin(DemoDto demoDto);
 }
