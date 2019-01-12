@@ -8,6 +8,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
+import com.appliance.utils.JwtTokenUtil;
 
 
 @Service
@@ -20,6 +21,9 @@ public class DemoServiceImpl implements DemoService{
 		DemoPojo demoLogin = demoMapper.demoLogin(demoDto);
 		if(demoLogin != null && demoDto.getPassword().equals(demoLogin.getPassword())) {
 			BaseResponse<DemoPojo> result = new BaseResponse<>(); 
+			String tokenStr = JwtTokenUtil.generateToken(demoDto.getUser());
+			demoLogin.setToken(tokenStr);
+			demoLogin.setPassword(null);
 			result.setResponseData(demoLogin);
 			result.setStatusCode(200);
 			result.setStatusMsg("SUCCESS");
