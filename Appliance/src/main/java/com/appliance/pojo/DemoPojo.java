@@ -13,5 +13,4 @@ public class DemoPojo implements Serializable {
 
 	private String password;
 
-	private String token;
 }
