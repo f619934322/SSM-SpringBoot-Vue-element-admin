@@ -32,10 +32,10 @@ public class LoginServiceImpl implements LoginService {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
-		UsernamePasswordToken token = new UsernamePasswordToken(userDto.getUserName(), MD5.md5(userDto.getPassword()));//使用MD5进行密码加密
+		UsernamePasswordToken token = new UsernamePasswordToken(userDto.getUserName(), MD5.md5(userDto.getPassword()));// 使用MD5进行密码加密
 		// 3.执行登录方法
 		try {
-			subject.login(token);//进入com.appliance.shiro.UserRealm中执行Shiro认证
+			subject.login(token);// 进入com.appliance.shiro.UserRealm中执行Shiro认证
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(200);
 			response.setStatusMsg("登录成功");
@@ -54,6 +54,27 @@ public class LoginServiceImpl implements LoginService {
 			return response;
 		}
 
+	}
+
+	/**
+	 * Shiro用户登出
+	 */
+	@Override
+	public BaseResponse<UserVo> logOut(UserDto userDto) {
+		Subject subject = SecurityUtils.getSubject();
+		try {
+			subject.logout();// 执行登出
+			BaseResponse<UserVo> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("登出成功");
+			return response;
+		} catch (Exception e) {
+			BaseResponse<UserVo> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("登出失败，检查服务端异常："+ e);
+			log.warn("登出失败，检查服务端异常:{}",e);
+			return response;
+		}
 	}
 
 }

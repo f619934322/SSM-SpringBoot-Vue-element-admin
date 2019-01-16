@@ -12,4 +12,11 @@ public interface LoginService {
 	 * @return
 	 */
 	public BaseResponse<UserVo> login(UserDto userDto);
+	
+	/**
+	 * 用户登出
+	 * @param userDto
+	 * @return
+	 */
+	public BaseResponse<UserVo> logOut(UserDto userDto);
 }

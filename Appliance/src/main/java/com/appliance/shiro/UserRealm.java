@@ -58,7 +58,7 @@ public class UserRealm extends AuthorizingRealm {
 		userDto.setUserName(thisToken.getUsername());
 		UserVo userVo = userMapper.userLogin(userDto);
 		if (userVo != null) {
-			return new SimpleAuthenticationInfo(userVo, MD5.md5(userVo.getPassword()), "UserRealm");// Shiro判断密码是否一致,并存储Principal,密码使用MD5进行密码加密
+			return new SimpleAuthenticationInfo(userVo, userVo.getPassword(), "UserRealm");// Shiro判断密码是否一致,并存储Principal,密码使用MD5进行密码加密
 		} else {
 			return null;// Shiro底层定义NULL为用户名不存在
 		}

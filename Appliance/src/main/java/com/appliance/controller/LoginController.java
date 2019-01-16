@@ -41,5 +41,21 @@ public class LoginController {
 		log.info("userLogin返回的JSON: {}", resultToString);
 		return resultToString;
 	}
+	
+	/**
+	 * 用户登出
+	 * @param httpSession
+	 * @param response
+	 * @param userDto
+	 * @return
+	 */
+	@RequestMapping(value = "/userLogOut", method = RequestMethod.POST, produces = { "application/json" })
+	public String logOut(HttpSession httpSession, HttpServletResponse response, @RequestBody UserDto userDto) {
+		log.info("执行userLogOut");
+		BaseResponse<UserVo> result = loginService.logOut(userDto);
+		String resultToString = JSON.toJSONString(result);
+		log.info("userLogOut返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 
 }

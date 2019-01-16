@@ -35,9 +35,9 @@ public class ShiroConfig {
 		 * 常见过滤器： anon:无需认证可直接访问； authc:必须认证才可访问； user：使用rememberMe功能才可访问；
 		 * perms：该资源需得到资源权限才可访问； role：该资源需要得到角色权限才可访问
 		 */
-		filterMap.put("/appliance/user/userLogin", "anon");//放行的路径必须在拦截的上面编写，否则失效
-		filterMap.put("/**", "perms[normal]");//使得所有路径被拦截，需要资源权限
-		shiroFilterFactoryBean.setLoginUrl("/");//权限不足访问失败跳转
+		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效
+		filterMap.put("/**", "perms[normal]");// 使得所有路径被拦截，需要资源权限
+		shiroFilterFactoryBean.setLoginUrl("/");// 权限不足访问失败跳转
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}
@@ -46,8 +46,7 @@ public class ShiroConfig {
 	 * 创建DefaultWebSecurityManager
 	 */
 	@Bean(name = "securityManager")
-	public DefaultWebSecurityManager getDefaultWebSecurityManager(
-			@Qualifier("userRealm") UserRealm userRealm) {
+	public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("userRealm") UserRealm userRealm) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 关联Realm
 		securityManager.setRealm(userRealm);
