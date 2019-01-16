@@ -5,10 +5,8 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.appliance.mapper.UserMapper;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
@@ -60,7 +58,7 @@ public class LoginServiceImpl implements LoginService {
 	 * Shiro用户登出
 	 */
 	@Override
-	public BaseResponse<UserVo> logOut(UserDto userDto) {
+	public BaseResponse<UserVo> logOut() {
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.logout();// 执行登出

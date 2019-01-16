@@ -15,8 +15,7 @@ public interface LoginService {
 	
 	/**
 	 * 用户登出
-	 * @param userDto
 	 * @return
 	 */
-	public BaseResponse<UserVo> logOut(UserDto userDto);
+	public BaseResponse<UserVo> logOut();
 }

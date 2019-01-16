@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.appliance.mapper.UserMapper;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
-import com.appliance.utils.MD5;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,13 +53,14 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		log.info("执行认证逻辑");
 		UsernamePasswordToken thisToken = (UsernamePasswordToken) token;
+		SecurityUtils.getSubject().getSession().setTimeout(1000*60*30*6L);//设置超时时长，超时后自动logout。单位ms
 		UserDto userDto = new UserDto();
 		userDto.setUserName(thisToken.getUsername());
 		UserVo userVo = userMapper.userLogin(userDto);
 		if (userVo != null) {
-			return new SimpleAuthenticationInfo(userVo, userVo.getPassword(), "UserRealm");// Shiro判断密码是否一致,并存储Principal,密码使用MD5进行密码加密
+			return new SimpleAuthenticationInfo(userVo, userVo.getPassword(), "UserRealm");// Shiro判断密码是否一致,并存储Principal,可能抛出IncorrectCredentialsException在service
 		} else {
-			return null;// Shiro底层定义NULL为用户名不存在
+			return null;// Shiro底层定义NULL为用户名不存在,可能抛出UnknownAccountException在service
 		}
 
 	}

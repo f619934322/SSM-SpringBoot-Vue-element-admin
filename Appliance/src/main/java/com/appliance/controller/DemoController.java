@@ -102,7 +102,7 @@ public class DemoController {
 		String[] columnNames = { "用户", "密码" };
 		// map中的key
 		String[] keys = { "user", "password" };
-		ExportPOIUtils.start_download(response, fileName, listDemopojo, columnNames, keys);
+		ExportPOIUtils.startDownload(response, fileName, listDemopojo, columnNames, keys);
 		return "导出出现问题，请检查导出工具";
 	}
 }

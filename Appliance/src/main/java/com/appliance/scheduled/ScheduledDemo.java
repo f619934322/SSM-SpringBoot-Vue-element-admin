@@ -6,6 +6,9 @@ import java.util.Date;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class ScheduledDemo {
 
@@ -14,7 +17,7 @@ public class ScheduledDemo {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		Date date = new Date();
 		String nowTime = sdf.format(date);
-		System.out.println("这是每小时执行一次的定时任务！！！当前时间：" + nowTime);
+		log.info("这是每小时执行一次的定时任务！！！当前时间：" + nowTime);
 	}
 
 }

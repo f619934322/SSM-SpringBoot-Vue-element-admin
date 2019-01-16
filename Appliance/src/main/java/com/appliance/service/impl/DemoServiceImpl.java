@@ -8,6 +8,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
+import com.appliance.utils.MD5;
 
 @Service
 public class DemoServiceImpl implements DemoService {
@@ -17,6 +18,7 @@ public class DemoServiceImpl implements DemoService {
 	@Override
 	public BaseResponse<DemoPojo> demoLogin(DemoDto demoDto) {
 		DemoPojo demoLogin = demoMapper.demoLogin(demoDto);
+		demoDto.setPassword(MD5.md5(demoDto.getPassword()));
 		if (demoLogin != null && demoDto.getPassword().equals(demoLogin.getPassword())) {
 			BaseResponse<DemoPojo> result = new BaseResponse<>();
 			demoLogin.setPassword(null);

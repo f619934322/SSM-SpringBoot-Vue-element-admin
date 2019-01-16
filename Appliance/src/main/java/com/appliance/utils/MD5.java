@@ -4,12 +4,17 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MD5 {
 
+	private static final String ERROR = "Error:{}";
+	
 	public static String md5(String str) {
-		
+
 		String returnString = str;
-		
+
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(returnString.getBytes());
@@ -28,11 +33,11 @@ public class MD5 {
 			}
 			returnString = buf.toString();
 		} catch (Exception e) {
-//			LogUtil.error("", MD5.class, "error", e);
+			log.warn(ERROR,e);
 		}
 		return returnString;
 	}
-	
+
 	private MD5() {
 		throw new IllegalStateException("Utility class");
 	}
@@ -43,59 +48,54 @@ public class MD5 {
 			md.update(white.getBytes("UTF8"));
 			byte[] byteDigest = md.digest();
 			int i;
-			StringBuffer buf = new StringBuffer("");
+			StringBuilder sb = new StringBuilder("");
 			for (int offset = 0; offset < byteDigest.length; offset++) {
 				i = byteDigest[offset];
 				if (i < 0)
 					i += 256;
 				if (i < 16)
-					buf.append("0");
-				buf.append(Integer.toHexString(i));
+					sb.append("0");
+				sb.append(Integer.toHexString(i));
 			}
 			// 32位加密
-			white = buf.toString();
+			white = sb.toString();
 			if (black.equals(white)) {
 				return true;
 			} else {
 				return false;
 			}
 			// 16位的加密
-			// return buf.toString().substring(8, 24);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return false;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			log.warn(ERROR,e);
 			return false;
 		}
-
 	}
-	
-	public static String getMD5(String data){
-		MessageDigest md = null;
+
+	public static String getMD5(String data) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA");
 		try {
 			md = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			log.warn(ERROR,e);
 		}
 		try {
 			md.update(data.getBytes("UTF8"));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			log.warn(ERROR,e);
 		}
 		byte[] byteDigest = md.digest();
 		int i;
-		StringBuffer buf = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		for (int offset = 0; offset < byteDigest.length; offset++) {
 			i = byteDigest[offset];
 			if (i < 0)
 				i += 256;
 			if (i < 16)
-				buf.append("0");
-			buf.append(Integer.toHexString(i));
+				sb.append("0");
+			sb.append(Integer.toHexString(i));
 		}
 		// 32位加密
-		return buf.toString();
+		return sb.toString();
 	}
-	
+
 }
