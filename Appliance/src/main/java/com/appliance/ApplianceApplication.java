@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @EnableTransactionManagement
 public class ApplianceApplication {
 
-
 	public static void main(String[] args) {
 		log.info("SpringBoot启动开始");
 		SpringApplication.run(ApplianceApplication.class, args);

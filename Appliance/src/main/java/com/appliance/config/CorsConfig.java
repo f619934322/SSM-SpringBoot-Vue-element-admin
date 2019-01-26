@@ -17,9 +17,11 @@ public class CorsConfig {
 	 */
 	private CorsConfiguration buildConfig() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOrigin("*");
+		corsConfiguration.addAllowedOrigin("*");// 前端地址"http://localhost:xxxx"
 		corsConfiguration.addAllowedHeader("*");
 		corsConfiguration.addAllowedMethod("*");
+		// allowCredential 需设置为true
+		corsConfiguration.setAllowCredentials(true);
 		return corsConfiguration;
 	}
 

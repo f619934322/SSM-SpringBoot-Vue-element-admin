@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -33,7 +33,7 @@ public class LoginController {
 	 * @param userDto
 	 * @return
 	 */
-	@RequestMapping(value = "/userLogin", method = RequestMethod.POST, produces = { "application/json" })
+	@PostMapping(value = "/userLogin", produces = { "application/json" })
 	public String login(HttpSession httpSession, HttpServletResponse response, @RequestBody UserDto userDto) {
 		log.info("执行userLogin");
 		BaseResponse<UserVo> result = loginService.login(userDto);
@@ -41,14 +41,15 @@ public class LoginController {
 		log.info("userLogin返回的JSON: {}", resultToString);
 		return resultToString;
 	}
-	
+
 	/**
 	 * 用户登出
+	 * 
 	 * @param httpSession
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/userLogOut", method = RequestMethod.POST, produces = { "application/json" })
+	@PostMapping(value = "/userLogOut", produces = { "application/json" })
 	public String logOut(HttpSession httpSession, HttpServletResponse response) {
 		log.info("执行userLogOut");
 		BaseResponse<UserVo> result = loginService.logOut();

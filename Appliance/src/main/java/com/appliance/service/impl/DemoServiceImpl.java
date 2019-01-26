@@ -16,6 +16,7 @@ public class DemoServiceImpl implements DemoService {
 	private DemoMapper demoMapper;
 
 	@Override
+	@Deprecated
 	public BaseResponse<DemoPojo> demoLogin(DemoDto demoDto) {
 		DemoPojo demoLogin = demoMapper.demoLogin(demoDto);
 		demoDto.setPassword(MD5.md5(demoDto.getPassword()));

@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
-		UsernamePasswordToken token = new UsernamePasswordToken(userDto.getUserName(), MD5.md5(userDto.getPassword()));// 使用MD5进行密码加密
+		UsernamePasswordToken token = new UsernamePasswordToken(userDto.getStaffNo(), MD5.md5(userDto.getPassword()));// 使用MD5进行密码加密
 		// 3.执行登录方法
 		try {
 			subject.login(token);// 进入com.appliance.shiro.UserRealm中执行Shiro认证

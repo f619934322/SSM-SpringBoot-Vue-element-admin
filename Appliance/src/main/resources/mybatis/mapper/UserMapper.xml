@@ -5,9 +5,9 @@
 		parameterType="com.appliance.pojo.dto.UserDto"
 		resultType="com.appliance.pojo.vo.UserVo">
 		SELECT 
-		NAME AS userName,
-		PASSWORD AS password,
-		PERMS AS perms
-		FROM USER WHERE NAME = #{userName,jdbcType=VARCHAR}
+		Staff_Number AS staffNo,
+		Password AS password,
+		User_Type AS perms
+		FROM staff_info WHERE Staff_Number = #{staffNo,jdbcType=VARCHAR}
 	</select>
 </mapper>

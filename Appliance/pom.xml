@@ -105,9 +105,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+	<!-- 主类位置配置 -->
+				<configuration>
+					<mainClass>com.appliance.ApplianceApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
-	<packaging>war</packaging>
 </project>

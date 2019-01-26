@@ -6,9 +6,9 @@ import lombok.Data;
 public class UserDto {
 
 	/**
-	 * 用户名
+	 * 用户名（员工号）
 	 */
-	private String userName;
+	private String staffNo;
 	
 	/**
 	 * 密码

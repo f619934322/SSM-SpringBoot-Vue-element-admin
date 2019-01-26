@@ -6,9 +6,9 @@ import lombok.Data;
 public class UserVo {
 	
 	/**
-	 * 用户名
+	 * 用户名（员工号）
 	 */
-	private String userName;
+	private String staffNo;
 	
 	/**
 	 * 密码
@@ -16,7 +16,7 @@ public class UserVo {
 	private String password;
 	
 	/**
-	 * 个人权限
+	 * 个人权限（用户类型）
 	 */
 	private String perms;
 }

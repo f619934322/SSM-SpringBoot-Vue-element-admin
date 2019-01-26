@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -28,8 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/appliance/demo")
 public class DemoController {
 
-
-	
 	@Autowired
 	private DemoService demoService;
 
@@ -38,7 +37,7 @@ public class DemoController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	@GetMapping(value = "/hello") // 如果只接受GET请求，sonar要求使用GetMapping，POST请求要求使用PostMapping；只有两者都接受的接口才写成@RequestMapping，@RequestMapping里不需要加方法为GET或POST
 	public String helloWorld() {
 		// 测试MD5
 		return MD5.md5("undefined") + " Hello World!";
@@ -49,7 +48,7 @@ public class DemoController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/demoToString", method = RequestMethod.GET, produces = { "application/json" })
+	@GetMapping(value = "/demoToString", produces = { "application/json" })
 	public List<DemoPojo> demoToString() {
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
@@ -67,18 +66,19 @@ public class DemoController {
 	}
 
 	/**
-	 * 测试连接数据库并获取值
+	 * 测试连接数据库并获取值(随着项目进展，此测试方法废除。时间：2019年1月26日 01:42:14)
 	 * 
 	 * @param httpSession
 	 * @param DemoDto
 	 * @return
 	 */
-	@RequestMapping(value = "/demoLogin", method = RequestMethod.POST, produces = { "application/json" })
+	@Deprecated
+	@PostMapping(value = "/demoLogin", produces = { "application/json" })
 	public String demoLogin(HttpSession httpSession, HttpServletResponse response, @RequestBody DemoDto demoDto) {
 		log.info("执行demoLogin");
 		BaseResponse<DemoPojo> result = demoService.demoLogin(demoDto);
-		String resultToString =  JSON.toJSONString(result);
-		log.info("demoLogin返回的JSON: {}", resultToString); 
+		String resultToString = JSON.toJSONString(result);
+		log.info("demoLogin返回的JSON: {}", resultToString);
 		return resultToString;
 	}
 
