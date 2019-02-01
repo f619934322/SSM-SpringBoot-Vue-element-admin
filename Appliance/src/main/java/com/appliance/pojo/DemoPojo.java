@@ -1,6 +1,9 @@
 package com.appliance.pojo;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.appliance.pojo.dto.DemoDto;
 
 import lombok.Data;
 
@@ -12,5 +15,7 @@ public class DemoPojo implements Serializable {
 	private String user;
 
 	private String password;
+
+	private List<DemoDto> demoDto;
 
 }

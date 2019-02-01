@@ -105,4 +105,36 @@ public class DemoController {
 		ExportPOIUtils.startDownload(response, fileName, listDemopojo, columnNames, keys);
 		return "导出出现问题，请检查导出工具";
 	}
+
+	/**
+	 * 测试动态路由格式,getMenu
+	 * 
+	 * @param role
+	 * @return
+	 */
+	@RequestMapping(value = "/demoRouter")
+	public String demoRouter(String role) {
+		DemoPojo demoPojo = new DemoPojo();
+		demoPojo.setUser("测试");
+		demoPojo.setPassword("aaaaa");
+		DemoDto demoDto = new DemoDto();
+		demoDto.setUser("afgaswfgafg");
+		List<DemoDto> demoDtoList = new ArrayList<>();
+		demoDtoList.add(demoDto);
+		demoPojo.setDemoDto(demoDtoList);
+		//第二条路由，以此类推
+		DemoPojo demoPojo2 = new DemoPojo();
+		demoPojo2.setUser("测试2");
+		demoPojo2.setPassword("aaaaa2");
+		DemoDto demoDto2 = new DemoDto();
+		demoDto2.setUser("afgaswfgafg2");
+		List<DemoDto> demoDtoList2 = new ArrayList<>();
+		demoDtoList2.add(demoDto2);
+		demoPojo2.setDemoDto(demoDtoList2);
+		//把每条单独的路由存到集合中，返回给前端一个侧边栏的JSON
+		List<DemoPojo> demoPojoList = new ArrayList<>();
+		demoPojoList.add(demoPojo);
+		demoPojoList.add(demoPojo2);
+		return JSON.toJSONString(demoPojoList);// 最后可以返回一个符合前端路由格式的JSON，格式如下： [{"a0":"a0","b0":[{"c0":"c0"},{"d0":"d0"}]},{"a1":"a1","b1":[{"c1":"c1"},{"d1":"d1"}]},...]
+	}
 }
