@@ -58,7 +58,7 @@ public class LoginServiceImpl implements LoginService {
 	 * Shiro用户登出
 	 */
 	@Override
-	public BaseResponse<UserVo> logOut() {
+	public BaseResponse<UserVo> logout() {
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.logout();// 执行登出

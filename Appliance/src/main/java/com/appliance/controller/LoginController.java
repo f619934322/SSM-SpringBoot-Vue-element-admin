@@ -1,8 +1,5 @@
 package com.appliance.controller;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +31,7 @@ public class LoginController {
 	 * @return
 	 */
 	@PostMapping(value = "/userLogin", produces = { "application/json" })
-	public String login(HttpSession httpSession, HttpServletResponse response, @RequestBody UserDto userDto) {
+	public String login(@RequestBody UserDto userDto) {
 		log.info("执行userLogin");
 		BaseResponse<UserVo> result = loginService.login(userDto);
 		String resultToString = JSON.toJSONString(result);
@@ -49,12 +46,12 @@ public class LoginController {
 	 * @param response
 	 * @return
 	 */
-	@PostMapping(value = "/userLogOut", produces = { "application/json" })
-	public String logOut(HttpSession httpSession, HttpServletResponse response) {
-		log.info("执行userLogOut");
-		BaseResponse<UserVo> result = loginService.logOut();
+	@PostMapping(value = "/userLogout", produces = { "application/json" })
+	public String userLogout() {
+		log.info("执行userLogout");
+		BaseResponse<UserVo> result = loginService.logout();
 		String resultToString = JSON.toJSONString(result);
-		log.info("userLogOut返回的JSON: {}", resultToString);
+		log.info("userLogout返回的JSON: {}", resultToString);
 		return resultToString;
 	}
 

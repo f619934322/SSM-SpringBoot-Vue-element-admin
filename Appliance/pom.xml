@@ -53,11 +53,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--页面跳转依赖 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
 		<!-- POI -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -97,7 +92,6 @@
 			<version>1.4.0</version>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
@@ -105,7 +99,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-	<!-- 主类位置配置 -->
+				<!-- 主类位置配置 -->
 				<configuration>
 					<mainClass>com.appliance.ApplianceApplication</mainClass>
 				</configuration>

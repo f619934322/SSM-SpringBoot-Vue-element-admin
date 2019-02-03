@@ -1,7 +1,9 @@
 package com.appliance.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,9 +41,13 @@ public class DemoController {
 	 * @return
 	 */
 	@GetMapping(value = "/hello") // 如果只接受GET请求，sonar要求使用GetMapping，POST请求要求使用PostMapping；只有两者都接受的接口才写成@RequestMapping，@RequestMapping里不需要加方法为GET或POST
-	public String helloWorld() {
+	public String helloWorld(@RequestHeader String token) {//测试请求头，如果请求头和对象名不一样，需要在此注解加上括号并写入传入的名称，如：@RequestHeader("实际请求头名称")
+		//测试时间格式
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		String nowTime = sdf.format(date);
 		// 测试MD5
-		return MD5.md5("undefined") + " Hello World!";
+		return MD5.md5("undefined") + token + nowTime;
 	}
 
 	/**

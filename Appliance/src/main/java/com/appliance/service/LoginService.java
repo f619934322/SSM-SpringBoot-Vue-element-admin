@@ -17,5 +17,5 @@ public interface LoginService {
 	 * 用户登出
 	 * @return
 	 */
-	public BaseResponse<UserVo> logOut();
+	public BaseResponse<UserVo> logout();
 }
