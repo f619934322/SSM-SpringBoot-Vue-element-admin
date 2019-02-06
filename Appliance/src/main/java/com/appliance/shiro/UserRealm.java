@@ -37,12 +37,14 @@ public class UserRealm extends AuthorizingRealm {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		Subject subject = SecurityUtils.getSubject();
 		UserVo userVo = (UserVo) subject.getPrincipal();
-		String[] perms = userVo.getPerms().split(",");// 使用split方法分割字符串获取单个资源权限名称
-		for (int i = 0; i < perms.length; i++) {
-			String permsOne = perms[i];
-			info.addStringPermission(permsOne);// 资源权限赋权
+		if (userVo.getUserType() == 1) {// 如果数据库的用户类型为1，则给予如下资源权限
+			info.addStringPermission("normal");// 资源权限赋权
 		}
-		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms
+		if (userVo.getUserType() == 2) {// 如果为2，则给予如下资源权限
+			info.addStringPermission("perm:normal");// 资源权限赋权
+			info.addStringPermission("perm:admin");// 资源权限赋权
+		}
+		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms，刷新时间
 		return info;
 	}
 

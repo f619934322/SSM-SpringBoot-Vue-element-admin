@@ -25,8 +25,6 @@ public class LoginController {
 	/**
 	 * 用户登录
 	 * 
-	 * @param httpSession
-	 * @param response
 	 * @param userDto
 	 * @return
 	 */
@@ -42,8 +40,6 @@ public class LoginController {
 	/**
 	 * 用户登出
 	 * 
-	 * @param httpSession
-	 * @param response
 	 * @return
 	 */
 	@PostMapping(value = "/userLogout", produces = { "application/json" })

@@ -7,7 +7,7 @@
 		SELECT 
 		Staff_Number AS staffNo,
 		Password AS password,
-		User_Type AS perms
+		User_Type AS userType
 		FROM staff_info WHERE Staff_Number = #{staffNo,jdbcType=VARCHAR}
 	</select>
 </mapper>

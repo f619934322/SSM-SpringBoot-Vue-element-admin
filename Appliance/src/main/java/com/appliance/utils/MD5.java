@@ -60,9 +60,9 @@ public class MD5 {
 			// 32位加密
 			white = sb.toString();
 			if (black.equals(white)) {
-				return true;
+				return black.equals(white);//sonar要求返回相同的文本，布尔的值不应直接用true或false
 			} else {
-				return false;
+				return !black.equals(white);
 			}
 			// 16位的加密
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {

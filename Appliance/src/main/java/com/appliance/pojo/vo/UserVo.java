@@ -18,6 +18,6 @@ public class UserVo {
 	/**
 	 * 个人权限（用户类型）
 	 */
-	private String perms;
+	private int userType;
 }
 

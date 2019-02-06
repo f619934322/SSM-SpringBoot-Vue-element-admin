@@ -35,7 +35,7 @@ public class ShiroConfig {
 		 * role:该资源必须得到角色的权限才可以访问
 		 */
 		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效
-		filterMap.put("/**", "perms[normal]");// 使得所有路径被拦截，需要资源权限;需要多权限写法：perms[a],perms[b],中括号中间字符串为自定义
+		filterMap.put("/**", "perms[perm:normal]");// 使得所有路径被拦截，需要资源权限;需要多权限写法：perms[a],perms[b],中括号中间字符串为自定义
 		shiroFilterFactoryBean.setLoginUrl("/");// 权限不足访问失败跳转
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;

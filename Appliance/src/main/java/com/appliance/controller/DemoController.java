@@ -92,13 +92,12 @@ public class DemoController {
 	/**
 	 * 测试POI导出功能
 	 * 
-	 * @param httpSession
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/demoExecl")
-	public String demoExecl(HttpSession httpSession, HttpServletResponse response) throws IOException {
+	public String demoExecl(HttpServletResponse response) throws IOException {
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
 		demopojo.setPassword(MD5.md5("123456"));
