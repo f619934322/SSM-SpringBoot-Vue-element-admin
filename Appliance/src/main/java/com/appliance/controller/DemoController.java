@@ -41,8 +41,8 @@ public class DemoController {
 	 * @return
 	 */
 	@GetMapping(value = "/hello") // 如果只接受GET请求，sonar要求使用GetMapping，POST请求要求使用PostMapping；只有两者都接受的接口才写成@RequestMapping，@RequestMapping里不需要加方法为GET或POST
-	public String helloWorld(@RequestHeader String token) {//测试请求头，如果请求头和对象名不一样，需要在此注解加上括号并写入传入的名称，如：@RequestHeader("实际请求头名称")
-		//测试时间格式
+	public String helloWorld(@RequestHeader String token) {// 测试请求头，如果请求头和对象名不一样，需要在此注解加上括号并写入传入的名称，如：@RequestHeader("实际请求头名称")
+		// 测试时间格式
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		String nowTime = sdf.format(date);
@@ -97,7 +97,7 @@ public class DemoController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/demoExecl")
-	public String demoExecl(HttpServletResponse response) throws IOException {
+	public String demoExecl(HttpServletResponse response) throws IOException {// postman下载的文件名默认叫response.xls
 		DemoPojo demopojo = new DemoPojo();
 		demopojo.setUser("admin");
 		demopojo.setPassword(MD5.md5("123456"));
@@ -128,7 +128,7 @@ public class DemoController {
 		List<DemoDto> demoDtoList = new ArrayList<>();
 		demoDtoList.add(demoDto);
 		demoPojo.setDemoDto(demoDtoList);
-		//第二条路由，以此类推
+		// 第二条路由，以此类推
 		DemoPojo demoPojo2 = new DemoPojo();
 		demoPojo2.setUser("测试2");
 		demoPojo2.setPassword("aaaaa2");
@@ -137,10 +137,11 @@ public class DemoController {
 		List<DemoDto> demoDtoList2 = new ArrayList<>();
 		demoDtoList2.add(demoDto2);
 		demoPojo2.setDemoDto(demoDtoList2);
-		//把每条单独的路由存到集合中，返回给前端一个侧边栏的JSON
+		// 把每条单独的路由存到集合中，返回给前端一个侧边栏的JSON
 		List<DemoPojo> demoPojoList = new ArrayList<>();
 		demoPojoList.add(demoPojo);
 		demoPojoList.add(demoPojo2);
-		return JSON.toJSONString(demoPojoList);// 最后可以返回一个符合前端路由格式的JSON，格式如下： [{"a0":"a0","b0":[{"c0":"c0"},{"d0":"d0"}]},{"a1":"a1","b1":[{"c1":"c1"},{"d1":"d1"}]},...]
+		return JSON.toJSONString(demoPojoList);// 最后可以返回一个符合前端路由格式的JSON，格式如下：
+												// [{"a0":"a0","b0":[{"c0":"c0"},{"d0":"d0"}]},{"a1":"a1","b1":[{"c1":"c1"},{"d1":"d1"}]},...]
 	}
 }

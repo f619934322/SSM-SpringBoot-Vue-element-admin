@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MD5 {
 
 	private static final String ERROR = "Error:{}";
-	
+
 	public static String md5(String str) {
 
 		String returnString = str;
@@ -33,7 +33,7 @@ public class MD5 {
 			}
 			returnString = buf.toString();
 		} catch (Exception e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 		}
 		return returnString;
 	}
@@ -60,15 +60,14 @@ public class MD5 {
 			// 32位加密
 			white = sb.toString();
 			if (black.equals(white)) {
-				return black.equals(white);//sonar要求返回相同的文本，布尔的值不应直接用true或false
-			} else {
-				return !black.equals(white);
+				return black.equals(white);// sonar要求返回相同的文本，布尔的值不应直接用true或false
 			}
 			// 16位的加密
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 			return false;
 		}
+		return false;
 	}
 
 	public static String getMD5(String data) throws NoSuchAlgorithmException {
@@ -76,12 +75,12 @@ public class MD5 {
 		try {
 			md = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 		}
 		try {
 			md.update(data.getBytes("UTF8"));
 		} catch (UnsupportedEncodingException e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 		}
 		byte[] byteDigest = md.digest();
 		int i;

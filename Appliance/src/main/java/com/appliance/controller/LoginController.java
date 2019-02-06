@@ -31,8 +31,8 @@ public class LoginController {
 	@PostMapping(value = "/userLogin", produces = { "application/json" })
 	public String login(@RequestBody UserDto userDto) {
 		log.info("执行userLogin");
-		BaseResponse<UserVo> result = loginService.login(userDto);
-		String resultToString = JSON.toJSONString(result);
+		BaseResponse<UserVo> response = loginService.login(userDto);
+		String resultToString = JSON.toJSONString(response);
 		log.info("userLogin返回的JSON: {}", resultToString);
 		return resultToString;
 	}
@@ -45,8 +45,8 @@ public class LoginController {
 	@PostMapping(value = "/userLogout", produces = { "application/json" })
 	public String userLogout() {
 		log.info("执行userLogout");
-		BaseResponse<UserVo> result = loginService.logout();
-		String resultToString = JSON.toJSONString(result);
+		BaseResponse<UserVo> response = loginService.logout();
+		String resultToString = JSON.toJSONString(response);
 		log.info("userLogout返回的JSON: {}", resultToString);
 		return resultToString;
 	}
