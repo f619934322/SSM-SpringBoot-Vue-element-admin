@@ -11,5 +11,6 @@ public interface DemoService {
 	 * @param DemoDto
 	 * @return
 	 */
+	@Deprecated
 	public BaseResponse<DemoPojo> demoLogin(DemoDto demoDto);
 }

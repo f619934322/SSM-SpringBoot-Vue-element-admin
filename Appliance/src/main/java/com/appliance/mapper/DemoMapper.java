@@ -11,5 +11,6 @@ public interface DemoMapper {
 	 * @param demoDto
 	 * @return
 	 */
+	@Deprecated
 	DemoPojo demoLogin(DemoDto demoDto);
 }
