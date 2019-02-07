@@ -38,7 +38,7 @@ public class UserRealm extends AuthorizingRealm {
 		Subject subject = SecurityUtils.getSubject();
 		UserVo userVo = (UserVo) subject.getPrincipal();
 		if (userVo.getUserType() == 1) {// 如果数据库的用户类型为1，则给予如下资源权限
-			info.addStringPermission("normal");// 资源权限赋权
+			info.addStringPermission("perm:normal");// 资源权限赋权
 		}
 		if (userVo.getUserType() == 2) {// 如果为2，则给予如下资源权限
 			info.addStringPermission("perm:normal");// 资源权限赋权
@@ -55,10 +55,10 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		log.info("执行认证逻辑");
 		UsernamePasswordToken thisToken = (UsernamePasswordToken) token;
-		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms
 		UserDto userDto = new UserDto();
 		userDto.setStaffNo(thisToken.getUsername());
 		UserVo userVo = userMapper.userLogin(userDto);// 根据员工号查询数据库对应数据
+		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms
 		if (userVo != null) {
 			return new SimpleAuthenticationInfo(userVo, userVo.getPassword(), "UserRealm");// Shiro判断密码是否一致,并存储Principal,可能抛出IncorrectCredentialsException在service
 		} else {
