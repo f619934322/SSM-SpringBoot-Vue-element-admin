@@ -1,5 +1,8 @@
 package com.appliance.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -17,7 +20,9 @@ public class CorsConfig {
 	 */
 	private CorsConfiguration buildConfig() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOrigin("*");// 前端地址"http://localhost:xxxx"
+		List<String> list = new ArrayList<>();
+		list.add("*");// 在list里添加前端的地址
+		corsConfiguration.setAllowedOrigins(list);// 指定list中的前端地址可访问
 		corsConfiguration.addAllowedHeader("*");
 		corsConfiguration.addAllowedMethod("*");
 		// allowCredential 需设置为true
