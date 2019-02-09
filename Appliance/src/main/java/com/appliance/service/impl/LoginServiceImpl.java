@@ -75,6 +75,9 @@ public class LoginServiceImpl implements LoginService {
 		}
 	}
 
+	/**
+	 * 获取用户信息，用于前端权限判断
+	 */
 	@Override
 	public BaseResponse<UserVo> getUserInfo() {
 		Subject subject = SecurityUtils.getSubject();
