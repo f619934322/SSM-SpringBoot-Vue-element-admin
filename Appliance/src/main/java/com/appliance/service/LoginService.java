@@ -18,4 +18,10 @@ public interface LoginService {
 	 * @return
 	 */
 	public BaseResponse<UserVo> logout();
+	
+	/**
+	 * 登录后获取用户信息并返回给前端
+	 * @return
+	 */
+	public BaseResponse<UserVo> getUserInfo();
 }

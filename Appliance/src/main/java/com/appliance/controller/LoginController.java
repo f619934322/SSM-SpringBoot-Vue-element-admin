@@ -1,6 +1,7 @@
 package com.appliance.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,4 +52,16 @@ public class LoginController {
 		return resultToString;
 	}
 
+	/**
+	 * 获取用户信息给前端
+	 * @return
+	 */
+	@GetMapping(value = "/getUserInfo", produces = { "application/json" })
+	public String getUserInfo() {
+		log.info("执行getUserInfo");
+		BaseResponse<UserVo> response = loginService.getUserInfo();
+		String resultToString = JSON.toJSONString(response);
+		log.info("getUserInfo返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 }

@@ -41,13 +41,13 @@ public class DemoController {
 	 * @return
 	 */
 	@GetMapping(value = "/hello") // 如果只接受GET请求，sonar要求使用GetMapping，POST请求要求使用PostMapping；只有两者都接受的接口才写成@RequestMapping，@RequestMapping里不需要加方法为GET或POST
-	public String helloWorld(@RequestHeader String token) {// 测试请求头，如果请求头和对象名不一样，需要在此注解加上括号并写入传入的名称，如：@RequestHeader("实际请求头名称")
+	public String helloWorld() {// 测试请求头，如果请求头和对象名不一样，需要在此注解加上括号并写入传入的名称，如：@RequestHeader("实际请求头名称")
 		// 测试时间格式
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		String nowTime = sdf.format(date);
 		// 测试MD5
-		return MD5.md5("undefined") + token + nowTime;
+		return MD5.md5("undefined") + nowTime;
 	}
 
 	/**
