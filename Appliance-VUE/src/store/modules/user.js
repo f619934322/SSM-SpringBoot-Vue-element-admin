@@ -1,5 +1,6 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import Cookies from 'js-cookie'
 
 const user = {
   state: {
@@ -49,8 +50,10 @@ const user = {
       const staffNo = userInfo.staffNo.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(staffNo, userInfo.password).then(response => {
-          commit('SET_TOKEN', response.data.statusCode)
-          setToken(response.data.statusCode)
+          const token = response.data.statusCode
+          commit('SET_TOKEN', token) // 由于只需要前端携带Cookie中的JSESSIONID到后端验证，此处token改成statusCode
+          setToken(token)
+          Cookies.set('statusMsg', response.data.statusMsg)
           resolve()
         }).catch(error => {
           reject(error)
@@ -64,6 +67,10 @@ const user = {
         getUserInfo().then(response => {
           // 由于mockjs 不支持自定义状态码只能这样hack
           if (!response.data) {
+            reject('Verification failed, please login again.')
+          }
+          if (!response.data.statusCode === '200') {
+            console.warn('获取用户信息失败，检查用户是否登录。')
             reject('Verification failed, please login again.')
           }
           const data = response.data.responseData
@@ -86,7 +93,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => { // 不需要前端传参数到后端验证用户再登出，只需要携带Cookie到后端即可
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()

@@ -22,7 +22,7 @@ import axios from 'axios'
 
 import * as filters from './filters' // global filters
 
-axios.defaults.withCredentials = true // 让ajax携带cookie
+axios.defaults.withCredentials = true // 让ajax携带cookie，用于后端shiro验证
 
 Vue.prototype.$axios = axios
 

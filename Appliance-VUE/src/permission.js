@@ -4,6 +4,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
+import Cookies from 'js-cookie'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -17,10 +18,11 @@ function hasPermission(roles, permissionRoles) {
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-  console.info('正在跳转')
+  console.info('从' + from.path + '跳转到:' + to.path)
   NProgress.start() // start progress bar
-  console.info('这是sessionID:' + getToken())
-  if (getToken()) { // determine if there has token
+  // 这里由于只需要前端携带cookie的JSESSIONID去后端验证，所以此处的token为状态码;假如假如后端并未存储登录状态，前端刷新后将跳转到登录界面，因为statusCode没有值
+  const statusCode = getToken()
+  if (statusCode === '200') { // determine if there has token
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' })
@@ -28,6 +30,13 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info，这里将去后端查询权限字段，并返回
+          console.info('拉取用户信息返回的状态码：' + res.data.statusCode)
+          if (parseInt(res.data.statusCode) !== 200) {
+            console.warn('获取用户信息失败，检查用户是否登录。')
+            store.dispatch('FedLogOut').then(() => {
+              next({ path: '/' })
+            })
+          }
           const roles = res.data.responseData.roles // note: roles must be a array! such as: ['editor','develop']
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
@@ -53,7 +62,20 @@ router.beforeEach((to, from, next) => {
     /* has no token*/
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
+    } else if (statusCode != null && statusCode !== '200') { // 这里判断是否有状态码保存在Cookie中，若没有则意味着从未调用后端接口登录
+      Message({
+        message: Cookies.get('statusMsg'),
+        type: 'error',
+        duration: 5 * 1000
+      })
+      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
+      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     } else {
+      Message({
+        message: '登出完成',
+        type: 'info',
+        duration: 5 * 1000
+      })
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }

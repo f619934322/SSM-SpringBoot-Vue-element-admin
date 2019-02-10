@@ -1,6 +1,7 @@
 <template>
+ <!-- 当用户权限是admin时，主页是这个 -->
   <div class="dashboard-editor-container">
-
+  <h1>如果你看到这行字，说明你是管理员</h1>
     <github-corner style="position: absolute; top: 0px; border: 0; right: 0;"/>
 
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
@@ -38,7 +39,6 @@
         <box-card/>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -71,7 +71,7 @@ const lineChartData = {
     actualData: [120, 82, 91, 154, 162, 140, 130]
   }
 }
-
+ // 这里是首页的所有组件，可按自己需求配置开发
 export default {
   name: 'DashboardAdmin',
   components: {

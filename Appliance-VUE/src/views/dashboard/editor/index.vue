@@ -1,5 +1,7 @@
 <template>
+ <!-- 当用户权限不是admin时，主页是这个 -->
   <div class="dashboard-editor-container">
+    <h1>如果你看到这行字，说明你不是管理员</h1>
     <div class=" clearfix">
       <pan-thumb :image="avatar" style="float: left"> Your roles:
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
@@ -23,7 +25,10 @@ import GithubCorner from '@/components/GithubCorner'
 
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
+  components: { 
+    PanThumb, 
+    GithubCorner 
+  },
   data() {
     return {
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'

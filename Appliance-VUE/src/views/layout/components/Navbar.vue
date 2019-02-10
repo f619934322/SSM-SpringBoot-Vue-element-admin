@@ -18,14 +18,13 @@
 
         <lang-select class="international right-menu-item"/>
 
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="theme-switch right-menu-item"/>
-        </el-tooltip>
       </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
+       
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+           <!-- 顶部菜单栏配置 -->
+          <span class="display_name">当前用户：{{ name }}</span>
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
