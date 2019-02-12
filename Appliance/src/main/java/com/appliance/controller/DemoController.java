@@ -23,6 +23,7 @@ import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
 import com.appliance.utils.ExportPOIUtils;
 import com.appliance.utils.MD5;
+import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -142,5 +143,19 @@ public class DemoController {
 		demoPojoList.add(demoPojo2);
 		return JSON.toJSONString(demoPojoList);// 最后可以返回一个符合前端路由格式的JSON，格式如下：
 												// [{"a0":"a0","b0":[{"c0":"c0"},{"d0":"d0"}]},{"a1":"a1","b1":[{"c1":"c1"},{"d1":"d1"}]},...]
+	}
+
+	/**
+	 * 测试分页
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@PostMapping(value = "/getPageInfoDemo", produces = { "application/json" })
+	public String getPageInfoDemo(@RequestBody DemoDto request) { // 分页必须连接数据库才有效
+		log.info("执行getPageInfoDemo");
+		BaseResponse<PageInfo<DemoPojo>> page = demoService.getPageInfoDemo(request);
+		log.info("getPageInfoDemo返回的JSON: {}", JSON.toJSONString(page));
+		return JSON.toJSONString(page);
 	}
 }

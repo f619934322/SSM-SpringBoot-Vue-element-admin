@@ -11,6 +11,11 @@ public class UserVo {
 	private String staffNo;
 	
 	/**
+	 * 用户姓名
+	 */
+	private String name;
+	
+	/**
 	 * 密码
 	 */
 	private String password;

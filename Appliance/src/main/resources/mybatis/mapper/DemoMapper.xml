@@ -5,6 +5,14 @@
 		parameterType="com.appliance.pojo.dto.DemoDto"
 		resultType="com.appliance.pojo.DemoPojo">
 		SELECT PASSWORD AS password
-		FROM USER WHERE NAME = #{user,jdbcType=VARCHAR}
+		FROM USER WHERE NAME =
+		#{user,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getPageInfoDemo"
+		parameterType="com.appliance.pojo.dto.DemoDto"
+		resultType="com.appliance.pojo.DemoPojo">
+		SELECT Item_Name AS itemName
+		FROM appliance_demand
 	</select>
 </mapper>

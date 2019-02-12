@@ -77,8 +77,8 @@
 		<!-- pageHelper -->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>4.1.6</version>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.2.3</version>
 		</dependency>
 		<!-- bean与xml转换 -->
 		<dependency>

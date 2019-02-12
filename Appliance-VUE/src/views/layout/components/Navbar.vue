@@ -6,14 +6,9 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item"/>
 
         <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
-        </el-tooltip>
-
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="international right-menu-item"/>
         </el-tooltip>
 
         <lang-select class="international right-menu-item"/>
@@ -35,7 +30,7 @@
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
-              {{ $t('navbar.github') }}
+              {{ $t('navbar.github')}}
             </el-dropdown-item>
           </a>
           <el-dropdown-item divided>
@@ -51,21 +46,15 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
-import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ErrorLog,
     Screenfull,
-    SizeSelect,
-    LangSelect,
-    ThemePicker
+    LangSelect
   },
   computed: {
     ...mapGetters([

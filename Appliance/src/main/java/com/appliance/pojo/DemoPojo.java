@@ -17,5 +17,7 @@ public class DemoPojo implements Serializable {
 	private String password;
 
 	private List<DemoDto> demoDto;
+	
+	private String itemName;
 
 }

@@ -1,5 +1,7 @@
 package com.appliance.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,8 @@ import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
 import com.appliance.utils.MD5;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class DemoServiceImpl implements DemoService {
@@ -34,5 +38,17 @@ public class DemoServiceImpl implements DemoService {
 			result.setStatusMsg("FAILED");
 			return result;
 		}
+	}
+
+	@Override
+	public BaseResponse<PageInfo<DemoPojo>> getPageInfoDemo(DemoDto demoDto) {
+		PageHelper.startPage(demoDto.getPageNum(), demoDto.getPageSize());
+		List<DemoPojo> list = demoMapper.getPageInfoDemo(demoDto);
+		PageInfo<DemoPojo> pageInfo = new PageInfo<>(list);
+		BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
+		result.setResponseData(pageInfo);
+		result.setStatusCode(200);
+		result.setStatusMsg("SUCCESS");
+		return result;
 	}
 }

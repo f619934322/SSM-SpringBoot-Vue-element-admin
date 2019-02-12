@@ -1,6 +1,7 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import Cookies from 'js-cookie'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
@@ -56,6 +57,11 @@ const user = {
           Cookies.set('statusMsg', response.data.statusMsg)
           resolve()
         }).catch(error => {
+          Message({
+            message: '网络异常',
+            type: 'error',
+            duration: 5 * 1000
+          })
           reject(error)
         })
       })
@@ -66,10 +72,20 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
           // 由于mockjs 不支持自定义状态码只能这样hack
-          if (!response.data) {
+          if (!response) {
+            Message({
+              message: '网络异常',
+              type: 'error',
+              duration: 5 * 1000
+            })
             reject('Verification failed, please login again.')
           }
-          if (!response.data.statusCode === '200') {
+          if (parseInt(response.data.statusCode) !== 200) {
+            Message({
+              message: '获取用户信息失败，检查用户是否登录',
+              type: 'error',
+              duration: 5 * 1000
+            })
             console.warn('获取用户信息失败，检查用户是否登录。')
             reject('Verification failed, please login again.')
           }
@@ -79,8 +95,8 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
-
-          commit('SET_NAME', data.staffNo)// 可以用store.getters获取这里赋的值
+          var nameAndStaffNo = data.name + '(' + data.staffNo + ')'
+          commit('SET_NAME', nameAndStaffNo)// 可以用store.getters获取这里赋的值,这里赋值是样式是：姓名（工号），后端不需要接收，只做前端展示
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
           resolve(response)

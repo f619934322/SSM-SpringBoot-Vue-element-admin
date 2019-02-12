@@ -20,7 +20,7 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 router.beforeEach((to, from, next) => {
   console.info('从' + from.path + '跳转到:' + to.path)
   NProgress.start() // start progress bar
-  // 这里由于只需要前端携带cookie的JSESSIONID去后端验证，所以此处的token为状态码;假如假如后端并未存储登录状态，前端刷新后将跳转到登录界面，因为statusCode没有值
+  // 这里由于只需要前端携带cookie的JSESSIONID去后端验证，所以此处的token为状态码;假如假如后端并未存储登录状态，前端刷新后将跳转到登录界面，因为GetUserInfo得到statusCode不正确
   const statusCode = getToken()
   if (statusCode === '200') { // determine if there has token
     /* has token*/
@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           next()
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+          next({ path: '/401', replace: true, query: { noGoBack: true } })
         }
         // 可删 ↑
       }
@@ -71,11 +71,6 @@ router.beforeEach((to, from, next) => {
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     } else {
-      Message({
-        message: '登出完成',
-        type: 'info',
-        duration: 5 * 1000
-      })
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }
