@@ -152,9 +152,9 @@ public class DemoController {
 	 * @return
 	 */
 	@PostMapping(value = "/getPageInfoDemo", produces = { "application/json" })
-	public String getPageInfoDemo(@RequestBody DemoDto request) { // 分页必须连接数据库才有效
+	public String getPageInfoDemo(@RequestBody DemoDto demoDto) { // 分页必须连接数据库才有效
 		log.info("执行getPageInfoDemo");
-		BaseResponse<PageInfo<DemoPojo>> page = demoService.getPageInfoDemo(request);
+		BaseResponse<PageInfo<DemoPojo>> page = demoService.getPageInfoDemo(demoDto);
 		log.info("getPageInfoDemo返回的JSON: {}", JSON.toJSONString(page));
 		return JSON.toJSONString(page);
 	}
