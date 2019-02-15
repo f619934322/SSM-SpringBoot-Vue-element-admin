@@ -44,18 +44,18 @@ public class DemoServiceImpl implements DemoService {
 	}
 
 	@Override
-	public BaseResponse<PageInfo<DemoPojo>> getPageInfoDemo(DemoDto demoDto) { // TODO 改成try后未测试，2019年2月13日 23:09:23
+	public BaseResponse<PageInfo<DemoPojo>> getPageInfoDemo(DemoDto demoDto) {
 		try {
 			PageHelper.startPage(demoDto.getPageNum(), demoDto.getPageSize());
-			List<DemoPojo> list = demoMapper.getPageInfoDemo(demoDto);
-			PageInfo<DemoPojo> pageInfo = new PageInfo<>(list);
+			List<DemoPojo> demoList = demoMapper.getPageInfoDemo(demoDto);
+			PageInfo<DemoPojo> pageInfo = new PageInfo<>(demoList);
 			BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
 			result.setResponseData(pageInfo);
 			result.setStatusCode(200);
 			result.setStatusMsg("SUCCESS");
 			return result;
 		} catch (Exception e) {
-			log.error("测试分页失败");
+			log.error("测试分页失败,信息{}", e);
 			BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
 			result.setStatusCode(201);
 			result.setStatusMsg("FAILED");
