@@ -11,6 +11,11 @@ public class UserVo {
 	private String staffNo;
 	
 	/**
+	 * 用户姓名
+	 */
+	private String name;
+	
+	/**
 	 * 密码
 	 */
 	private String password;
@@ -19,5 +24,10 @@ public class UserVo {
 	 * 个人权限（用户类型）
 	 */
 	private int userType;
+	
+	/**
+	 * 前端需求的角色类别
+	 */
+	private String[] roles;
 }
 

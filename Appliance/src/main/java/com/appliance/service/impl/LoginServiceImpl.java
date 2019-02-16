@@ -69,10 +69,42 @@ public class LoginServiceImpl implements LoginService {
 		} catch (Exception e) {
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(200);
-			response.setStatusMsg("登出失败，检查服务端异常："+ e);
-			log.warn("登出失败，检查服务端异常:{}",e);
+			response.setStatusMsg("登出失败，检查服务端异常：" + e);
+			log.warn("登出失败，检查服务端异常:{}", e);
 			return response;
 		}
+	}
+
+	/**
+	 * 获取用户信息，用于前端权限判断
+	 */
+	@Override
+	public BaseResponse<UserVo> getUserInfo() {
+		Subject subject = SecurityUtils.getSubject();
+		UserVo userVo = (UserVo) subject.getPrincipal();
+		BaseResponse<UserVo> response = new BaseResponse<>();
+		if (userVo != null) { // 假如用户未登录，此处的userVo为null，前端将自动跳转到登陆界面
+			if (userVo.getUserType() == 2) {
+				String[] roles = { "admin" };
+				userVo.setRoles(roles);
+				response.setResponseData(userVo);
+				response.setStatusCode(200);
+				response.setStatusMsg("用户信息返回成功");
+			} else if (userVo.getUserType() == 1) {
+				String[] roles = { "normal" };
+				userVo.setRoles(roles);
+				response.setResponseData(userVo);
+				response.setStatusCode(200);
+				response.setStatusMsg("用户信息返回成功");
+			} else {
+				response.setStatusCode(201);
+				response.setStatusMsg("用户信息返回失败");
+			}
+		} else {
+			response.setStatusCode(201);
+			response.setStatusMsg("用户信息返回失败");
+		}
+		return response;
 	}
 
 }

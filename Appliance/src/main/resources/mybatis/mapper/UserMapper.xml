@@ -6,6 +6,7 @@
 		resultType="com.appliance.pojo.vo.UserVo">
 		SELECT 
 		Staff_Number AS staffNo,
+		Name AS name,
 		Password AS password,
 		User_Type AS userType
 		FROM staff_info WHERE Staff_Number = #{staffNo,jdbcType=VARCHAR}
