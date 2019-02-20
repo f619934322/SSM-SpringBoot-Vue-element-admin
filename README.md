@@ -1,2 +1,2 @@
-这是一个用springboot创建的SSM项目，前端套用vue-admin，各项基础配置已经完成，并写了各层的demo方法，可以直接使用作为后端框架二次开发
+这是一个用springboot创建的SSM项目，前端套用vue-element-admin，各项基础配置已经完成，并写了各层的demo方法，可以直接使用作为后端框架二次开发
 数据库使用MYSQL8
