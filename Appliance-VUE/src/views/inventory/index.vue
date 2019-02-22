@@ -116,7 +116,8 @@ export default {
     },
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
-      (this.currentPage = 1)((this.listLoading = true))
+      this.currentPage = 1
+      this.listLoading = true
       this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
     }
   }
