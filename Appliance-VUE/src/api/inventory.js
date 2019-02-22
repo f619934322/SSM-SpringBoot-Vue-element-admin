@@ -8,3 +8,24 @@ export function pagination(data) {
     data
   })
 }
+
+// 批量删除物品
+export function bacthDeleteItem(data) {
+  return request({
+    url: '/appliance/inventory/batchDeleteInventory',
+    method: 'post',
+    data
+  })
+}
+
+// 单选删除物品
+export function deleteItem(data) {
+  return request({
+    url: '/appliance/inventory/deleteInventory',
+    method: 'post',
+    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
+      'Content-Type': 'application/json'
+    },
+    data
+  })
+}

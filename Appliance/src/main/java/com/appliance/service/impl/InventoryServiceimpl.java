@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.appliance.mapper.InventoryMapper;
 import com.appliance.model.BaseResponse;
@@ -37,10 +38,54 @@ public class InventoryServiceimpl implements InventoryService {
 			response.setStatusMsg("获取inventoryList数据成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取inventoryList数据,信息{}", e);
+			log.error("获取inventoryList数据失败,信息{}", e);
 			BaseResponse<PageInfo<InventoryVo>> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("获取inventoryList数据失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 物品批量删除
+	 */
+	@Transactional
+	@Override
+	public BaseResponse<String> batchDeleteInventory(Long[] ids) {
+		try {
+			for (Long id : ids) {
+				inventoryMapper.deleteInventory(id); // 将Long数组遍历然后对每一个id进行删除操作
+			}
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("批量删除成功");
+			return response;
+		} catch (Exception e) {
+			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("批量删除失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 物品单选删除
+	 */
+	@Transactional
+	@Override
+	public BaseResponse<String> deleteInventory(Long id) {
+		try {
+			inventoryMapper.deleteInventory(id); // 对传入的id进行删除操作
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("单选删除成功");
+			return response;
+		} catch (Exception e) {
+			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("单选删除失败");
 			return response;
 		}
 	}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.appliance.mapper.InventoryMapper">
+	<!-- 教学用品库存一览查询 -->
 	<select id="inventoryList"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.InventoryVo">
@@ -13,9 +14,14 @@
 		Creator AS creator,
 		Updator AS updator
 		FROM
-		appliance_inventory 
-		<where>
-		Item_Name LIKE '%${itemName}%'
-		</where> 
+		appliance_inventory
+		WHERE Delete_Flag = 0
+		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 	</select>
+	<!-- 逻辑删除教学用品库存 -->
+	<update id="deleteInventory" parameterType="java.lang.Long">
+		UPDATE appliance_inventory SET
+		Delete_Flag = 1
+		WHERE ID = #{id}
+	</update>
 </mapper>

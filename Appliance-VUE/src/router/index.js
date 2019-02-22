@@ -79,7 +79,7 @@ export const constantRouterMap = [
         path: 'inventory_index',
         component: () => import('@/views/inventory/index'),
         name: '教学用品物品一览',
-        meta: { title: 'inventory', icon: 'dashboard', noCache: true }
+        meta: { title: 'inventory', icon: 'table', noCache: true }
       }
     ]
   }
