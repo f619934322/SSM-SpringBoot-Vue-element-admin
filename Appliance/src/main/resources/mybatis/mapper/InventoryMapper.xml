@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appliance.mapper.InventoryMapper">
+	<select id="inventoryList"
+		parameterType="com.appliance.pojo.dto.InventoryDto"
+		resultType="com.appliance.pojo.vo.InventoryVo">
+		SELECT
+		ID AS id,
+		Item_Name AS itemName,
+		Item_Count AS itemCount,
+		Item_Type AS itemType,
+		Commit AS commit,
+		Creator AS creator,
+		Updator AS updator
+		FROM
+		appliance_inventory 
+		<where>
+		Item_Name LIKE '%${itemName}%'
+		</where> 
+	</select>
+</mapper>
