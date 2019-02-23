@@ -13,9 +13,8 @@
         </el-tooltip>
         <el-button
           class="filter-item"
-          type="primary"
           style="margin-left: 6px;"
-          icon="search"
+          icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
         <el-button
@@ -23,13 +22,13 @@
           align="right"
           style="margin-left: 6px;"
           type="primary"
-          icon="edit"
+          icon="el-icon-circle-plus-outline"
         >申请新增采购</el-button>
         <el-button
           v-permission="['admin']"
           class="filter-item"
           type="danger"
-          icon="delBacthClick"
+          icon="el-icon-delete"
           @click="delBacthClick"
         >批量删除</el-button>
       </div>
@@ -118,20 +117,38 @@
       <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
       <el-table-column align="center" label="操作" width="220">
         <template slot-scope="scope">
-          <el-button size="small" type="info" @click="deatil(scope.row.id);">详 情</el-button>
-          <el-button size="small" type="primary" @click="supplement(scope.row.id);">申请补充</el-button>
-          <el-button
-            v-permission="['admin']"
-            size="small"
-            type="success"
-            @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
-          >编 辑</el-button>
-          <el-button
-            v-permission="['admin']"
-            size="small"
-            type="danger"
-            @click="deleteItem(scope.row.id);"
-          >删 除</el-button>
+          <div align="right">
+            <el-button
+              size="small"
+              type="primary"
+              icon="el-icon-circle-plus"
+              plain
+              @click="supplement(scope.row.id);"
+            >申请补充</el-button>
+            <el-button
+              size="small"
+              type="info"
+              icon="el-icon-star-off"
+              plain
+              @click="deatil(scope.row.id);"
+            >详情</el-button>
+            <el-button
+              v-permission="['admin']"
+              size="small"
+              type="warning"
+              icon="el-icon-edit"
+              plain
+              @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
+            >编辑</el-button>
+            <el-button
+              v-permission="['admin']"
+              size="small"
+              type="danger"
+              icon="el-icon-delete"
+              plain
+              @click="deleteItem(scope.row.id);"
+            >删除</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
