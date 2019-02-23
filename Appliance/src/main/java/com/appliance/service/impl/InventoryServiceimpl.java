@@ -1,7 +1,11 @@
 package com.appliance.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +14,7 @@ import com.appliance.mapper.InventoryMapper;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
 import com.appliance.pojo.vo.InventoryVo;
+import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.InventoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -54,7 +59,16 @@ public class InventoryServiceimpl implements InventoryService {
 	public BaseResponse<String> batchDeleteInventory(Long[] ids) {
 		try {
 			for (Long id : ids) {
-				inventoryMapper.deleteInventory(id); // 将Long数组遍历然后对每一个id进行删除操作
+				/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+				InventoryDto inventoryDto = new InventoryDto();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String nowTime = sdf.format(new Date());
+				Subject subject = SecurityUtils.getSubject();
+				UserVo userVo = (UserVo) subject.getPrincipal();
+				inventoryDto.setUpdator(userVo.getStaffNo());
+				inventoryDto.setUpdateTime(nowTime);
+				inventoryDto.setId(id);
+				inventoryMapper.deleteInventory(inventoryDto); // 将Long数组遍历然后对每一个id进行删除操作
 			}
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(200);
@@ -76,7 +90,16 @@ public class InventoryServiceimpl implements InventoryService {
 	@Override
 	public BaseResponse<String> deleteInventory(Long id) {
 		try {
-			inventoryMapper.deleteInventory(id); // 对传入的id进行删除操作
+			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+			InventoryDto inventoryDto = new InventoryDto();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			inventoryDto.setUpdator(userVo.getStaffNo());
+			inventoryDto.setUpdateTime(nowTime);
+			inventoryDto.setId(id);
+			inventoryMapper.deleteInventory(inventoryDto); // 对传入的id进行删除操作
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(200);
 			response.setStatusMsg("单选删除成功");
@@ -86,6 +109,27 @@ public class InventoryServiceimpl implements InventoryService {
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("单选删除失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 对库存表进行编辑
+	 */
+	@Transactional
+	@Override
+	public BaseResponse<String> updateInventory(InventoryDto inventoryDto) {
+		try {
+			inventoryMapper.updateInventory(inventoryDto);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("对库存表进行编辑成功");
+			return response;
+		} catch (Exception e) {
+			log.error("updateInventory对库存表进行编辑失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("对库存表进行编辑失败");
 			return response;
 		}
 	}

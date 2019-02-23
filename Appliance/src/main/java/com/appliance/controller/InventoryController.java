@@ -69,4 +69,19 @@ public class InventoryController {
 		return resultToString;
 	}
 
+	/**
+	 * 对库存表进行编辑
+	 * 
+	 * @param inventoryDto
+	 * @return
+	 */
+	@PostMapping(value = "/updateInventory", produces = { "application/json;charset=utf-8" })
+	public String updateInventory(@RequestBody InventoryDto inventoryDto) {
+		log.info("执行updateInventory");
+		BaseResponse<String> response = inventoryService.updateInventory(inventoryDto);
+		String resultToString = JSON.toJSONString(response);
+		log.info("updateInventory返回的JSON: {}", resultToString);
+		return resultToString;
+	}
+
 }

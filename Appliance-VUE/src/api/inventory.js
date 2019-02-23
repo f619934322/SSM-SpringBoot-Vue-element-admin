@@ -29,3 +29,12 @@ export function deleteItem(data) {
     data
   })
 }
+
+// 编辑物品
+export function updateItem(data) {
+  return request({
+    url: '/appliance/inventory/updateInventory',
+    method: 'post',
+    data
+  })
+}

@@ -19,9 +19,19 @@
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 	</select>
 	<!-- 逻辑删除教学用品库存 -->
-	<update id="deleteInventory" parameterType="java.lang.Long">
+	<update id="deleteInventory" parameterType="com.appliance.pojo.dto.InventoryDto">
 		UPDATE appliance_inventory SET
+		Updator = #{updator,jdbcType=VARCHAR},
+		Update_Time = #{updateTime,jdbcType=VARCHAR},
 		Delete_Flag = 1
+		WHERE ID = #{id}
+	</update>
+	<update id="updateInventory" parameterType="com.appliance.pojo.dto.InventoryDto">
+		UPDATE appliance_inventory SET
+		Item_Name = #{itemName,jdbcType=VARCHAR},
+		Item_Count = #{itemCount,jdbcType=INTEGER},
+		Item_Type = #{itemType,jdbcType=VARCHAR},
+		Commit = #{commit,jdbcType=VARCHAR}
 		WHERE ID = #{id}
 	</update>
 </mapper>

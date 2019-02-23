@@ -18,5 +18,11 @@ public interface InventoryMapper {
 	 * 删除库存物品
 	 * @param id
 	 */
-	public void deleteInventory(Long id);
+	public void deleteInventory(InventoryDto inventoryDto);
+	
+	/**
+	 * 对库存表进行编辑
+	 * @param inventoryDto
+	 */
+	public void updateInventory(InventoryDto inventoryDto);
 }

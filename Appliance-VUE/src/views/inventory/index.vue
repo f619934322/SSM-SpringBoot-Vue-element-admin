@@ -53,6 +53,52 @@
       </div>
     </el-dialog>
     <!-- /物品单选删除弹窗 -->
+    <!-- 库存编辑弹窗 -->
+    <el-dialog
+      :visible.sync="dialogItemUpdate"
+      :before-close="handleCloseEdit"
+      :rules="editRule"
+      title="商品修改"
+    >
+      <el-form
+        ref="editForm"
+        :model="ItemUpdateObj"
+        :rules="editRule"
+        class="small-space"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="id" style="display: none;">
+          <el-input v-model="ItemUpdateObj.id" disabled="disabled"/>
+        </el-form-item>
+        <el-form-item label="物品名称" prop="itemName">
+          <el-input v-model="ItemUpdateObj.itemName" placeholder="请输入物品名称"/>
+        </el-form-item>
+        <el-form-item label="物品总数" prop="itemCount">
+          <el-input v-model="ItemUpdateObj.itemCount" placeholder="请输入物品数量"/>
+        </el-form-item>
+        <el-form-item label="物品类型" prop="itemType">
+          <el-select
+            v-model="ItemUpdateObj.itemType"
+            class="filter-item"
+            filterable
+            placeholder="请选择商品类型"
+          >
+            <el-option v-for="item in itemTypeList" :key="item.key" :value="item.itemType"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="修改备注" prop="commit">
+          <el-input v-model="ItemUpdateObj.commit" placeholder="请输入备注信息"/>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogItemUpdate = false;$refs.editForm.resetFields()">取消</el-button>
+        <el-button type="primary" @click="updateItemSubmit('editForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- /库存编辑弹窗 -->
     <!-- 主表格 -->
     <el-table
       v-loading.body="listLoading"
@@ -78,7 +124,7 @@
             v-permission="['admin']"
             size="small"
             type="success"
-            @click="updateItem(scope.row.id);"
+            @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
           >编 辑</el-button>
           <el-button
             v-permission="['admin']"
@@ -108,7 +154,20 @@
 <script>
 import { Message } from 'element-ui'
 import permission from '@/directive/permission/index.js' // 权限判断指令
-import { pagination, bacthDeleteItem, deleteItem } from '@/api/inventory'
+import {
+  pagination,
+  bacthDeleteItem,
+  deleteItem,
+  updateItem
+} from '@/api/inventory'
+const inventoryObj = {
+  // 插入更新等对象在这初始化
+  id: null,
+  itemName: null,
+  itemCount: null,
+  itemType: null,
+  commit: null
+}
 export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
@@ -116,15 +175,34 @@ export default {
       listLoading: true,
       dialogVisibleDelBatch: false, // 这是批量删除的弹窗，默认false
       dialogVisibleDel: false, // 这是单选删除的弹窗，默认false
+      dialogItemUpdate: false, // 这是编辑的弹窗，默认false
       multipleSelection: [], // 存放勾选对象的数组
-      list: null,
+      list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
       delItemId: null, // 这是单选删除的物品id
+      itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
+      // 这是编辑用的对象
+      ItemUpdateObj: Object.assign({}, inventoryObj),
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
       searchOptions: {
         // 这是传给后端的检索用参数
         itemName: null
+      },
+      // 编辑规则,在编辑时强制输入符合规则的内容
+      editRule: {
+        itemName: [
+          { required: true, message: '请输入物品名称', trigger: 'blur' }
+        ],
+        itemCount: [
+          { required: true, message: '请输入物品数量', trigger: 'blur' }
+        ],
+        itemType: [
+          { required: true, message: '请选择物品类型', trigger: 'blur' }
+        ],
+        commit: [
+          { required: true, message: '请输入本次修改的备注', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -257,6 +335,58 @@ export default {
             duration: 5 * 1000
           })
         })
+    },
+    // 编辑弹窗关闭
+    handleCloseEdit() {
+      this.dialogItemUpdate = false
+      this.$refs.editForm.resetFields()
+    },
+    // 编辑弹窗打开和内容赋值
+    updateItem(id, itemName, itemCount, commit, itemType) {
+      this.ItemUpdateObj.id = id
+      this.ItemUpdateObj.itemName = itemName
+      this.ItemUpdateObj.itemCount = itemCount
+      this.ItemUpdateObj.commit = commit
+      this.ItemUpdateObj.itemType = itemType
+      this.dialogItemUpdate = true
+    },
+    updateItemSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          updateItem(this.ItemUpdateObj)
+            .then(response => {
+              const data = response.data
+              console.info('aaa1' + data.statusCode)
+              this.listLoading = false
+              if (data.statusCode === 200) {
+                Message({
+                  message: '编辑成功',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+                this.$refs[formName].resetFields()
+                this.dialogItemUpdate = false
+                this.ItemUpdateObj = Object.assign({}, inventoryObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
+                this.fetchData()
+              } else {
+                this.loading = false
+                Message({
+                  message: '编辑失败',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+              }
+            })
+            .catch(() => {
+              this.loading = false
+              Message({
+                message: '编辑失败',
+                type: 'error',
+                duration: 5 * 1000
+              })
+            })
+        }
+      })
     }
   }
 }

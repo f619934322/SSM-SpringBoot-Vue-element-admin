@@ -17,15 +17,24 @@ public interface InventoryService {
 
 	/**
 	 * 物品批量删除
+	 * 
 	 * @param ids
 	 * @return
 	 */
 	public BaseResponse<String> batchDeleteInventory(Long[] ids);
-	
+
 	/**
 	 * 物品单选删除
+	 * 
 	 * @param id
 	 * @return
 	 */
 	public BaseResponse<String> deleteInventory(Long id);
+
+	/**
+	 * 对库存表进行编辑
+	 * @param inventoryDto
+	 * @return
+	 */
+	public BaseResponse<String> updateInventory(InventoryDto inventoryDto);
 }
