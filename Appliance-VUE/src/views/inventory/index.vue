@@ -356,7 +356,6 @@ export default {
           updateItem(this.ItemUpdateObj)
             .then(response => {
               const data = response.data
-              console.info('aaa1' + data.statusCode)
               this.listLoading = false
               if (data.statusCode === 200) {
                 Message({
