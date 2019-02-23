@@ -58,7 +58,7 @@
       :visible.sync="dialogItemUpdate"
       :before-close="handleCloseEdit"
       :rules="editRule"
-      title="商品修改"
+      title="库存物品修改"
     >
       <el-form
         ref="editForm"
