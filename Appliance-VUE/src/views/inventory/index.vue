@@ -88,7 +88,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="修改备注" prop="commit">
-          <el-input v-model="ItemUpdateObj.commit" placeholder="请输入备注信息"/>
+          <el-input
+            v-model="ItemUpdateObj.commit"
+            :autosize="{ minRows: 3, maxRows: 5}"
+            placeholder="请输入备注信息"
+            type="textarea"
+          />
         </el-form-item>
       </el-form>
 
@@ -100,7 +105,13 @@
     <!-- /库存编辑弹窗 -->
     <!-- 库存详情弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
-      <el-table v-loading.body="listLoading" :data="tableDetail" height="300" border style="width: 100%">
+      <el-table
+        v-loading.body="listLoading"
+        :data="tableDetail"
+        height="300"
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="id" label="id" width="50"/>
         <el-table-column prop="itemName" label="物品名称" width="100"/>
         <el-table-column prop="itemCount" label="该次补充数量" width="120"/>
@@ -131,30 +142,40 @@
       <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
       <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
-          <el-button
-            size="small"
-            type="primary"
-            icon="el-icon-circle-plus"
-            plain
-            @click="supplement(scope.row.id);"
-          >申请补充</el-button>
-          <el-button
-            size="small"
-            type="success"
-            icon="el-icon-plus"
-            plain
-            @click="apply(scope.row.id);"
-          >申请领取</el-button>
-          <div align="center">
-            <el-select class="filter-item" placeholder="其他选项" filterable>
-              <el-option>
+          <el-dropdown trigger="click">
+            <el-button type="primary">
+              操作选项
+              <i class="el-icon-arrow-down el-icon--right"/>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-circle-plus"
+                  plain
+                  @click="supplement(scope.row.id);"
+                >申请补充</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-button
+                  size="mini"
+                  type="success"
+                  icon="el-icon-plus"
+                  plain
+                  @click="apply(scope.row.id);"
+                >申请领取</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <el-button
                   size="small"
                   type="info"
-                  icon="el-icon-star-off"
+                  icon="el-icon-tickets"
                   plain
                   @click="detail(scope.row.id);"
                 >详情</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <el-button
                   v-permission="['admin']"
                   size="small"
@@ -163,6 +184,8 @@
                   plain
                   @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
                 >编辑</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <el-button
                   v-permission="['admin']"
                   size="small"
@@ -171,9 +194,9 @@
                   plain
                   @click="deleteItem(scope.row.id);"
                 >删除</el-button>
-              </el-option>
-            </el-select>
-          </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
