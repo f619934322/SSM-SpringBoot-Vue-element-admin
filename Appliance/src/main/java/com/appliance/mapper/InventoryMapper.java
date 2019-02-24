@@ -3,6 +3,7 @@ package com.appliance.mapper;
 import java.util.List;
 
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 
 public interface InventoryMapper {
@@ -25,4 +26,11 @@ public interface InventoryMapper {
 	 * @param inventoryDto
 	 */
 	public void updateInventory(InventoryDto inventoryDto);
+	
+	/**
+	 * 库存物品的详情
+	 * @param id
+	 * @return
+	 */
+	public List<DemandVo> inventoryDetail(Long id);
 }

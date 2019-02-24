@@ -1,5 +1,5 @@
 <template>
-  <!-- 检索选项 -->
+  <!-- 检索等顶部选项 -->
   <div class="app-container">
     <div class="filter-container">
       <div class="container">
@@ -33,7 +33,7 @@
         >批量删除</el-button>
       </div>
     </div>
-    <!-- /检索选项 -->
+    <!-- /检索等顶部选项 -->
     <!-- 物品批量删除弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDelBatch" title="物品批量删除">
       <code>您确认要删除这些物品吗？ {{ multipleSelection }}</code>
@@ -98,6 +98,20 @@
       </div>
     </el-dialog>
     <!-- /库存编辑弹窗 -->
+    <!-- 库存详情弹窗 -->
+    <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
+      <el-table v-loading.body="listLoading" :data="tableDetail" height="300" border style="width: 100%">
+        <el-table-column prop="id" label="id" width="50"/>
+        <el-table-column prop="itemName" label="物品名称" width="100"/>
+        <el-table-column prop="itemCount" label="该次补充数量" width="120"/>
+        <el-table-column prop="creator" label="申请人" width="120"/>
+        <el-table-column prop="reviewer" label="审核人" width="120"/>
+        <el-table-column prop="createTime" label="申请时间" width="120"/>
+        <el-table-column prop="reviewTime" label="审核时间" width="120"/>
+        <el-table-column prop="commit" label="备注" width="200"/>
+      </el-table>
+    </el-dialog>
+    <!-- /库存详情弹窗 -->
     <!-- 主表格 -->
     <el-table
       v-loading.body="listLoading"
@@ -115,39 +129,50 @@
       <el-table-column prop="itemCount" label="物品总数" min-width="120px;" sortable/>
       <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
       <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
-      <el-table-column align="center" label="操作" width="220">
+      <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
-          <div align="right">
-            <el-button
-              size="small"
-              type="primary"
-              icon="el-icon-circle-plus"
-              plain
-              @click="supplement(scope.row.id);"
-            >申请补充</el-button>
-            <el-button
-              size="small"
-              type="info"
-              icon="el-icon-star-off"
-              plain
-              @click="deatil(scope.row.id);"
-            >详情</el-button>
-            <el-button
-              v-permission="['admin']"
-              size="small"
-              type="warning"
-              icon="el-icon-edit"
-              plain
-              @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
-            >编辑</el-button>
-            <el-button
-              v-permission="['admin']"
-              size="small"
-              type="danger"
-              icon="el-icon-delete"
-              plain
-              @click="deleteItem(scope.row.id);"
-            >删除</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            icon="el-icon-circle-plus"
+            plain
+            @click="supplement(scope.row.id);"
+          >申请补充</el-button>
+          <el-button
+            size="small"
+            type="success"
+            icon="el-icon-plus"
+            plain
+            @click="apply(scope.row.id);"
+          >申请领取</el-button>
+          <div align="center">
+            <el-select class="filter-item" placeholder="其他选项" filterable>
+              <el-option>
+                <el-button
+                  size="small"
+                  type="info"
+                  icon="el-icon-star-off"
+                  plain
+                  @click="detail(scope.row.id);"
+                >详情</el-button>
+                <el-button
+                  v-permission="['admin']"
+                  size="small"
+                  type="warning"
+                  icon="el-icon-edit"
+                  plain
+                  @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
+                >编辑</el-button>
+                <el-button
+                  v-permission="['admin']"
+                  size="small"
+                  type="danger"
+                  icon="el-icon-delete"
+                  plain
+                  @click="deleteItem(scope.row.id);"
+                >删除</el-button>
+              </el-option>
+            </el-select>
           </div>
         </template>
       </el-table-column>
@@ -175,7 +200,8 @@ import {
   pagination,
   bacthDeleteItem,
   deleteItem,
-  updateItem
+  updateItem,
+  detailForInventory
 } from '@/api/inventory'
 const inventoryObj = {
   // 插入更新等对象在这初始化
@@ -193,8 +219,10 @@ export default {
       dialogVisibleDelBatch: false, // 这是批量删除的弹窗，默认false
       dialogVisibleDel: false, // 这是单选删除的弹窗，默认false
       dialogItemUpdate: false, // 这是编辑的弹窗，默认false
+      dialogVisibleDetail: false, // 这是库存详情的弹窗，默认false
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
+      tableDetail: null, // 这是库存详情的list，默认null
       delItemId: null, // 这是单选删除的物品id
       itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
@@ -265,7 +293,8 @@ export default {
     },
     // 批量删除确认
     delBacthClick() {
-      if (this.multipleSelection === null || this.multipleSelection === '') {
+      if (this.multipleSelection.length === 0) {
+        // 数组判空
         Message({
           message: '您还未勾选',
           type: 'error',
@@ -403,7 +432,34 @@ export default {
             })
         }
       })
+    },
+    // 库存物品详情弹窗显示
+    detail(id) {
+      // 先获取详情数据，再展示窗口
+      detailForInventory(id)
+        .then(response => {
+          const data = response.data
+          this.listLoading = false
+          if (data.statusCode === 200) {
+            this.tableDetail = data.responseData
+            this.dialogVisibleDetail = true
+          } else {
+            Message({
+              message: '获取详情失败',
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
+        })
+        .catch(() => {
+          this.loading = false
+          Message({
+            message: '获取详情失败',
+            type: 'error',
+            duration: 5 * 1000
+          })
+        })
     }
-  }
+  } // 这是方法末尾花括号
 }
 </script>

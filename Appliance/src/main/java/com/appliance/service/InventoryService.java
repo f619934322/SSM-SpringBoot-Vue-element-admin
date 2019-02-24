@@ -1,7 +1,10 @@
 package com.appliance.service;
 
+import java.util.List;
+
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.github.pagehelper.PageInfo;
 
@@ -33,8 +36,16 @@ public interface InventoryService {
 
 	/**
 	 * 对库存表进行编辑
+	 * 
 	 * @param inventoryDto
 	 * @return
 	 */
 	public BaseResponse<String> updateInventory(InventoryDto inventoryDto);
+
+	/**
+	 * 库存物品的详情
+	 * @param id
+	 * @return
+	 */
+	public BaseResponse<List<DemandVo>> inventoryDetail(Long id);
 }

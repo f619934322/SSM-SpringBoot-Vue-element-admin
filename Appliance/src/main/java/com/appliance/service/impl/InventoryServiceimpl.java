@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.appliance.mapper.InventoryMapper;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.InventoryService;
@@ -105,7 +106,7 @@ public class InventoryServiceimpl implements InventoryService {
 			response.setStatusMsg("单选删除成功");
 			return response;
 		} catch (Exception e) {
-			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			log.error("deleteInventory单选删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("单选删除失败");
@@ -130,6 +131,26 @@ public class InventoryServiceimpl implements InventoryService {
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("对库存表进行编辑失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 库存物品的详情
+	 */
+	@Override
+	public BaseResponse<List<DemandVo>> inventoryDetail(Long id) {
+		try {
+			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetail(id);
+			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
+			response.setResponseData(inventoryDetail);
+			response.setStatusCode(200);
+			response.setStatusMsg("获取库存表详情成功");
+			return response;
+		} catch (Exception e) {
+			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("获取库存表详情失败");
 			return response;
 		}
 	}

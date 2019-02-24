@@ -34,4 +34,24 @@
 		Commit = #{commit,jdbcType=VARCHAR}
 		WHERE ID = #{id}
 	</update>
+	<!-- 教学用品库存单品详情获取 -->
+	<select id="inventoryDetail"
+		parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.DemandVo">
+		SELECT 
+        ad.ID AS id,
+        ad.Item_Name AS itemName,
+        ad.Item_Count AS itemCount,
+        ad.Status AS status,
+        ad.Commit AS commit,
+        ad.Creator AS creator,
+        ad.Reviewer AS reviewer,
+        ad.Create_Time AS createTime,
+        ad.Review_Time AS reviewTime 
+        FROM 
+		appliance_inventory ai 
+        LEFT JOIN 
+        appliance_demand ad ON (ai.ID = ad.Inventory_ID)
+        WHERE ai.ID = #{id}
+	</select>
 </mapper>

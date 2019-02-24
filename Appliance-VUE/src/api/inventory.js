@@ -38,3 +38,15 @@ export function updateItem(data) {
     data
   })
 }
+
+// 获取库存单项详情
+export function detailForInventory(data) {
+  return request({
+    url: '/appliance/inventory/inventoryDetail',
+    method: 'post',
+    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
+      'Content-Type': 'application/json'
+    },
+    data
+  })
+}
