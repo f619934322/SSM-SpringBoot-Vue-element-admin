@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class InventoryServiceimpl implements InventoryService {
+public class InventoryServiceImpl implements InventoryService {
 
 	@Autowired
 	private InventoryMapper inventoryMapper;
