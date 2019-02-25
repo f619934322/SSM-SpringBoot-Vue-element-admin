@@ -149,6 +149,38 @@
       </div>
     </el-dialog>
     <!-- /新增采购弹窗 -->
+    <!-- 补充采购弹窗 -->
+    <el-dialog
+      :visible.sync="dialogSupplementDemand"
+      :before-close="handleCloseSupplement"
+      :rules="addRule"
+      title="申请补充库存"
+    >
+      <el-form
+        ref="supplementForm"
+        :model="demandObj"
+        :rules="addRule"
+        class="small-space"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="申请原因" prop="commit">
+          <el-input
+            v-model="demandObj.commit"
+            :autosize="{ minRows: 3, maxRows: 5}"
+            placeholder="请输入备注信息"
+            type="textarea"
+          />
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogSupplementDemand = false;$refs.supplementForm.resetFields()">取消</el-button>
+        <el-button type="primary" @click="supplementDemand('supplementForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- /补充采购弹窗 -->
     <!-- 库存详情弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
       <el-table
@@ -201,7 +233,7 @@
                   type="primary"
                   icon="el-icon-circle-plus"
                   plain
-                  @click="supplement(scope.row.id);"
+                  @click="openDialogSupplementDemand(scope.row.id,scope.row.itemName,scope.row.itemType);"
                 >申请补充</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
@@ -272,7 +304,8 @@ import {
   deleteItem,
   updateItem,
   detailForInventory,
-  insertNewDemand
+  insertNewDemand,
+  supplementDemand
 } from '@/api/inventory'
 const inventoryObj = {
   // 插入更新等对象在这初始化
@@ -284,6 +317,7 @@ const inventoryObj = {
 }
 // 采购对象初始化
 const demandObj = {
+  inventoryId: null,
   itemName: null,
   itemType: null,
   commit: null
@@ -298,6 +332,7 @@ export default {
       dialogItemUpdate: false, // 这是编辑的弹窗，默认false
       dialogVisibleDetail: false, // 这是库存详情的弹窗，默认false
       dialogNewDemand: false, // 这是新增采购的弹窗，默认false
+      dialogSupplementDemand: false, // 这是采购补充的弹窗，默认false
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
       tableDetail: null, // 这是库存详情的list，默认null
@@ -572,6 +607,51 @@ export default {
               const data = response.data
               this.listLoading = false
               if (data.statusCode === 200) {
+                Message({
+                  message: '申请成功',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+              } else {
+                Message({
+                  message: '申请失败，检查网络',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+              }
+            })
+            .catch(() => {
+              this.loading = false
+              Message({
+                message: '申请失败，检查网络',
+                type: 'error',
+                duration: 5 * 1000
+              })
+            })
+        }
+      })
+    }, // 补充采购弹窗关闭
+    handleCloseSupplement() {
+      this.dialogSupplementDemand = false
+      this.$refs.supplementForm.resetFields()
+    },
+    // 打开采购新增表单
+    openDialogSupplementDemand(id, itemName, itemType) {
+      this.dialogSupplementDemand = true
+      this.demandObj.inventoryId = id
+      this.demandObj.itemName = itemName
+      this.demandObj.itemType = itemType
+    },
+    supplementDemand(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          supplementDemand(this.demandObj)
+            .then(response => {
+              const data = response.data
+              this.listLoading = false
+              if (data.statusCode === 200) {
+                this.dialogSupplementDemand = false
+                this.demandObj = Object.assign({}, demandObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
                 Message({
                   message: '申请成功',
                   type: 'success',

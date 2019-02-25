@@ -59,3 +59,13 @@ export function insertNewDemand(data) {
     data
   })
 }
+
+// 申请补充采购
+export function supplementDemand(data) {
+  return request({
+    url: '/appliance/demand/insertSupplementDemand',
+    method: 'post',
+    data
+  })
+}
+
