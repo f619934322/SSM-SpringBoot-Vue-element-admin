@@ -2,10 +2,12 @@ package com.appliance.pojo.dto;
 
 import java.io.Serializable;
 
+import com.appliance.model.PaginationBase;
+
 import lombok.Data;
 
 @Data
-public class DemandDto implements Serializable {
+public class DemandDto extends PaginationBase implements Serializable {
 
 	/**
 	 * 

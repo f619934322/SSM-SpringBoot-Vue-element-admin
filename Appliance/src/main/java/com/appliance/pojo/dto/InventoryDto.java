@@ -17,6 +17,12 @@ public class InventoryDto extends PaginationBase implements Serializable {
 	 * 物品id
 	 */
 	private Long id;
+	
+	/**
+	 * 需求表id
+	 */
+	private Long demandId;
+	
 	/**
 	 * 物品名称
 	 */

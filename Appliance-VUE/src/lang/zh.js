@@ -2,7 +2,8 @@ export default {
   // 这里修改全球化语言-中文
   route: {
     dashboard: '首页',
-    inventory: '教学用品物品一览'
+    inventory: '教学用品一览',
+    demand: '教学用品申请审核'
   },
   navbar: {
     logOut: '退出登录',

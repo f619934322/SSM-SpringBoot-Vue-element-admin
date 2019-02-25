@@ -15,7 +15,7 @@ public class InventoryVo implements Serializable{
 	/**
 	 * 教学管理用品库存表ID
 	 */
-	private String id;
+	private Long id;
 	
 	/**
 	 * 物品名称
@@ -25,7 +25,7 @@ public class InventoryVo implements Serializable{
 	/**
 	 * 物品数量
 	 */
-	private String itemCount;
+	private int itemCount;
 	
 	/**
 	 * 物品类型

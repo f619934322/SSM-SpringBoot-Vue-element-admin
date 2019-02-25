@@ -121,6 +121,12 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	public BaseResponse<String> updateInventory(InventoryDto inventoryDto) {
 		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			inventoryDto.setUpdator(userVo.getName());
+			inventoryDto.setUpdateTime(nowTime);
 			inventoryMapper.updateInventory(inventoryDto);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(200);

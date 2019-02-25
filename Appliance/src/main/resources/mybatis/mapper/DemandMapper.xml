@@ -49,4 +49,56 @@
 		0
 		)
 	</insert>
+	<!-- 获取审核清单 -->
+	<select id="demandList"
+		parameterType="com.appliance.pojo.dto.DemandDto"
+		resultType="com.appliance.pojo.vo.DemandVo">
+		SELECT
+		ID AS id,
+		Inventory_ID AS inventoryId,
+		Added_Flag AS addedFlag,
+		Item_Name AS itemName,
+		Item_Type AS itemType,
+		Status AS status,
+		Purchase_Price AS purchasePrice,
+		Item_Count AS itemCount,
+		Commit AS
+		commit,
+		Creator AS creator
+		FROM
+		appliance_demand
+		WHERE Delete_Flag = 0
+		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
+	</select>
+	<!-- 审核操作 -->
+	<update id="reviewDemand"
+		parameterType="com.appliance.pojo.dto.DemandDto">
+		UPDATE appliance_demand SET
+		Item_Count =
+		#{itemCount,jdbcType=INTEGER},
+		Purchase_Price =
+		#{purchasePrice,jdbcType=INTEGER},
+		Status =
+		#{status,jdbcType=INTEGER},
+		Reviewer = #{reviewer,jdbcType=VARCHAR},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
+
+	<update id="updateDemandInventoryId"
+		parameterType="com.appliance.pojo.dto.DemandDto">
+		UPDATE appliance_demand SET
+		Inventory_ID =
+		#{inventoryId,jdbcType=INTEGER},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
 </mapper>

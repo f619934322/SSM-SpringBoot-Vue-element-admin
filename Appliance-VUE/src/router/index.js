@@ -82,6 +82,19 @@ export const constantRouterMap = [
         meta: { title: 'inventory', icon: 'table', noCache: true }
       }
     ]
+  },
+  {
+    path: '/demand',
+    component: Layout,
+    redirect: 'demand',
+    children: [
+      {
+        path: 'demand_index',
+        component: () => import('@/views/demand/index'),
+        name: '教学用品物品申请审核清单',
+        meta: { title: 'demand', icon: 'table', noCache: true }
+      }
+    ]
   }
 ]
 
