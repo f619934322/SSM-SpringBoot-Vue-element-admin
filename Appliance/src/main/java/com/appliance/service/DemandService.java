@@ -11,4 +11,11 @@ public interface DemandService {
 	 * @return
 	 */
 	public BaseResponse<String> insertNewDemand(DemandDto demandDto);
+	
+	/**
+	 * 采购申请补充
+	 * @param demandDto
+	 * @return
+	 */
+	public BaseResponse<String> insertSupplementDemand(DemandDto demandDto);
 }

@@ -44,10 +44,38 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("insertNewDemand插入成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取inventoryList数据失败,信息{}", e);
+			log.error("insertNewDemand失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("insertNewDemand插入失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 采购申请补充
+	 */
+	@Transactional
+	@Override
+	public BaseResponse<String> insertSupplementDemand(DemandDto demandDto) {
+		try {
+			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			demandDto.setCreator(userVo.getStaffNo());
+			demandDto.setCreateTime(nowTime);
+			demandMapper.insertSupplementDemand(demandDto);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("insertNewDemand插入成功");
+			return response;
+		} catch (Exception e) {
+			log.error("insertSupplementDemand失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("insertSupplementDemand插入失败");
 			return response;
 		}
 	}

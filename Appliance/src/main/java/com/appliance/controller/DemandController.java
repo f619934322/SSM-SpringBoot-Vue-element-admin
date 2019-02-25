@@ -35,4 +35,17 @@ public class DemandController {
 		log.info("insertNewDemand返回的JSON: {}", resultToString);
 		return resultToString;
 	}
+	/**
+	 * 采购申请补充
+	 * @param demandDto
+	 * @return
+	 */
+	@PostMapping(value = "/insertSupplementDemand", produces = { "application/json" })
+	public String insertSupplementDemand(@RequestBody DemandDto demandDto) {// 新增采购需求，在需求表里新增一条数据，并且需求标识为1（新增）
+		log.info("执行insertSupplementDemand");
+		BaseResponse<String> response = demandService.insertSupplementDemand(demandDto);
+		String resultToString = JSON.toJSONString(response);
+		log.info("insertSupplementDemand返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 }

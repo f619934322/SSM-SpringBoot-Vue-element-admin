@@ -10,4 +10,9 @@ public interface DemandMapper {
 	 */
 	public void insertNewDemand(DemandDto demandDto);
 
+	/**
+	 * 采购申请补充
+	 * @param demandDto
+	 */
+	public void insertSupplementDemand(DemandDto demandDto);
 }
