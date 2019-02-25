@@ -46,7 +46,7 @@ public class DemandServiceImpl implements DemandService {
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
-			demandDto.setCreator(userVo.getStaffNo());
+			demandDto.setCreator(userVo.getName());
 			demandDto.setCreateTime(nowTime);
 			demandMapper.insertNewDemand(demandDto);
 			BaseResponse<String> response = new BaseResponse<>();
@@ -74,7 +74,7 @@ public class DemandServiceImpl implements DemandService {
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
-			demandDto.setCreator(userVo.getStaffNo());
+			demandDto.setCreator(userVo.getName());
 			demandDto.setCreateTime(nowTime);
 			demandMapper.insertSupplementDemand(demandDto);
 			BaseResponse<String> response = new BaseResponse<>();
@@ -138,36 +138,41 @@ public class DemandServiceImpl implements DemandService {
 					inventoryDto.setDemandId(demandDto.getId());
 					inventoryDto.setCreator(userVo.getName());
 					inventoryDto.setCreateTime(nowTime);
-					log.info("执行reviewDemand更新审核状态，新增"); 
+					log.info("执行reviewDemand更新审核状态，新增");
+					demandDto.setReviewer(userVo.getName());
+					demandDto.setReviewTime(nowTime);
 					demandMapper.reviewDemand(demandDto);
-					log.info("执行reviewDemand插入一条新的库存表数据"); 
+					log.info("执行reviewDemand插入一条新的库存表数据");
 					inventoryMapper.insertNewInventory(inventoryDto);
-					log.info("执行selectInventoryByDemandId获取唯一一条库存数据"); 
+					log.info("执行selectInventoryByDemandId获取唯一一条库存数据");
 					InventoryVo inventoryVo = inventoryMapper.selectInventoryByDemandId(demandDto.getId());
 					demandDto.setInventoryId(inventoryVo.getId());
 					demandDto.setUpdator(userVo.getName());
 					demandDto.setUpdateTime(nowTime);
-					log.info("执行updateDemandInventoryId更新需求表中的库存表ID外键"); 
+					log.info("执行updateDemandInventoryId更新需求表中的库存表ID外键");
 					demandMapper.updateDemandInventoryId(demandDto);
 				} else {// 否则直接更新库存表数量
-					log.info("执行selectInventoryById查询唯一的库存表数据"); 
+					log.info("执行selectInventoryById查询唯一的库存表数据");
 					InventoryVo inventoryVo = inventoryMapper.selectInventoryById(demandDto.getInventoryId());
 					int itemCount = demandDto.getItemCount() + inventoryVo.getItemCount();
 					InventoryDto inventoryDto = new InventoryDto();
 					inventoryDto.setId(demandDto.getInventoryId());
 					inventoryDto.setItemCount(itemCount);
+					demandDto.setReviewer(userVo.getName());
+					demandDto.setReviewTime(nowTime);
 					inventoryDto.setUpdator(userVo.getName());
 					inventoryDto.setUpdateTime(nowTime);
-					log.info("执行reviewDemand更新审核状态等，补充"); 
+					log.info("执行reviewDemand更新审核状态等，补充");
 					demandMapper.reviewDemand(demandDto);
-					log.info("执行updateInventoryForitemCount更新补充的库存数量"); 
+					log.info("执行updateInventoryForitemCount更新补充的库存数量");
 					inventoryMapper.updateInventoryForitemCount(inventoryDto);
 				}
 			} else {// 如果审核标识不为4，则正常更新，不对库存表做操作
 				demandDto.setReviewer(userVo.getName());
 				demandDto.setUpdator(userVo.getName());
+				demandDto.setReviewTime(nowTime);
 				demandDto.setUpdateTime(nowTime);
-				log.info("执行reviewDemand更新审核状态等"); 
+				log.info("执行reviewDemand更新审核状态等");
 				demandMapper.reviewDemand(demandDto);
 			}
 

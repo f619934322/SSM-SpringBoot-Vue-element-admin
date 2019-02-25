@@ -81,6 +81,8 @@
 		Status =
 		#{status,jdbcType=INTEGER},
 		Reviewer = #{reviewer,jdbcType=VARCHAR},
+		Review_Time =
+		#{reviewtime,jdbcType=VARCHAR},
 		Updator =
 		#{updator,jdbcType=VARCHAR},
 		Update_Time =
