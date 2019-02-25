@@ -50,3 +50,12 @@ export function detailForInventory(data) {
     data
   })
 }
+
+// 申请新采购
+export function insertNewDemand(data) {
+  return request({
+    url: '/appliance/demand/insertNewDemand',
+    method: 'post',
+    data
+  })
+}

@@ -23,6 +23,7 @@
           style="margin-left: 6px;"
           type="primary"
           icon="el-icon-circle-plus-outline"
+          @click="openDialogNewDemand"
         >申请新增采购</el-button>
         <el-button
           v-permission="['admin']"
@@ -57,11 +58,11 @@
       :visible.sync="dialogItemUpdate"
       :before-close="handleCloseEdit"
       :rules="editRule"
-      title="库存物品修改"
+      title="申请发起新采购"
     >
       <el-form
         ref="editForm"
-        :model="ItemUpdateObj"
+        :model="itemUpdateObj"
         :rules="editRule"
         class="small-space"
         label-position="left"
@@ -69,27 +70,27 @@
         style="width: 400px; margin-left:50px;"
       >
         <el-form-item label="id" style="display: none;">
-          <el-input v-model="ItemUpdateObj.id" disabled="disabled"/>
+          <el-input v-model="itemUpdateObj.id" disabled="disabled"/>
         </el-form-item>
         <el-form-item label="物品名称" prop="itemName">
-          <el-input v-model="ItemUpdateObj.itemName" placeholder="请输入物品名称"/>
+          <el-input v-model="itemUpdateObj.itemName" placeholder="请输入物品名称"/>
         </el-form-item>
         <el-form-item label="物品总数" prop="itemCount">
-          <el-input v-model="ItemUpdateObj.itemCount" placeholder="请输入物品数量"/>
+          <el-input v-model="itemUpdateObj.itemCount" placeholder="请输入物品数量"/>
         </el-form-item>
         <el-form-item label="物品类型" prop="itemType">
           <el-select
-            v-model="ItemUpdateObj.itemType"
+            v-model="itemUpdateObj.itemType"
             class="filter-item"
             filterable
-            placeholder="请选择商品类型"
+            placeholder="请选择物品类型"
           >
             <el-option v-for="item in itemTypeList" :key="item.key" :value="item.itemType"/>
           </el-select>
         </el-form-item>
         <el-form-item label="修改备注" prop="commit">
           <el-input
-            v-model="ItemUpdateObj.commit"
+            v-model="itemUpdateObj.commit"
             :autosize="{ minRows: 3, maxRows: 5}"
             placeholder="请输入备注信息"
             type="textarea"
@@ -103,6 +104,51 @@
       </div>
     </el-dialog>
     <!-- /库存编辑弹窗 -->
+    <!-- 新增采购弹窗 -->
+    <el-dialog
+      :visible.sync="dialogNewDemand"
+      :before-close="handleCloseNewAdd"
+      :rules="addRule"
+      title="申请新采购"
+    >
+      <el-form
+        ref="addForm"
+        :model="demandObj"
+        :rules="addRule"
+        class="small-space"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="物品名称" prop="itemName">
+          <el-input v-model="demandObj.itemName" placeholder="请输入物品名称"/>
+        </el-form-item>
+        <el-form-item label="物品类型" prop="itemType">
+          <el-select
+            v-model="demandObj.itemType"
+            class="filter-item"
+            filterable
+            placeholder="请选择物品类型"
+          >
+            <el-option v-for="item in itemTypeList" :key="item.key" :value="item.itemType"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="申请原因" prop="commit">
+          <el-input
+            v-model="demandObj.commit"
+            :autosize="{ minRows: 3, maxRows: 5}"
+            placeholder="请输入备注信息"
+            type="textarea"
+          />
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogNewDemand = false;$refs.addForm.resetFields()">取消</el-button>
+        <el-button type="primary" @click="insertNewDemand('addForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- /新增采购弹窗 -->
     <!-- 库存详情弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
       <el-table
@@ -119,6 +165,7 @@
         <el-table-column prop="reviewer" label="审核人" width="120"/>
         <el-table-column prop="createTime" label="申请时间" width="120"/>
         <el-table-column prop="reviewTime" label="审核时间" width="120"/>
+        <el-table-column prop="status" label="审核状态" width="120"/>
         <el-table-column prop="commit" label="备注" width="200"/>
       </el-table>
     </el-dialog>
@@ -173,7 +220,7 @@
                   icon="el-icon-tickets"
                   plain
                   @click="detail(scope.row.id);"
-                >详情</el-button>
+                >采购详情</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
                 <el-button
@@ -183,7 +230,7 @@
                   icon="el-icon-edit"
                   plain
                   @click="updateItem(scope.row.id,scope.row.itemName,scope.row.itemCount,scope.row.commit,scope.row.itemType);"
-                >编辑</el-button>
+                >编辑物品</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
                 <el-button
@@ -193,7 +240,7 @@
                   icon="el-icon-delete"
                   plain
                   @click="deleteItem(scope.row.id);"
-                >删除</el-button>
+                >删除物品</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -224,13 +271,20 @@ import {
   bacthDeleteItem,
   deleteItem,
   updateItem,
-  detailForInventory
+  detailForInventory,
+  insertNewDemand
 } from '@/api/inventory'
 const inventoryObj = {
   // 插入更新等对象在这初始化
   id: null,
   itemName: null,
   itemCount: null,
+  itemType: null,
+  commit: null
+}
+// 采购对象初始化
+const demandObj = {
+  itemName: null,
   itemType: null,
   commit: null
 }
@@ -243,13 +297,16 @@ export default {
       dialogVisibleDel: false, // 这是单选删除的弹窗，默认false
       dialogItemUpdate: false, // 这是编辑的弹窗，默认false
       dialogVisibleDetail: false, // 这是库存详情的弹窗，默认false
+      dialogNewDemand: false, // 这是新增采购的弹窗，默认false
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
       tableDetail: null, // 这是库存详情的list，默认null
       delItemId: null, // 这是单选删除的物品id
       itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
-      ItemUpdateObj: Object.assign({}, inventoryObj),
+      itemUpdateObj: Object.assign({}, inventoryObj),
+      // 这是新增采购用对象
+      demandObj: Object.assign({}, demandObj),
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
@@ -270,6 +327,20 @@ export default {
         ],
         commit: [
           { required: true, message: '请输入本次修改的备注', trigger: 'blur' }
+        ]
+      },
+      addRule: {
+        itemName: [
+          { required: true, message: '请输入物品名称', trigger: 'blur' }
+        ],
+        itemCount: [
+          { required: true, message: '请输入物品数量', trigger: 'blur' }
+        ],
+        itemType: [
+          { required: true, message: '请选择物品类型', trigger: 'blur' }
+        ],
+        commit: [
+          { required: true, message: '请输入申请的备注', trigger: 'blur' }
         ]
       }
     }
@@ -412,17 +483,17 @@ export default {
     },
     // 编辑弹窗打开和内容赋值
     updateItem(id, itemName, itemCount, commit, itemType) {
-      this.ItemUpdateObj.id = id
-      this.ItemUpdateObj.itemName = itemName
-      this.ItemUpdateObj.itemCount = itemCount
-      this.ItemUpdateObj.commit = commit
-      this.ItemUpdateObj.itemType = itemType
+      this.itemUpdateObj.id = id
+      this.itemUpdateObj.itemName = itemName
+      this.itemUpdateObj.itemCount = itemCount
+      this.itemUpdateObj.commit = commit
+      this.itemUpdateObj.itemType = itemType
       this.dialogItemUpdate = true
     },
     updateItemSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          updateItem(this.ItemUpdateObj)
+          updateItem(this.itemUpdateObj)
             .then(response => {
               const data = response.data
               this.listLoading = false
@@ -434,7 +505,7 @@ export default {
                 })
                 this.$refs[formName].resetFields()
                 this.dialogItemUpdate = false
-                this.ItemUpdateObj = Object.assign({}, inventoryObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
+                this.itemUpdateObj = Object.assign({}, inventoryObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
                 this.fetchData()
               } else {
                 this.loading = false
@@ -482,6 +553,48 @@ export default {
             duration: 5 * 1000
           })
         })
+    },
+    // 新增采购弹窗关闭
+    handleCloseNewAdd() {
+      this.dialogNewDemand = false
+      this.$refs.addForm.resetFields()
+    },
+    // 打开采购新增表单
+    openDialogNewDemand() {
+      this.dialogNewDemand = true
+    },
+    // 新增采购申请
+    insertNewDemand(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          insertNewDemand(this.demandObj)
+            .then(response => {
+              const data = response.data
+              this.listLoading = false
+              if (data.statusCode === 200) {
+                Message({
+                  message: '申请成功',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+              } else {
+                Message({
+                  message: '申请失败，检查网络',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+              }
+            })
+            .catch(() => {
+              this.loading = false
+              Message({
+                message: '申请失败，检查网络',
+                type: 'error',
+                duration: 5 * 1000
+              })
+            })
+        }
+      })
     }
   } // 这是方法末尾花括号
 }
