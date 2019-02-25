@@ -607,6 +607,7 @@ export default {
               const data = response.data
               this.listLoading = false
               if (data.statusCode === 200) {
+                this.dialogNewDemand = false
                 Message({
                   message: '申请成功',
                   type: 'success',
