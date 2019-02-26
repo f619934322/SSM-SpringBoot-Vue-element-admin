@@ -18,12 +18,26 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         />
+        <el-select
+          v-model="searchOptions.status"
+          class="filter-item"
+          filterable
+          placeholder="请选择物品类型"
+        >
+          <el-option
+            v-for="item in itemStatusList"
+            :key="item.key"
+            :label="item.statusName"
+            :value="item.status"
+          />
+        </el-select>
         <el-button
           class="filter-item"
           style="margin-left: 6px;"
           icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
+        <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
         <el-button class="filter-item" type="primary" icon="el-icon-download" @click="excelClick">导出</el-button>
       </div>
     </div>
@@ -47,11 +61,11 @@
         >
           <el-form-item label="选择审核状态" prop="status">
             <div align="left">
-              <el-radio-group v-model="demandObj.status" size="mini">
-                <el-radio-button :disabled="disabled" label="1">驳回</el-radio-button>
-                <el-radio-button label="2">通过未采购</el-radio-button>
-                <el-radio-button label="3">采购失败</el-radio-button>
-                <el-radio-button label="4">采购完成</el-radio-button>
+              <el-radio-group v-model="demandStatus" size="mini">
+                <el-radio-button :disabled="demandObj.status === 2" label="1">驳回</el-radio-button>
+                <el-radio-button :disabled="demandObj.status > 2" label="2">通过未采购</el-radio-button>
+                <el-radio-button :disabled="demandObj.status === 0" label="3">采购失败</el-radio-button>
+                <el-radio-button :disabled="demandObj.status === 0" label="4">采购完成</el-radio-button>
               </el-radio-group>
             </div>
           </el-form-item>
@@ -71,7 +85,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogDemandReview = false;$refs.reviewForm.resetFields()">取消</el-button>
+          <el-button @click="handleCloseReview()">取消</el-button>
           <el-button type="primary" @click="reviewDemand('reviewForm')">确 定</el-button>
         </div>
       </el-dialog>
@@ -100,8 +114,21 @@
         <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
         <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
         <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
-        <el-table-column prop="status" label="审核状态" min-width="120px;" sortable/>
-        <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable/>
+        <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">未审核</span>
+            <span v-if="scope.row.status === 1">驳回</span>
+            <span v-if="scope.row.status === 2">审核通过未采购</span>
+            <span v-if="scope.row.status === 3">采购失败</span>
+            <span v-if="scope.row.status === 4">采购完成</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable>
+          <template slot-scope="scope">
+            <span v-if="scope.row.addedFlag === 0">需要补充</span>
+            <span v-if="scope.row.addedFlag === 1">需要新增</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
         <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
         <el-table-column align="center" label="操作" width="250">
@@ -115,22 +142,12 @@
                 <el-dropdown-item>
                   <el-button
                     v-permission="['admin']"
-                    v-if="scope.row.status === 0 || scope.row.status === 2"
+                    :disabled="scope.row.status === 1 || scope.row.status === 3 || scope.row.status === 4"
                     size="mini"
                     type="warning"
                     icon="el-icon-info"
                     plain
-                    @click="openDialogDemandReview(scope.row.id,scope.row.inventoryId,scope.row.purchasePrice,scope.row.itemCount,scope.row.addedFlag,scope.row.itemName,scope.row.itemType,scope.row.status);"
-                  >进行审核</el-button>
-                  <el-button
-                    v-permission="['admin']"
-                    v-else
-                    disabled
-                    size="mini"
-                    type="warning"
-                    icon="el-icon-info"
-                    plain
-                    @click="openDialogDemandReview(scope.row.id,scope.row.inventoryId,scope.row.purchasePrice,scope.row.itemCount,scope.row.addedFlag,scope.row.itemName,scope.row.itemType);"
+                    @click="openDialogDemandReview(scope.row.id,scope.row.inventoryId,scope.row.purchasePrice,scope.row.itemCount,scope.row.addedFlag,scope.row.itemName,scope.row.itemType,scope.row.status,scope.row.reviewCommit);"
                   >进行审核</el-button>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -169,7 +186,8 @@ const demandObj = {
   status: null, // 审核弹窗审核状态单选
   purchasePrice: null,
   addedFlag: null,
-  commit: null
+  commit: null,
+  reviewCommit: null
 }
 export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
@@ -177,16 +195,24 @@ export default {
     return {
       dialogDemandReview: false, // 这是审核操作窗口，默认false
       dialogVisibleExeclForDemand: false, // 这是导出弹窗，默认false
-      disabled: false, // 这是审核操作里的审核状态按钮disabled，判断该条审核状态并禁止点某项
       list: null, // 这是申请一览的list，打开页面会去找接口获取数据并赋值，默认null
       demandObj: Object.assign({}, demandObj), // 这是审核用对象
+      demandStatus: null, // 审核弹窗审核状态单选
+      itemStatusList: [
+        { key: 0, status: 0, statusName: '未审核' },
+        { key: 1, status: 1, statusName: '驳回' },
+        { key: 2, status: 2, statusName: '审核但未采购' },
+        { key: 3, status: 3, statusName: '采购失败' },
+        { key: 4, status: 4, statusName: '采购成功' }
+      ], // 这是下拉框选项的审核状态,label绑定statusName，在下拉框中显示中文状态名称
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
       searchOptions: {
         // 这是传给后端的检索用参数
         itemName: null,
-        createTimeBeginToEnd: [] // 这是时间的数组
+        createTimeBeginToEnd: [], // 这是时间的数组
+        status: null // 这是下拉框的审核状态
       },
       // 审核表单逻辑验证
       editRule: {
@@ -229,6 +255,15 @@ export default {
       this.currentPage = val
       this.fetchData() // 每次切换页码的时候调用fetchData方法
     },
+    // 清空搜索选项
+    clearSearchOptions() {
+      this.searchOptions = {
+        // 此处用于重置搜索参数
+        itemName: null,
+        createTimeBeginToEnd: [], // 这是时间的数组
+        status: null // 这是下拉框的审核状态
+      }
+    },
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
       this.currentPage = 1
@@ -255,7 +290,12 @@ export default {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
         itemName: this.searchOptions.itemName, // 以物品名称进行检索
+        status: this.searchOptions.status, // 查出所有选择的审核状态数据
         createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
+      }
+      if (listQuery.status === null) {
+        // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
+        listQuery.status = -1 // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
       pagination(listQuery).then(response => {
         const data = response.data.responseData
@@ -273,7 +313,8 @@ export default {
       addedFlag,
       itemName,
       itemType,
-      status
+      status,
+      reviewCommit
     ) {
       // 这里获取列表中选中的采购需求id
       this.demandObj.id = id // 然后赋值给对象
@@ -282,13 +323,12 @@ export default {
       this.demandObj.addedFlag = addedFlag
       this.demandObj.itemName = itemName
       this.demandObj.itemType = itemType
-      this.demandObj.status = status
+      this.demandObj.status = status // 获取该条的审核状态，用于判断在审核弹窗的审核状态选择的显示
+      this.demandObj.reviewCommit = reviewCommit
       if (itemCount === 0) {
         itemCount = null // 由于后端物品数量类型为int，当数据库值为null时，后端会把他转变为0，这里转回null
       }
-      if (status === 2) {
-        this.disabled = true // 这是审核操作里的审核状态按钮disabled，判断该条审核状态并禁止点某项
-      }
+      this.demandStatus = status
       this.demandObj.itemCount = itemCount
       this.dialogDemandReview = true
     },
@@ -299,6 +339,7 @@ export default {
     },
     // 审核
     reviewDemand(formName) {
+      this.demandObj.status = this.demandStatus // 因为直接绑定this.demandObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.demandStatus来接收前端选择的状态
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.demandObj.status = parseInt(this.demandObj.status) // 状态码转为数字

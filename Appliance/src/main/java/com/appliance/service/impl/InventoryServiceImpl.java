@@ -26,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
+	private static final String TIMEFORMAT = "yyyy-MM-dd HH:mm:ss";// sonar要求同一字符串不得出现两次或以上，必须使用静态最终成员定义
+
 	@Autowired
 	private InventoryMapper inventoryMapper;
 
@@ -62,7 +64,7 @@ public class InventoryServiceImpl implements InventoryService {
 			for (Long id : ids) {
 				/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
 				InventoryDto inventoryDto = new InventoryDto();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 				String nowTime = sdf.format(new Date());
 				Subject subject = SecurityUtils.getSubject();
 				UserVo userVo = (UserVo) subject.getPrincipal();
@@ -93,7 +95,7 @@ public class InventoryServiceImpl implements InventoryService {
 		try {
 			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
 			InventoryDto inventoryDto = new InventoryDto();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
@@ -121,7 +123,7 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	public BaseResponse<String> updateInventory(InventoryDto inventoryDto) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();

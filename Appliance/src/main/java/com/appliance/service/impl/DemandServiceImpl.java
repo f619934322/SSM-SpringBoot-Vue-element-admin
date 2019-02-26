@@ -28,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class DemandServiceImpl implements DemandService {
 
+	private static final String TIMEFORMAT = "yyyy-MM-dd HH:mm:ss";// sonar要求同一字符串不得出现两次或以上，必须使用静态最终成员定义
+	
 	@Autowired
 	private DemandMapper demandMapper;
 
@@ -42,7 +44,7 @@ public class DemandServiceImpl implements DemandService {
 	public BaseResponse<String> insertNewDemand(DemandDto demandDto) {
 		try {
 			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
@@ -70,7 +72,7 @@ public class DemandServiceImpl implements DemandService {
 	public BaseResponse<String> insertSupplementDemand(DemandDto demandDto) {
 		try {
 			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
@@ -130,7 +132,7 @@ public class DemandServiceImpl implements DemandService {
 	@Override
 	public BaseResponse<String> reviewDemand(DemandDto demandDto) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();

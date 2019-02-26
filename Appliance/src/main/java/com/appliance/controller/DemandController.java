@@ -53,7 +53,7 @@ public class DemandController {
 	 * @return
 	 */
 	@PostMapping(value = "/insertSupplementDemand", produces = { "application/json" })
-	public String insertSupplementDemand(@RequestBody DemandDto demandDto) {// 新增采购需求，在需求表里新增一条数据，并且需求标识为1（新增）
+	public String insertSupplementDemand(@RequestBody DemandDto demandDto) {// 补充采购需求，在需求表里新增一条数据，并且需求标识为0（补充）
 		log.info("执行insertSupplementDemand");
 		BaseResponse<String> response = demandService.insertSupplementDemand(demandDto);
 		String resultToString = JSON.toJSONString(response);
@@ -99,7 +99,7 @@ public class DemandController {
 	 * @throws IOException
 	 */
 	@GetMapping(value = "/excelDemand", produces = { "application/json" })
-	public String excelDemand(HttpServletResponse httpServletResponse, @RequestParam int status) throws IOException {
+	public String excelDemand(HttpServletResponse httpServletResponse, @RequestParam("status") int status) throws IOException {
 		log.info("执行excelDemand");
 		DemandDto demandDto = new DemandDto();
 		demandDto.setStatus(status);

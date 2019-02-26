@@ -17,6 +17,7 @@
           icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
+        <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
         <el-button
           class="filter-item"
           align="right"
@@ -197,7 +198,15 @@
         <el-table-column prop="reviewer" label="审核人" width="120"/>
         <el-table-column prop="createTime" label="申请时间" width="120"/>
         <el-table-column prop="reviewTime" label="审核时间" width="120"/>
-        <el-table-column prop="status" label="审核状态" width="120"/>
+        <el-table-column prop="status" label="审核状态" width="120">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">未审核</span>
+            <span v-if="scope.row.status === 1">驳回</span>
+            <span v-if="scope.row.status === 2">审核通过未采购</span>
+            <span v-if="scope.row.status === 3">采购失败</span>
+            <span v-if="scope.row.status === 4">采购完成</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="commit" label="备注" width="200"/>
       </el-table>
     </el-dialog>
@@ -398,6 +407,13 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.fetchData() // 每次切换页码的时候调用fetchData方法
+    },
+    // 清空搜索选项
+    clearSearchOptions() {
+      this.searchOptions = {
+        // 此处用于重置搜索参数
+        itemName: null
+      }
     },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {

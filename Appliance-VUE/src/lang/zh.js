@@ -3,7 +3,8 @@ export default {
   route: {
     dashboard: '首页',
     inventory: '教学用品一览',
-    demand: '教学用品申请审核'
+    demand: '申请采购审核清单',
+    apply: '申请领取审核清单'
   },
   navbar: {
     logOut: '退出登录',

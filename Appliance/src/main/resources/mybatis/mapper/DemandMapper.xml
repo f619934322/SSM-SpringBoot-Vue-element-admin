@@ -74,7 +74,7 @@
 		appliance_demand
 		WHERE Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
-		<if test="status != null and status !=''">AND Status = #{status}</if>
+		<if test="status != null and status != -1">AND Status = #{status}</if>
 		<if test="createTimeBegin != null and createTimeBegin !=''">AND
 			Create_Time <![CDATA[ >= ]]>
 			#{createTimeBegin}
@@ -97,6 +97,7 @@
 		Reviewer = #{reviewer,jdbcType=VARCHAR},
 		Review_Time =
 		#{reviewTime,jdbcType=VARCHAR},
+		Review_Commit = #{reviewCommit,jdbcType=VARCHAR},
 		Updator =
 		#{updator,jdbcType=VARCHAR},
 		Update_Time =

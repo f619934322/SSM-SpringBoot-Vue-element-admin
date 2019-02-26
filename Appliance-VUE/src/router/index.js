@@ -91,8 +91,21 @@ export const constantRouterMap = [
       {
         path: 'demand_index',
         component: () => import('@/views/demand/index'),
-        name: '教学用品物品申请审核清单',
+        name: '教学用品物品申请采购审核清单',
         meta: { title: 'demand', icon: 'table', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/apply',
+    component: Layout,
+    redirect: 'apply',
+    children: [
+      {
+        path: 'apply_index',
+        component: () => import('@/views/apply/index'),
+        name: '教学用品物品申请领取审核清单',
+        meta: { title: 'apply', icon: 'table', noCache: true }
       }
     ]
   }
