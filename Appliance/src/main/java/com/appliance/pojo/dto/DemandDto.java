@@ -93,4 +93,19 @@ public class DemandDto extends PaginationBase implements Serializable {
 	 * 更新时间
 	 */
 	private String updateTime;
+
+	/**
+	 * 前端传入的起始与结束日期数组
+	 */
+	private String[] createTimeBeginToEnd;
+
+	/**
+	 * 前端传入的起始日期（需要从数组中分离）
+	 */
+	private String createTimeBegin;
+
+	/**
+	 * 前端传入的结束日期（需要从数组中分离）
+	 */
+	private String createTimeEnd;
 }

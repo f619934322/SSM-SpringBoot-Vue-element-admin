@@ -1,5 +1,7 @@
 package com.appliance.service;
 
+import java.util.List;
+
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.DemandDto;
 import com.appliance.pojo.vo.DemandVo;
@@ -38,4 +40,11 @@ public interface DemandService {
 	 * @return
 	 */
 	public BaseResponse<String> reviewDemand(DemandDto demandDto);
+	
+	/**
+	 * 导出需求表
+	 * @param demandDto
+	 * @return
+	 */
+	public BaseResponse<List<DemandVo>> excelDemand(DemandDto demandDto);
 }

@@ -1,9 +1,16 @@
 package com.appliance.controller;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -11,6 +18,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.DemandDto;
 import com.appliance.pojo.vo.DemandVo;
 import com.appliance.service.DemandService;
+import com.appliance.utils.ExportPOIUtils;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -74,12 +82,39 @@ public class DemandController {
 	 * @param demandDto
 	 * @return
 	 */
-	@PostMapping(value = "/reviewDemand", produces = { "application/json" })// TODO 尚未完成业务逻辑
+	@PostMapping(value = "/reviewDemand", produces = { "application/json" })
 	public String reviewDemand(@RequestBody DemandDto demandDto) {
 		log.info("执行reviewDemand");
 		BaseResponse<String> response = demandService.reviewDemand(demandDto);
 		String resultToString = JSON.toJSONString(response);
 		log.info("reviewDemand返回的JSON: {}", resultToString);
+		return resultToString;
+	}
+
+	/**
+	 * 导出需求表
+	 * 
+	 * @param demandDto
+	 * @return
+	 * @throws IOException
+	 */
+	@GetMapping(value = "/excelDemand", produces = { "application/json" })
+	public String excelDemand(HttpServletResponse httpServletResponse, @RequestParam int status) throws IOException {
+		log.info("执行excelDemand");
+		DemandDto demandDto = new DemandDto();
+		demandDto.setStatus(status);
+		BaseResponse<List<DemandVo>> response = demandService.excelDemand(demandDto);
+		List<DemandVo> demandVoList = response.getResponseData();
+		String fileName = "采购需求清单";
+		// 列名
+		String[] columnNames = { "ID", "物品名称", "需求标识", "采购需求数量", "物品类型", "采购金额", "审核状态", "采购需求原因", "采购需求提起人",
+				"采购需求发起时间", "审核人", "审核时间", "审核备注" };
+		// map中的key
+		String[] keys = { "id", "itemName", "addedFlag", "itemCount", "itemType", "purchasePrice", "status", "commit",
+				"creator", "createTime", "reviewer", "reviewTime", "reviewCommit" };
+		ExportPOIUtils.startDownload(httpServletResponse, fileName, demandVoList, columnNames, keys);
+		String resultToString = JSON.toJSONString(response);
+		log.info("excelDemand返回的JSON: {}", resultToString);
 		return resultToString;
 	}
 }

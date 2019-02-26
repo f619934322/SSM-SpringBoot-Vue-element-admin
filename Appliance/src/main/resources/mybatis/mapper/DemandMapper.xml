@@ -64,11 +64,25 @@
 		Item_Count AS itemCount,
 		Commit AS
 		commit,
+		Reviewer AS reviewer,
+		Review_Time AS reviewTime,
+		Review_Commit AS
+		reviewCommit,
+		Create_Time AS createTime,
 		Creator AS creator
 		FROM
 		appliance_demand
 		WHERE Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
+		<if test="status != null and status !=''">AND Status = #{status}</if>
+		<if test="createTimeBegin != null and createTimeBegin !=''">AND
+			Create_Time <![CDATA[ >= ]]>
+			#{createTimeBegin}
+		</if>
+		<if test="createTimeEnd != null and createTimeEnd !=''">AND
+			Create_Time<![CDATA[ <= ]]>
+			#{createTimeEnd}
+		</if>
 	</select>
 	<!-- 审核操作 -->
 	<update id="reviewDemand"
@@ -82,7 +96,7 @@
 		#{status,jdbcType=INTEGER},
 		Reviewer = #{reviewer,jdbcType=VARCHAR},
 		Review_Time =
-		#{reviewtime,jdbcType=VARCHAR},
+		#{reviewTime,jdbcType=VARCHAR},
 		Updator =
 		#{updator,jdbcType=VARCHAR},
 		Update_Time =

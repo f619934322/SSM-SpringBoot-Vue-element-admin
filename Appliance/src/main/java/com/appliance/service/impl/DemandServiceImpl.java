@@ -96,6 +96,16 @@ public class DemandServiceImpl implements DemandService {
 	@Override
 	public BaseResponse<PageInfo<DemandVo>> demandList(DemandDto demandDto) {
 		try {
+			if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+				// 从数组中分离出起始和结束日期
+				String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
+				String createTimeBegin = createTimeBeginAndEnd[0];
+				String createTimeEnd = createTimeBeginAndEnd[1];
+				// 将日期赋值给对象
+				demandDto.setCreateTimeBegin(createTimeBegin);
+				demandDto.setCreateTimeEnd(createTimeEnd);
+			}
+			// 执行分页查询
 			PageHelper.startPage(demandDto.getPageNum(), demandDto.getPageSize());
 			List<DemandVo> inventoryList = demandMapper.demandList(demandDto);
 			PageInfo<DemandVo> pageInfo = new PageInfo<>(inventoryList);
@@ -142,7 +152,7 @@ public class DemandServiceImpl implements DemandService {
 					demandDto.setReviewer(userVo.getName());
 					demandDto.setReviewTime(nowTime);
 					demandMapper.reviewDemand(demandDto);
-					log.info("执行reviewDemand插入一条新的库存表数据");
+					log.info("执行insertNewInventory插入一条新的库存表数据");
 					inventoryMapper.insertNewInventory(inventoryDto);
 					log.info("执行selectInventoryByDemandId获取唯一一条库存数据");
 					InventoryVo inventoryVo = inventoryMapper.selectInventoryByDemandId(demandDto.getId());
@@ -172,7 +182,7 @@ public class DemandServiceImpl implements DemandService {
 				demandDto.setUpdator(userVo.getName());
 				demandDto.setReviewTime(nowTime);
 				demandDto.setUpdateTime(nowTime);
-				log.info("执行reviewDemand更新审核状态等");
+				log.info("执行reviewDemand更新审核状态等，采购未完成");
 				demandMapper.reviewDemand(demandDto);
 			}
 
@@ -185,6 +195,27 @@ public class DemandServiceImpl implements DemandService {
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("reviewDemand操作失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 导出需求表
+	 */
+	@Override
+	public BaseResponse<List<DemandVo>> excelDemand(DemandDto demandDto) {
+		try {
+			List<DemandVo> inventoryList = demandMapper.demandList(demandDto);
+			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
+			response.setResponseData(inventoryList);
+			response.setStatusCode(201);
+			response.setStatusMsg("excelDemand导出成功");
+			return response;
+		} catch (Exception e) {
+			log.info("执行excelDemand异常，信息{}", e);
+			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("excelDemand导出失败");
 			return response;
 		}
 	}
