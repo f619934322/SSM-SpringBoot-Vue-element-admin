@@ -1,8 +1,11 @@
 export default {
-  // 这里修改多语言
+  // 这里修改多语言（英文）
   route: {
     dashboard: 'Dashboard',
-    inventory: 'Inventory'
+    inventoryInfo: 'Inventory Info',
+    pageForAdmin: 'Page For Admin',
+    reviewDemand: 'Review Demand',
+    reviewApply: 'Review Apply'
   },
   navbar: {
     logOut: 'Log Out',
