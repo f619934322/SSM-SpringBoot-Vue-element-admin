@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <!-- 检索等顶部选项 -->
       <div class="container">
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
@@ -22,7 +23,7 @@
           v-model="searchOptions.status"
           class="filter-item"
           filterable
-          placeholder="请选择物品类型"
+          placeholder="请选择审核状态"
         >
           <el-option
             v-for="item in itemStatusList"
@@ -63,9 +64,9 @@
             <div align="left">
               <el-radio-group v-model="demandStatus" size="mini">
                 <el-radio-button :disabled="demandObj.status === 2" label="1">驳回</el-radio-button>
-                <el-radio-button :disabled="demandObj.status > 2" label="2">通过未采购</el-radio-button>
-                <el-radio-button :disabled="demandObj.status === 0" label="3">采购失败</el-radio-button>
-                <el-radio-button :disabled="demandObj.status === 0" label="4">采购完成</el-radio-button>
+                <el-radio-button label="2">通过未采购</el-radio-button>
+                <el-radio-button label="3">采购失败</el-radio-button>
+                <el-radio-button label="4">采购完成</el-radio-button>
               </el-radio-group>
             </div>
           </el-form-item>
@@ -339,7 +340,16 @@ export default {
     },
     // 审核
     reviewDemand(formName) {
-      this.demandObj.status = this.demandStatus // 因为直接绑定this.demandObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.demandStatus来接收前端选择的状态
+      if (this.demandObj.status === this.demandStatus) {
+        Message({
+          message: '请选择下一状态！',
+          type: 'warn',
+          duration: 5 * 1000
+        })
+        return
+      } else {
+        this.demandObj.status = this.demandStatus // 因为直接绑定this.demandObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.demandStatus来接收前端选择的状态
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.demandObj.status = parseInt(this.demandObj.status) // 状态码转为数字

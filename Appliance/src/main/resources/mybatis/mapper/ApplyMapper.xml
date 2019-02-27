@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appliance.mapper.ApplyMapper">
+	<!-- 获取申领清单 -->
+	<select id="applyList"
+		parameterType="com.appliance.pojo.dto.ApplyDto"
+		resultType="com.appliance.pojo.vo.ApplyVo">
+		SELECT
+		aa.ID AS id,
+		aa.Inventory_ID AS inventoryId,
+		aa.Item_Name AS
+		itemName,
+		aa.Status AS status,
+		ai.item_Type AS itemType,
+		aa.Item_Count AS
+		itemCount,
+		aa.Commit AS
+		commit,
+		aa.Reviewer AS reviewer,
+		aa.Review_Time AS
+		reviewTime,
+		aa.Review_Commit AS
+		reviewCommit,
+		aa.Create_Time AS
+		createTime,
+		aa.Creator AS creator
+		FROM
+		appliance_apply
+		aa
+		LEFT JOIN
+		appliance_inventory ai ON aa.Inventory_ID = ai.ID
+		WHERE
+		aa.Delete_Flag =
+		0
+		<if test="creator != null and creator !=''">AND aa.Creator = #{creator}</if>
+		<if test="status != null and status != -1">AND aa.Status = #{status}</if>
+		<if test="createTimeBegin != null and createTimeBegin !=''">AND
+			aa.Create_Time <![CDATA[ >= ]]>
+			#{createTimeBegin}
+		</if>
+		<if test="createTimeEnd != null and createTimeEnd !=''">AND
+			aa.Create_Time<![CDATA[ <= ]]>
+			#{createTimeEnd}
+		</if>
+	</select>
+	<!-- 在库存一览中申请领取 -->
+	<insert id="insertApply"
+		parameterType="com.appliance.pojo.dto.ApplyDto">
+		INSERT INTO appliance_apply
+		(Inventory_ID,
+		Item_Name,
+		Item_Count,
+		Status,
+		Commit,
+		Creator,
+		Create_Time,
+		Delete_Flag)
+		values
+		(
+		#{inventoryId,jdbcType=INTEGER},
+		#{itemName,jdbcType=VARCHAR},
+		#{itemCount,jdbcType=INTEGER},
+		0,
+		#{commit,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR},
+		0
+		)
+	</insert>
+	<!-- 审核操作 -->
+	<update id="reviewApply"
+		parameterType="com.appliance.pojo.dto.ApplyDto">
+		UPDATE
+		appliance_apply SET
+		Status =
+		#{status,jdbcType=INTEGER},
+		Reviewer =
+		#{reviewer,jdbcType=VARCHAR},
+		Review_Time =
+		#{reviewTime,jdbcType=VARCHAR},
+		Review_Commit =
+		#{reviewCommit,jdbcType=VARCHAR},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
+	<!-- 去数据库查出该条申领的数量 -->
+	<select id="selectApplyById" parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.ApplyVo">
+		SELECT Item_Count AS itemCount
+		FROM appliance_apply
+		WHERE
+		Delete_Flag = 0 AND ID
+		= #{id}
+	</select>
+</mapper>

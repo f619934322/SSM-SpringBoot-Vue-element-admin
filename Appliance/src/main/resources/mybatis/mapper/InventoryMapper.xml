@@ -30,7 +30,7 @@
 		Delete_Flag = 1
 		WHERE ID = #{id}
 	</update>
-	<!-- 强制编辑库存信息 -->
+	<!-- 强制编辑库存信息/更新数量 -->
 	<update id="updateInventory"
 		parameterType="com.appliance.pojo.dto.InventoryDto">
 		UPDATE appliance_inventory SET
@@ -40,7 +40,7 @@
 		#{itemCount,jdbcType=INTEGER},
 		Item_Type =
 		#{itemType,jdbcType=VARCHAR},
-		Commit = #{commit,jdbcType=VARCHAR},
+		<if test="commit != null and commit !=''"> Commit = #{commit,jdbcType=VARCHAR},</if>
 		Updator = #{updator,jdbcType=VARCHAR},
 		Update_Time =
 		#{updateTime,jdbcType=VARCHAR}
@@ -121,6 +121,8 @@
 		resultType="com.appliance.pojo.vo.InventoryVo">
 		SELECT
 		ID AS id,
+		Item_Name AS itemName,
+		Item_Type AS itemtype,
 		Item_Count AS itemCount
 		FROM
 		appliance_inventory

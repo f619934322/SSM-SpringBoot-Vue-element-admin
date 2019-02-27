@@ -182,6 +182,39 @@
       </div>
     </el-dialog>
     <!-- /补充采购弹窗 -->
+    <!-- 库存申领弹窗 -->
+    <el-dialog
+      :visible.sync="dialogApply"
+      :before-close="handleCloseApply"
+      title="申请领取"
+    >
+      <el-form
+        ref="applyForm"
+        :model="demandObj"
+        class="small-space"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="申请数量" prop="itemCount">
+          <el-input v-model="demandObj.itemCount" placeholder="请输入物品数量"/>
+        </el-form-item>
+        <el-form-item label="申请原因" prop="commit">
+          <el-input
+            v-model="demandObj.commit"
+            :autosize="{ minRows: 3, maxRows: 5}"
+            placeholder="请输入备注信息"
+            type="textarea"
+          />
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogApply = false;$refs.applyForm.resetFields()">取消</el-button>
+        <el-button type="primary" @click="insertNewApply('applyForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- /库存申领弹窗 -->
     <!-- 库存详情弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
       <el-table
@@ -251,7 +284,7 @@
                   type="success"
                   icon="el-icon-plus"
                   plain
-                  @click="apply(scope.row.id);"
+                  @click="openDialogApply(scope.row.id,scope.row.itemName);"
                 >申请领取</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
@@ -316,6 +349,7 @@ import {
   insertNewDemand,
   supplementDemand
 } from '@/api/inventory'
+import { insertNewApply } from '@/api/apply'
 const inventoryObj = {
   // 插入更新等对象在这初始化
   id: null,
@@ -339,6 +373,7 @@ export default {
       dialogVisibleDelBatch: false, // 这是批量删除的弹窗，默认false
       dialogVisibleDel: false, // 这是单选删除的弹窗，默认false
       dialogItemUpdate: false, // 这是编辑的弹窗，默认false
+      dialogApply: false, // 这是申请领取的弹窗，默认false
       dialogVisibleDetail: false, // 这是库存详情的弹窗，默认false
       dialogNewDemand: false, // 这是新增采购的弹窗，默认false
       dialogSupplementDemand: false, // 这是采购补充的弹窗，默认false
@@ -604,6 +639,51 @@ export default {
             duration: 5 * 1000
           })
         })
+    },
+    // 库存申领弹窗
+    openDialogApply(id, itemName) {
+      this.demandObj.inventoryId = id
+      this.demandObj.itemName = itemName
+      this.dialogApply = true
+    },
+    // 库存申领弹窗关闭
+    handleCloseApply() {
+      this.dialogApply = false
+      this.$refs.applyForm.resetFields()
+    },
+    // 执行申请领取
+    insertNewApply(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          insertNewApply(this.demandObj)
+            .then(response => {
+              const data = response.data
+              this.listLoading = false
+              if (data.statusCode === 200) {
+                this.dialogApply = false
+                Message({
+                  message: '申请成功',
+                  type: 'success',
+                  duration: 5 * 1000
+                })
+              } else {
+                Message({
+                  message: '申请失败，检查网络',
+                  type: 'error',
+                  duration: 5 * 1000
+                })
+              }
+            })
+            .catch(() => {
+              this.loading = false
+              Message({
+                message: '申请失败，检查网络',
+                type: 'error',
+                duration: 5 * 1000
+              })
+            })
+        }
+      })
     },
     // 新增采购弹窗关闭
     handleCloseNewAdd() {
