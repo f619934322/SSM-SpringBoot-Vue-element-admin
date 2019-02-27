@@ -34,9 +34,11 @@ public class ShiroConfig {
 		 * user:只要登录过，并且记住了密码，如果设置了rememberMe的功能可以直接访问 perms:该资源必须得到资源权限才可以访问
 		 * role:该资源必须得到角色的权限才可以访问
 		 */
-		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效
+		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效，一般将 /**放在最为下边
 		filterMap.put("/appliance/demo/**", "perms[perm:normal]");// 使得所写路径被拦截，需要资源权限;需要多权限写法：perms[a],perms[b],中括号中间字符串为自定义。此处路径若有多个，务必一个个put，一次可以拦截一个类的所有方法
-		shiroFilterFactoryBean.setLoginUrl("/appliance/fallback/fallback");// 权限不足访问失败跳转
+		filterMap.put("/**", "authc");// 所有路径需要登录认证
+		shiroFilterFactoryBean.setLoginUrl("/appliance/fallback/fallback");// 权限不足访问失败跳转，由于不设置会自动跳到login.jsp，所以手动设置
+		shiroFilterFactoryBean.setUnauthorizedUrl("/appliance/fallback/fallback");// 权限不足访问失败跳转
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}

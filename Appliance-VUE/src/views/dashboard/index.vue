@@ -23,7 +23,7 @@ export default {
     ])
   },
   created() {
-    if (!this.roles.includes('admin')) {
+    if (!this.roles.includes('admin')) { // 这里判断后端传上来的role是否是admin，如果是则跳转到admin主页，否则跳转到editor主页
       this.currentRole = 'editorDashboard'
     }
   }

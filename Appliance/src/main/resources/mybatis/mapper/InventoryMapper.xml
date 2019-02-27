@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appliance.mapper.InventoryMapper">
+	<!-- 教学用品库存一览查询 -->
+	<select id="inventoryList"
+		parameterType="com.appliance.pojo.dto.InventoryDto"
+		resultType="com.appliance.pojo.vo.InventoryVo">
+		SELECT
+		ID AS id,
+		Item_Name AS itemName,
+		Item_Count AS itemCount,
+		Item_Type AS itemType,
+		Commit AS commit,
+		Creator AS creator,
+		Updator AS
+		updator
+		FROM
+		appliance_inventory
+		WHERE Delete_Flag = 0
+		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
+	</select>
+	<!-- 逻辑删除教学用品库存 -->
+	<update id="deleteInventory"
+		parameterType="com.appliance.pojo.dto.InventoryDto">
+		UPDATE appliance_inventory SET
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR},
+		Delete_Flag = 1
+		WHERE ID = #{id}
+	</update>
+	<!-- 强制编辑库存信息/更新数量 -->
+	<update id="updateInventory"
+		parameterType="com.appliance.pojo.dto.InventoryDto">
+		UPDATE appliance_inventory SET
+		Item_Name =
+		#{itemName,jdbcType=VARCHAR},
+		Item_Count =
+		#{itemCount,jdbcType=INTEGER},
+		Item_Type =
+		#{itemType,jdbcType=VARCHAR},
+		<if test="commit != null and commit !=''"> Commit = #{commit,jdbcType=VARCHAR},</if>
+		Updator = #{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
+	<!-- 教学用品库存单品详情获取 -->
+	<select id="inventoryDetail" parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.DemandVo">
+		SELECT
+		ad.ID AS id,
+		ad.Item_Name AS itemName,
+		ad.Item_Count AS
+		itemCount,
+		ad.Status AS status,
+		ad.Commit AS commit,
+		ad.Creator AS
+		creator,
+		ad.Reviewer AS reviewer,
+		ad.Create_Time AS createTime,
+		ad.Review_Time AS reviewTime
+		FROM
+		appliance_inventory ai
+		LEFT JOIN
+		appliance_demand ad ON (ai.ID = ad.Inventory_ID)
+		WHERE ai.ID = #{id}
+	</select>
+	<!-- 根据需求表ID查出对应库存表数据 -->
+	<select id="selectInventoryByDemandId"
+		parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.InventoryVo">
+		SELECT
+		ID AS id
+		FROM
+		appliance_inventory
+		WHERE Demand_ID =
+		#{demandid}
+	</select>
+	<!-- 更新库存表数量 -->
+	<update id="updateInventoryForitemCount"
+		parameterType="com.appliance.pojo.dto.InventoryDto">
+		UPDATE appliance_inventory SET
+		Item_Count =
+		#{itemCount,jdbcType=INTEGER},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
+	<!-- 采购完成后插入一条库存表数据 -->
+	<insert id="insertNewInventory"
+		parameterType="com.appliance.pojo.dto.InventoryDto">
+		INSERT INTO appliance_inventory
+		(Demand_ID,
+		Item_Name,
+		Item_Count,
+		Item_Type,
+		Commit,
+		Creator,
+		Create_Time,
+		Delete_Flag
+		)
+		values
+		(#{demandId,jdbcType=INTEGER},
+		#{itemName,jdbcType=VARCHAR},
+		#{itemCount,jdbcType=VARCHAR},
+		#{itemType,jdbcType=VARCHAR},
+		#{commit,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR},
+		0
+		)
+	</insert>
+	<!-- 根据库存表ID查出一条数据 -->
+	<select id="selectInventoryById" parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.InventoryVo">
+		SELECT
+		ID AS id,
+		Item_Name AS itemName,
+		Item_Type AS itemtype,
+		Item_Count AS itemCount
+		FROM
+		appliance_inventory
+		WHERE ID = #{id}
+	</select>
+</mapper>

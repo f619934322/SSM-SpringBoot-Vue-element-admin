@@ -52,7 +52,7 @@ public class UserRealm extends AuthorizingRealm {
 	 * 执行认证逻辑
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
 		log.info("执行认证逻辑");
 		UsernamePasswordToken thisToken = (UsernamePasswordToken) token;
 		UserDto userDto = new UserDto();
