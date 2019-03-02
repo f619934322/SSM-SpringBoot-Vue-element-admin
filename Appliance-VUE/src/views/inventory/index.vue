@@ -6,6 +6,7 @@
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
             v-model.trim="searchOptions.itemName"
+            clearable
             style="width: 200px;"
             class="filter-item"
             placeholder="物品名称"
@@ -183,11 +184,7 @@
     </el-dialog>
     <!-- /补充采购弹窗 -->
     <!-- 库存申领弹窗 -->
-    <el-dialog
-      :visible.sync="dialogApply"
-      :before-close="handleCloseApply"
-      title="申请领取"
-    >
+    <el-dialog :visible.sync="dialogApply" :before-close="handleCloseApply" title="申请领取">
       <el-form
         ref="applyForm"
         :model="demandObj"

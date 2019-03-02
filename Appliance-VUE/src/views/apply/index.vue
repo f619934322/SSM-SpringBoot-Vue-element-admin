@@ -6,6 +6,7 @@
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
             v-model.trim="searchOptions.itemName"
+            clearable
             style="width: 200px;"
             class="filter-item"
             placeholder="物品名称"
@@ -13,6 +14,8 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
+          clearable
+          size="mini"
           value-format="yyyy-MM-dd"
           type="datetimerange"
           range-separator="至"
@@ -21,6 +24,7 @@
         />
         <el-select
           v-model="searchOptions.status"
+          clearable
           class="filter-item"
           filterable
           placeholder="请选择审核状态"
@@ -135,6 +139,7 @@
         </el-table-column>
       </el-table>
       <!-- /主表格 -->
+      <!-- 分页选项 -->
       <div align="center">
         <el-pagination
           :current-page="currentPage"

@@ -82,6 +82,19 @@ export const constantRouterMap = [
         meta: { title: 'inventoryInfo', icon: 'table', noCache: true }
       }
     ]
+  },
+  {
+    path: '/myApply',
+    component: Layout,
+    redirect: 'myApply',
+    children: [
+      {
+        path: 'myApply',
+        component: () => import('@/views/apply/myApply'),
+        name: '我的申领',
+        meta: { title: 'MyApply', icon: 'table', noCache: true }
+      }
+    ]
   }
 ]
 
