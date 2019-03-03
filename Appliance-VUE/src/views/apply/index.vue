@@ -271,47 +271,50 @@ export default {
       if (this.applyObj.status === this.applyStatus) {
         Message({
           message: "请选择下一状态！",
-          type: "warning",          duration: 5 * 1000
+          type: "warning",
+          duration: 5 * 1000
         });
         return;
       } else {
         this.applyObj.status = this.applyStatus; // 因为直接绑定this.applyObj.status会导致选择判断bug（页面展示上      }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.applyObj.status = parseInt(this.applyObj.status); // 状态码转为数字
-          reviewApply(this.applyObj)
-            .then(response => {
-              const data = response.data;
-              this.listLoading = false;
-              if (data.statusCode === 200) {
-                Message({
-                  message: "操作成功",
-                  type: "success",
-                  duration: 5 * 1000
-                });
-                this.$refs[formName].resetFields();
-                this.dialogApplyReview = false;
-                this.applyObj = Object.assign({}, applyObj); // 重新给修改用对象赋值初始化，applyObj为全局const对象
-                this.fetchData();              } else {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.applyObj.status = parseInt(this.applyObj.status); // 状态码转为数字
+            reviewApply(this.applyObj)
+              .then(response => {
+                const data = response.data;
+                this.listLoading = false;
+                if (data.statusCode === 200) {
+                  Message({
+                    message: "操作成功",
+                    type: "success",
+                    duration: 5 * 1000
+                  });
+                  this.$refs[formName].resetFields();
+                  this.dialogApplyReview = false;
+                  this.applyObj = Object.assign({}, applyObj); // 重新给修改用对象赋值初始化，applyObj为全局const对象
+                  this.fetchData();
+                } else {
+                  this.loading = false;
+                  Message({
+                    message: "操作失败",
+                    type: "error",
+                    duration: 5 * 1000
+                  });
+                }
+              })
+              .catch(() => {
                 this.loading = false;
                 Message({
                   message: "操作失败",
                   type: "error",
                   duration: 5 * 1000
                 });
-              }
-            })
-            .catch(() => {
-              this.loading = false;
-              Message({
-                message: "操作失败",
-                type: "error",
-                duration: 5 * 1000
               });
-            });
-        }
-      });
-    }
-  } // 这是方法末尾花括号
+          }
+        });
+      }
+    } // 这是方法末尾花括号
+  }
 };
 </script>
