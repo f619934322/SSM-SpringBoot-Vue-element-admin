@@ -347,7 +347,7 @@ export default {
       if (this.demandObj.status === this.demandStatus) {
         Message({
           message: '请选择下一状态！',
-          type: 'warn',
+          type: 'warning',
           duration: 5 * 1000
         })
         return

@@ -270,12 +270,12 @@ export default {
       if (this.applyObj.status === this.applyStatus) {
         Message({
           message: '请选择下一状态！',
-          type: 'warn',
+          type: 'warning',
           duration: 5 * 1000
         })
         return
       } else {
-        this.applyObj.status = this.applyStatus // 因为直接绑定this.demandObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.demandStatus来接收前端选择的状态
+        this.applyObj.status = this.applyStatus // 因为直接绑定this.applyObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.applyStatus来接收前端选择的状态
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -292,7 +292,7 @@ export default {
                 })
                 this.$refs[formName].resetFields()
                 this.dialogApplyReview = false
-                this.applyObj = Object.assign({}, applyObj) // 重新给修改用对象赋值初始化，demandObj为全局const对象
+                this.applyObj = Object.assign({}, applyObj) // 重新给修改用对象赋值初始化，applyObj为全局const对象
                 this.fetchData()
               } else {
                 this.loading = false
