@@ -39,5 +39,5 @@ public interface ApplyService {
 	 * @param applyDto
 	 * @return
 	 */
-	public BaseResponse<List<ApplyVo>> myApply(ApplyDto applyDto);
+	public BaseResponse<PageInfo<ApplyVo>> myApply(ApplyDto applyDto);
 }

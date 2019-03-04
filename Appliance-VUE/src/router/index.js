@@ -79,33 +79,20 @@ export const constantRouterMap = [
         path: 'inventory_index',
         component: () => import('@/views/inventory/index'),
         name: '教学用品物品一览',
-        meta: { title: 'inventory', icon: 'table', noCache: true }
+        meta: { title: 'inventoryInfo', icon: 'table', noCache: true }
       }
     ]
   },
   {
-    path: '/demand',
+    path: '/myApply',
     component: Layout,
-    redirect: 'demand',
+    redirect: 'myApply',
     children: [
       {
-        path: 'demand_index',
-        component: () => import('@/views/demand/index'),
-        name: '教学用品物品申请采购审核清单',
-        meta: { title: 'demand', icon: 'table', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/apply',
-    component: Layout,
-    redirect: 'apply',
-    children: [
-      {
-        path: 'apply_index',
-        component: () => import('@/views/apply/index'),
-        name: '教学用品物品申请领取审核清单',
-        meta: { title: 'apply', icon: 'table', noCache: true }
+        path: 'myApply',
+        component: () => import('@/views/apply/myApply'),
+        name: '我的申领',
+        meta: { title: 'MyApply', icon: 'table', noCache: true }
       }
     ]
   }
@@ -119,36 +106,36 @@ export default new Router({
 
 // 以下是异步路由，通过判断meta内的roles来控制是否显示左侧某项路由
 export const asyncRouterMap = [
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission/index',
-  //   alwaysShow: true, // will always show the root menu
-  //   meta: {
-  //     title: 'permission',
-  //     icon: 'lock',
-  //     roles: ['admin', 'editor'] // you can set roles in root nav
-  //   },
-  //   children: [
-  //     {
-  //       path: 'page',
-  //       component: () => import('@/views/permission/page'),
-  //       name: 'PagePermission',
-  //       meta: {
-  //         title: 'pagePermission',
-  //         roles: ['admin'] // or you can only set roles in sub nav
-  //       }
-  //     },
-  //     {
-  //       path: 'directive',
-  //       component: () => import('@/views/permission/directive'),
-  //       name: 'DirectivePermission',
-  //       meta: {
-  //         title: 'directivePermission'
-  //         // if do not set roles, means: this page does not require permission
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/reviewForAdmin',
+    component: Layout,
+    redirect: '/reviewForAdmin/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'pageForAdmin',
+      icon: 'lock',
+      roles: ['admin'] // you can set roles in root nav;['admin', 'editor']
+    },
+    children: [
+      {
+        path: 'reviewDemand',
+        component: () => import('@/views/demand/index'),
+        name: '教学用品物品申请采购审核清单',
+        meta: {
+          title: 'reviewDemand',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'reviewApply',
+        component: () => import('@/views/apply/index'),
+        name: '教学用品物品申请领取审核清单',
+        meta: {
+          title: 'reviewApply',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]

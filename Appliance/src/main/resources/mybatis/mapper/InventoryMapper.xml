@@ -38,8 +38,10 @@
 		#{itemName,jdbcType=VARCHAR},
 		Item_Count =
 		#{itemCount,jdbcType=INTEGER},
-		Item_Type =
-		#{itemType,jdbcType=VARCHAR},
+		<if test="itemType != null and itemType !=''">
+			Item_Type =
+			#{itemType,jdbcType=VARCHAR},
+		</if>
 		<if test="commit != null and commit !=''"> Commit = #{commit,jdbcType=VARCHAR},</if>
 		Updator = #{updator,jdbcType=VARCHAR},
 		Update_Time =
@@ -122,7 +124,6 @@
 		SELECT
 		ID AS id,
 		Item_Name AS itemName,
-		Item_Type AS itemtype,
 		Item_Count AS itemCount
 		FROM
 		appliance_inventory

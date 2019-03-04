@@ -119,14 +119,13 @@ public class ApplyServiceImpl implements ApplyService {
 			if (applyDto.getStatus() == 2) {
 				InventoryVo inventoryVo = inventoryMapper.selectInventoryById(applyDto.getInventoryId());// 查出该条库存的数量
 				int inventoryItemCount = inventoryVo.getItemCount();
-				ApplyVo applyVo = applyMapper.selectApplyById(applyDto.getId());
+				ApplyVo applyVo = applyMapper.selectApplyById(applyDto.getId());// 查出需求的数量
 				int applyItemCount = applyVo.getItemCount();
 				int newItemCount = inventoryItemCount - applyItemCount;// 算出经过领取后的数量
 				InventoryDto inventoryDto = new InventoryDto();
 				inventoryDto.setItemCount(newItemCount);
 				inventoryDto.setId(inventoryVo.getId());
 				inventoryDto.setItemName(inventoryVo.getItemName());
-				inventoryDto.setItemType(inventoryVo.getItemType());
 				inventoryDto.setUpdator(userVo.getName());
 				inventoryDto.setUpdateTime(nowTime);
 				inventoryMapper.updateInventory(inventoryDto);// 更新库存数量
@@ -148,19 +147,22 @@ public class ApplyServiceImpl implements ApplyService {
 	 * 我的申领
 	 */
 	@Override
-	public BaseResponse<List<ApplyVo>> myApply(ApplyDto applyDto) {
+	public BaseResponse<PageInfo<ApplyVo>> myApply(ApplyDto applyDto) {
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			applyDto.setCreator(userVo.getName());
+			// 执行分页查询
+			PageHelper.startPage(applyDto.getPageNum(), applyDto.getPageSize());
 			List<ApplyVo> applyList = applyMapper.applyList(applyDto);
-			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
-			response.setResponseData(applyList);
+			PageInfo<ApplyVo> pageInfo = new PageInfo<>(applyList);
+			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
+			response.setResponseData(pageInfo);
 			response.setStatusCode(200);
 			response.setStatusMsg("获取myApply数据成功");
 			return response;
 		} catch (Exception e) {
-			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
+			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("获取myApply数据失败");
 			return response;
