@@ -17,7 +17,7 @@ public class UserDto extends PaginationBase implements Serializable {
 	/**
 	 * 用户id（自增长）
 	 */
-	private int id;
+	private Long id;
 
 	/**
 	 * 用户名（员工号）

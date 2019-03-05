@@ -60,7 +60,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 	public BaseResponse<String> insertUser(UserDto userDto) {
 		try {
 			int count = userMapper.selectUserByStaffNo(userDto); // 判断数据库中是否有相同工号的用户
-			if(count != 0) {
+			if (count != 0) {
 				log.warn("执行insertUser失败,数据库中已经有该用户名");
 				BaseResponse<String> response = new BaseResponse<>();
 				response.setStatusCode(201);
@@ -111,6 +111,35 @@ public class UserManagementServiceImpl implements UserManagementService {
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("执行updateUser失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 用户单选删除
+	 */
+	@Override
+	public BaseResponse<String> deleteUser(Long id) {
+		try {
+			UserDto userDto = new UserDto();
+			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			userDto.setUpdator(userVo.getStaffNo());
+			userDto.setUpdateTime(nowTime);
+			userDto.setId(id);
+			userMapper.deleteUser(userDto); // 对传入的id进行删除操作
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(200);
+			response.setStatusMsg("deleteUser单选删除成功");
+			return response;
+		} catch (Exception e) {
+			log.error("deleteUser单选删除失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("deleteUser单选删除失败");
 			return response;
 		}
 	}

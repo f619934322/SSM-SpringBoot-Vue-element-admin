@@ -44,4 +44,11 @@ public interface UserMapper {
 	 * @return
 	 */
 	public int selectUserByStaffNo(UserDto userDto);
+
+	/**
+	 * 用户删除
+	 * 
+	 * @param userDto
+	 */
+	public void deleteUser(UserDto userDto);
 }

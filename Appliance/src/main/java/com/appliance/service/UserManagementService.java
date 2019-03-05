@@ -25,8 +25,17 @@ public interface UserManagementService {
 
 	/**
 	 * 用户编辑
+	 * 
 	 * @param userDto
 	 * @return
 	 */
 	public BaseResponse<String> updateUser(UserDto userDto);
+
+	/**
+	 * 用户单选删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public BaseResponse<String> deleteUser(Long id);
 }

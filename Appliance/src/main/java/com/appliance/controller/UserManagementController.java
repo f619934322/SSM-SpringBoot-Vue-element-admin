@@ -67,4 +67,13 @@ public class UserManagementController {
 		log.info("updateUser返回的JSON: {}", resultToString);
 		return resultToString;
 	}
+	
+	@PostMapping(value = "/deleteUser", produces = { "application/json;charset=utf-8" })
+	public String deleteUser(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
+		log.info("执行deleteUser");
+		BaseResponse<String> response = userManagementService.deleteUser(id);
+		String resultToString = JSON.toJSONString(response);
+		log.info("deleteUser返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 }

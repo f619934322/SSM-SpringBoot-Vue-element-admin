@@ -2,11 +2,11 @@
 <div class="app-container">
     <div class="filter-container">
     <!-- 用户新增弹窗 -->
-    <el-dialog :visible.sync="dialogAdd" :before-close="handleCloseAdd" :rules="addRule"
-      title="申请领取">
+    <el-dialog :visible.sync="dialogAdd" :before-close="handleCloseAdd" :rules="userRule"
+      title="用户新增">
       <el-form
         ref="addForm"
-        :rules="addRule"
+        :rules="userRule"
         :model="userObj"
         class="small-space"
         label-position="left"
@@ -32,6 +32,47 @@
       </div>
     </el-dialog>
     <!-- /用户新增弹窗 -->
+    <!-- 用户编辑弹窗 -->
+        <el-dialog :visible.sync="dialogUpdate" :before-close="handleCloseUpdate" :rules="userRule"
+      title="用户编辑">
+      <el-form
+        ref="updateForm"
+        :rules="userRule"
+        :model="userObj"
+        class="small-space"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="工号" prop="staffNo">
+          <el-input type="count" v-model="userObj.staffNo" placeholder="请输入工号"/>
+        </el-form-item>
+        <el-form-item label="真实姓名" prop="name">
+          <el-input type="count" v-model="userObj.name" placeholder="请输入姓名"/>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="count" v-model="userObj.password" placeholder="请输入密码"/>
+        </el-form-item>
+        <el-form-item label="用户类型" prop="userType">
+          <el-input type="count" v-model="userObj.userType" placeholder="请输入人员类型"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogUpdate = false;$refs.updateForm.resetFields()">取消</el-button>
+        <el-button type="primary" @click="updateUser('updateForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- /用户编辑弹窗 -->
+    <!-- 物品单选删除弹窗 -->
+    <el-dialog :visible.sync="dialogVisibleDel" title="用户删除">
+      <code>您确认要删除此用户吗？ ID:{{ userObj.id }}
+      </code>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleDel = false;userObj.id = null">取 消</el-button>
+        <el-button type="danger" @click="userDeleteSubmit">确认删除</el-button>
+      </div>
+    </el-dialog>
+    <!-- /物品单选删除弹窗 -->
    <!-- 主表格 -->
     <el-table
       v-loading.body="listLoading"
@@ -76,7 +117,7 @@
                   type="warning"
                   icon="el-icon-edit"
                   plain
-                  @click="updateUseDialogr(scope.row.id);"
+                  @click="updateUseDialogr(scope.row.id,scope.row.staffNo,scope.row.name,scope.row.userType);"
                 >用户编辑</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
@@ -112,7 +153,12 @@
 </template>
 <script>
 import { Message } from "element-ui";
-import { pagination, insertNewUser } from "@/api/userManagement";
+import {
+  pagination,
+  insertNewUser,
+  updateUser,
+  userDelete
+} from "@/api/userManagement";
 const userObj = {
   // 插入更新等对象在这初始化
   id: null,
@@ -126,6 +172,8 @@ export default {
     return {
       listLoading: true,
       dialogAdd: false, // 这是新增用户弹窗，默认false
+      dialogUpdate: false, // 这是编辑用户的弹窗，默认false
+      dialogVisibleDel: false, // 单选删除弹窗
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
       // 这是编辑新增用的对象
@@ -133,7 +181,7 @@ export default {
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
-      addRule: {
+      userRule: {
         staffNo: [{ required: true, message: "请输入工号", trigger: "blur" }],
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
@@ -196,7 +244,7 @@ export default {
               this.listLoading = false;
               if (data.statusCode === 200) {
                 Message({
-                  message: "新增编辑成功",
+                  message: "新增成功",
                   type: "success",
                   duration: 5 * 1000
                 });
@@ -207,7 +255,7 @@ export default {
               } else {
                 this.loading = false;
                 Message({
-                  message: "新增失败,原因："+data.statusMsg,
+                  message: "新增失败,原因：" + data.statusMsg,
                   type: "error",
                   duration: 5 * 1000
                 });
@@ -224,10 +272,96 @@ export default {
         }
       });
     },
+    // 编辑弹窗关闭
+    handleCloseUpdate() {
+      this.dialogUpdate = false;
+      this.$refs.updateForm.resetFields();
+    },
     // 更新用户
-    updateUseDialogr(id) {},
+    updateUseDialogr(id, staffNo, name, userType) {
+      this.userObj.id = id;
+      this.userObj.staffNo = staffNo;
+      this.userObj.name = name;
+      this.userObj.userType = userType;
+      this.dialogUpdate = true;
+    },
+    // 更新用户确认
+    updateUser(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          updateUser(this.userObj)
+            .then(response => {
+              const data = response.data;
+              this.listLoading = false;
+              if (data.statusCode === 200) {
+                Message({
+                  message: "编辑成功",
+                  type: "success",
+                  duration: 5 * 1000
+                });
+                this.$refs[formName].resetFields();
+                this.dialogUpdate = false;
+                this.userObj = Object.assign({}, userObj); // 重新给修改用对象赋值初始化，userObj为全局const对象
+                this.fetchData();
+              } else {
+                this.loading = false;
+                Message({
+                  message: "编辑失败",
+                  type: "error",
+                  duration: 5 * 1000
+                });
+              }
+            })
+            .catch(() => {
+              this.loading = false;
+              Message({
+                message: "编辑失败",
+                type: "error",
+                duration: 5 * 1000
+              });
+            });
+        }
+      });
+    },
     // 单选删除弹窗
-    deleteUserDialog(id) {}
+    deleteUserDialog(id) {
+      this.userObj.id = id;
+      this.dialogVisibleDel = true;
+    },
+    // 单项删除
+    userDeleteSubmit() {
+      this.listLoading = true;
+      this.dialogVisibleDel = false;
+      const id = this.userObj.id;
+      userDelete(id)
+        .then(response => {
+          const data = response.data;
+          this.listLoading = false;
+          if (data.statusCode === 200) {
+            this.delItemId = null;
+            Message({
+              message: "删除成功",
+              type: "success",
+              duration: 5 * 1000
+            });
+          } else {
+            Message({
+              message: "删除失败",
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+          this.fetchData();
+        })
+        .catch(() => {
+          this.loading = false;
+          Message({
+            message: "删除失败",
+            type: "error",
+            duration: 5 * 1000
+          });
+        });
+    }
   } // 这是方法末尾花括号
 };
 </script>

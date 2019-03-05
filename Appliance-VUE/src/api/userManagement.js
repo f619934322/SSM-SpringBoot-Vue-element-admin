@@ -18,3 +18,24 @@ export function insertNewUser(data) {
   })
 }
 
+// 编辑用户
+export function updateUser(data) {
+  return request({
+    url: '/appliance/userManagement/updateUser',
+    method: 'post',
+    data
+  })
+}
+
+// 用户单选删除
+export function userDelete(data) {
+  return request({
+    url: '/appliance/userManagement/deleteUser',
+    method: 'post',
+    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
+      'Content-Type': 'application/json'
+    },
+    data
+  })
+}
+

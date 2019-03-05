@@ -70,10 +70,24 @@
 	</update>
 	<!-- 判断数据库中是否有存在要注册的用户 -->
 	<select id="selectUserByStaffNo"
-		parameterType="com.appliance.pojo.dto.UserDto" resultType="java.lang.Integer">
+		parameterType="com.appliance.pojo.dto.UserDto"
+		resultType="java.lang.Integer">
 		SELECT
 		count(*) AS count
-		FROM staff_info WHERE Delete_Flag = 0
+		FROM staff_info WHERE Delete_Flag =
+		0
 		AND Staff_Number = #{staffNo}
 	</select>
+	<!-- 用户删除 -->
+	<update id="deleteUser"
+		parameterType="com.appliance.pojo.dto.UserDto">
+		UPDATE staff_info SET
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR},
+		Delete_Flag = 1
+		WHERE
+		ID = #{id}
+	</update>
 </mapper>

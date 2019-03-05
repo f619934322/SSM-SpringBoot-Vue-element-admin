@@ -105,13 +105,13 @@ public class InventoryServiceImpl implements InventoryService {
 			inventoryMapper.deleteInventory(inventoryDto); // 对传入的id进行删除操作
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(200);
-			response.setStatusMsg("单选删除成功");
+			response.setStatusMsg("deleteInventory单选删除成功");
 			return response;
 		} catch (Exception e) {
 			log.error("deleteInventory单选删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(201);
-			response.setStatusMsg("单选删除失败");
+			response.setStatusMsg("deleteInventory单选删除失败");
 			return response;
 		}
 	}
