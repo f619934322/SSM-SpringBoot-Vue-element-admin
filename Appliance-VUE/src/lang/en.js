@@ -5,7 +5,10 @@ export default {
     inventoryInfo: 'Inventory Info',
     pageForAdmin: 'Page For Admin',
     reviewDemand: 'Review Demand',
-    reviewApply: 'Review Apply'
+    reviewApply: 'Review Apply',
+    myApply: 'My Apply',
+    myDemand: 'My Deamand',
+    userManagement: 'User Management'
   },
   navbar: {
     logOut: 'Log Out',

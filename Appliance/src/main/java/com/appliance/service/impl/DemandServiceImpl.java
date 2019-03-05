@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DemandServiceImpl implements DemandService {
 
 	private static final String TIMEFORMAT = "yyyy-MM-dd HH:mm:ss";// sonar要求同一字符串不得出现两次或以上，必须使用静态最终成员定义
-	
+
 	@Autowired
 	private DemandMapper demandMapper;
 
@@ -218,6 +218,38 @@ public class DemandServiceImpl implements DemandService {
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("excelDemand导出失败");
+			return response;
+		}
+	}
+
+	@Override
+	public BaseResponse<PageInfo<DemandVo>> myDemand(DemandDto demandDto) {
+		try {
+				if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+					// 从数组中分离出起始和结束日期
+					String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
+					String createTimeBegin = createTimeBeginAndEnd[0];
+					String createTimeEnd = createTimeBeginAndEnd[1];
+					// 将日期赋值给对象
+					demandDto.setCreateTimeBegin(createTimeBegin);
+					demandDto.setCreateTimeEnd(createTimeEnd);
+				}
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			demandDto.setCreator(userVo.getName());
+			// 执行分页查询
+			PageHelper.startPage(demandDto.getPageNum(), demandDto.getPageSize());
+			List<DemandVo> demandList = demandMapper.demandList(demandDto);
+			PageInfo<DemandVo> pageInfo = new PageInfo<>(demandList);
+			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
+			response.setResponseData(pageInfo);
+			response.setStatusCode(200);
+			response.setStatusMsg("获取myDemand数据成功");
+			return response;
+		} catch (Exception e) {
+			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("获取myDemand数据失败");
 			return response;
 		}
 	}

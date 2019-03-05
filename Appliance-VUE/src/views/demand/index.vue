@@ -45,7 +45,6 @@
         <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
         <el-button class="filter-item" type="primary" icon="el-icon-download" @click="excelClick">导出</el-button>
       </div>
-    </div>
     <!-- /检索等顶部选项 -->
     <div>
       <!-- 审核弹窗 -->
@@ -176,6 +175,7 @@
       <!-- /分页选项 -->
     </div>
   </div>
+  </div>
 </template>
 <script>
 import { Message } from "element-ui";
@@ -198,6 +198,7 @@ export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
     return {
+      listLoading: true,
       dialogDemandReview: false, // 这是审核操作窗口，默认false
       dialogVisibleExeclForDemand: false, // 这是导出弹窗，默认false
       list: null, // 这是申请一览的list，打开页面会去找接口获取数据并赋值，默认null
@@ -374,7 +375,8 @@ export default {
       if (this.demandObj.status === this.demandStatus) {
         Message({
           message: "请选择下一状态！",
-          type: "warning",          duration: 5 * 1000
+          type: "warning",
+          duration: 5 * 1000
         });
         return;
       } else {

@@ -1,9 +1,22 @@
 package com.appliance.pojo.vo;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class UserVo {
+public class UserVo implements Serializable {
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 用户自增ID
+	 */
+	private int id;
 	
 	/**
 	 * 用户名（员工号）

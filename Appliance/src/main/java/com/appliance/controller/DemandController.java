@@ -117,4 +117,13 @@ public class DemandController {
 		log.info("excelDemand返回的JSON: {}", resultToString);
 		return resultToString;
 	}
+	
+	@PostMapping(value = "/myDemand", produces = { "application/json" })
+	public String myApply(@RequestBody DemandDto demandDto) {
+		log.info("执行myDemand");
+		BaseResponse<PageInfo<DemandVo>> response = demandService.myDemand(demandDto);
+		String resultToString = JSON.toJSONString(response);
+		log.info("myDemand返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 }

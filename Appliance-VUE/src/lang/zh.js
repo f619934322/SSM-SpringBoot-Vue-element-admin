@@ -5,7 +5,10 @@ export default {
     inventoryInfo: '教学用品一览',
     pageForAdmin: '管理员界面',
     reviewDemand: '申请采购审核清单',
-    reviewApply: '申请领取审核清单'
+    reviewApply: '申请领取审核清单',
+    myApply: '我的申请-领取',
+    myDemand: '我的申请-采购',
+    userManagement: '用户管理'
   },
   navbar: {
     logOut: '退出登录',

@@ -73,6 +73,7 @@
 		FROM
 		appliance_demand
 		WHERE Delete_Flag = 0
+				<if test="creator != null and creator !=''">AND Creator = #{creator}</if>
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 		<if test="status != null and status != -1">AND Status = #{status}</if>
 		<if test="createTimeBegin != null and createTimeBegin !=''">AND

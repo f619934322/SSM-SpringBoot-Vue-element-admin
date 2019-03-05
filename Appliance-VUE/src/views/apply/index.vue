@@ -170,6 +170,7 @@ export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
     return {
+      listLoading: true,
       dialogApplyReview: false, // 审核弹窗，默认false
       list: null, // 这是分页list
       applyStatus: null, // 这是审核弹窗的状态

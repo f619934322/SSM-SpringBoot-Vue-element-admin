@@ -91,8 +91,21 @@ export const constantRouterMap = [
       {
         path: 'myApply',
         component: () => import('@/views/apply/myApply'),
-        name: '我的申领',
-        meta: { title: 'MyApply', icon: 'table', noCache: true }
+        name: '我的申请-领取',
+        meta: { title: 'myApply', icon: 'table', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/myDemand',
+    component: Layout,
+    redirect: 'myDemand',
+    children: [
+      {
+        path: 'myDemand',
+        component: () => import('@/views/demand/myDemand'),
+        name: '我的申请-采购',
+        meta: { title: 'myDemand', icon: 'table', noCache: true }
       }
     ]
   }
@@ -132,6 +145,15 @@ export const asyncRouterMap = [
         name: '教学用品物品申请领取审核清单',
         meta: {
           title: 'reviewApply',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'userManagement',
+        component: () => import('@/views/user/userManagement'),
+        name: '用户管理',
+        meta: {
+          title: 'userManagement',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       }
