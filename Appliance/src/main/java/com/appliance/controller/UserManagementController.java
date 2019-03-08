@@ -68,6 +68,11 @@ public class UserManagementController {
 		return resultToString;
 	}
 	
+	/**
+	 * 单选删除用户
+	 * @param id
+	 * @return
+	 */
 	@PostMapping(value = "/deleteUser", produces = { "application/json;charset=utf-8" })
 	public String deleteUser(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
 		log.info("执行deleteUser");
