@@ -372,7 +372,7 @@ export default {
     },
     // 审核
     reviewDemand(formName) {
-      if (this.demandObj.status === this.demandStatus) {
+      if (parseInt(this.demandObj.status) === parseInt(this.demandStatus)) { // 必须采用转换，因为两者类型可能会不一样导致业务逻辑失效
         Message({
           message: "请选择下一状态！",
           type: "warning",

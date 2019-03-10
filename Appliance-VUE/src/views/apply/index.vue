@@ -269,7 +269,7 @@ export default {
     },
     // 进行审核
     reviewApply(formName) {
-      if (this.applyObj.status === this.applyStatus) {
+      if (parseInt(this.applyObj.status) === parseInt(this.applyStatus)) { // 必须采用转换，因为两者类型可能会不一样导致业务逻辑失效
         Message({
           message: "请选择下一状态！",
           type: "warning",
@@ -277,7 +277,7 @@ export default {
         });
         return;
       } else {
-        this.applyObj.status = this.applyStatus; // 因为直接绑定this.applyObj.status会导致选择判断bug（页面展示上      }
+        this.applyObj.status = this.applyStatus; // 因为直接绑定this.applyObj.status会导致选择判断bug（页面展示上）
         this.$refs[formName].validate(valid => {
           if (valid) {
             this.applyObj.status = parseInt(this.applyObj.status); // 状态码转为数字

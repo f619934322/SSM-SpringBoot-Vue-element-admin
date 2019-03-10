@@ -1,6 +1,50 @@
 <template>
-<div class="app-container">
+ <!-- 检索等顶部选项 -->
+  <div class="app-container">
     <div class="filter-container">
+      <div class="container">
+        <el-tooltip class="item" effect="light" content="人员姓名" placement="top">
+          <el-input
+            v-model.trim="searchOptions.name"
+            clearable
+            style="width: 200px;"
+            class="filter-item"
+            placeholder="人员姓名"
+          />
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="工号" placement="top">
+          <el-input
+            v-model.trim="searchOptions.staffNo"
+            clearable
+            style="width: 200px;"
+            class="filter-item"
+            placeholder="工号"
+          />
+        </el-tooltip>
+           <el-select
+          v-model="searchOptions.userType"
+          clearable
+          class="filter-item"
+          filterable
+          placeholder="请选择用户类型"
+        >
+          <el-option
+            v-for="item in userTypeList"
+            :key="item.key"
+            :label="item.label"
+            :value="item.userType"
+          />
+        </el-select>
+        <el-button
+          class="filter-item"
+          style="margin-left: 6px;"
+          icon="el-icon-search"
+          @click="searchData"
+        >搜索</el-button>
+        <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
+      </div>
+    </div>
+    <!-- /检索等顶部选项 -->
     <!-- 用户新增弹窗 -->
     <el-dialog :visible.sync="dialogAdd" :before-close="handleCloseAdd" :rules="userRule"
       title="用户新增">
@@ -169,7 +213,6 @@
     </div>
     <!-- /分页选项 -->
   </div>
- </div>
 </template>
 <script>
 import { Message } from "element-ui";
@@ -205,6 +248,12 @@ export default {
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
+      searchOptions: {
+        // 搜索用参数
+        name: null,
+        staffNo: null,
+        userType: null
+      },
       userRule: {
         staffNo: [{ required: true, message: "请输入工号", trigger: "blur" }],
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
@@ -234,12 +283,24 @@ export default {
       this.currentPage = val;
       this.fetchData(); // 每次切换页码的时候调用fetchData方法
     },
+    // 清空搜索选项
+    clearSearchOptions() {
+      this.searchOptions = {
+        // 此处用于重置搜索参数
+        name: null,
+        staffNo: null,
+        userType: null
+      };
+    },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {
       this.listLoading = false;
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
-        pageSize: this.pagesize // 向后端传的单页条数
+        pageSize: this.pagesize, // 向后端传的单页条数
+        name: this.searchOptions.name, // 这三个用于查询用户姓名，工号，用户类型
+        staffNo: this.searchOptions.staffNo,
+        userType: this.searchOptions.userType
       };
       pagination(listQuery).then(response => {
         const data = response.data.responseData;
@@ -247,6 +308,12 @@ export default {
         this.totalCount = data.total;
         this.listLoading = false;
       });
+    },
+    // 带检索条件去查询列表（带检索用参数）
+    searchData() {
+      this.currentPage = 1;
+      this.listLoading = true;
+      this.fetchData(); // 跳回第一页，带条件参数去后端查询列表数据
     },
     // 新增弹窗关闭
     handleCloseAdd() {
