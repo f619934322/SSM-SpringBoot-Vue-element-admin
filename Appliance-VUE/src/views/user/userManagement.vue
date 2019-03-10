@@ -22,8 +22,18 @@
         <el-form-item label="密码" prop="password">
           <el-input type="count" v-model="userObj.password" placeholder="请输入密码"/>
         </el-form-item>
-        <el-form-item label="用户类型" prop="userType">
-          <el-input type="count" v-model="userObj.userType" placeholder="请输入人员类型"/>
+      <el-form-item label="用户类型" prop="itemType">
+          <el-select
+            v-model="userObj.userType"
+            class="filter-item"
+            filterable
+            placeholder="请选择人员类型"
+          >
+            <el-option v-for="item in userTypeList" :key="item.key" :value="item.userType" :label="item.label">
+            <span v-if="item.userType ===1 ">普通职工</span>
+            <span v-if="item.userType ===2 ">管理员/采购人员</span>
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -51,10 +61,20 @@
           <el-input type="count" v-model="userObj.name" placeholder="请输入姓名"/>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="count" v-model="userObj.password" placeholder="请输入密码"/>
+          <el-input type="count" v-model="userObj.password" placeholder="请输入密码（强制修改）"/>
         </el-form-item>
-        <el-form-item label="用户类型" prop="userType">
-          <el-input type="count" v-model="userObj.userType" placeholder="请输入人员类型"/>
+        <el-form-item label="用户类型" prop="itemType">
+          <el-select
+            v-model="userObj.userType"
+            class="filter-item"
+            filterable
+            placeholder="请选择人员类型"
+          >
+            <el-option v-for="item in userTypeList" :key="item.key" :value="item.userType" :label="item.label">
+            <span v-if="item.userType ===1 ">普通职工</span>
+            <span v-if="item.userType ===2 ">管理员/采购人员</span>
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -176,6 +196,10 @@ export default {
       dialogVisibleDel: false, // 单选删除弹窗
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
+      userTypeList: [
+        { key: 1, userType: 1, label: "普通职工" },
+        { key: 2, userType: 2, label: "管理员/采购人员" }
+      ], // 这是编辑弹窗里的用户类型下拉框数据，默认写死;label会最优先展示，其次到value，但是value是实际绑定的值，要传给后端的，是数字，所以不应用来展示
       // 这是编辑新增用的对象
       userObj: Object.assign({}, userObj),
       totalCount: 0,
