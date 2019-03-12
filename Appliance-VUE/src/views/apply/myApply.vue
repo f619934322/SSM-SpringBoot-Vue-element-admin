@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-          <!-- 检索等顶部选项 -->
+      <!-- 检索等顶部选项 -->
       <div class="container">
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
@@ -76,7 +76,7 @@
         <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
       </el-table>
       <!-- /主表格 -->
-            <!-- 分页选项 -->
+      <!-- 分页选项 -->
       <div align="center">
         <el-pagination
           :current-page="currentPage"
@@ -89,11 +89,11 @@
         />
       </div>
       <!-- /分页选项 -->
-          </div>
+    </div>
   </div>
 </template>
 <script>
-import { paginationForMy } from "@/api/apply";
+import { paginationForMy } from '@/api/apply'
 export default {
   data() {
     return {
@@ -109,37 +109,37 @@ export default {
         status: null // 这是下拉框的审核状态
       },
       itemStatusList: [
-        { key: 0, status: 0, statusName: "未审核" },
-        { key: 1, status: 1, statusName: "驳回" },
-        { key: 2, status: 2, statusName: "审核但未领取" },
-        { key: 3, status: 3, statusName: "领取完毕" }
+        { key: 0, status: 0, statusName: '未审核' },
+        { key: 1, status: 1, statusName: '驳回' },
+        { key: 2, status: 2, statusName: '审核但未领取' },
+        { key: 3, status: 3, statusName: '领取完毕' }
       ]
-    };
+    }
   },
   created() {
     // 这里是设置打开页面自动会调用的方法
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     // ID数组的赋值
     handleSelectionChange(val) {
-      this.multipleSelection = val;
+      this.multipleSelection = val
     },
     // 每页显示数据量变更
     handleSizeChange(val) {
-      this.pagesize = val;
-      this.fetchData(); // 每次选择一页显示几条的时候调用fetchData方法
+      this.pagesize = val
+      this.fetchData() // 每次选择一页显示几条的时候调用fetchData方法
     },
     // 页码变更
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this.fetchData(); // 每次切换页码的时候调用fetchData方法
+      this.currentPage = val
+      this.fetchData() // 每次切换页码的时候调用fetchData方法
     },
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
-      this.currentPage = 1;
-      this.listLoading = true;
-      this.fetchData(); // 跳回第一页，带条件参数去后端查询列表数据
+      this.currentPage = 1
+      this.listLoading = true
+      this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
     },
     // 清空搜索选项
     clearSearchOptions() {
@@ -148,29 +148,29 @@ export default {
         itemName: null,
         createTimeBeginToEnd: [], // 这是时间的数组
         status: null // 这是下拉框的审核状态
-      };
+      }
     },
     fetchData() {
-      this.listLoading = false;
+      this.listLoading = false
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
         itemName: this.searchOptions.itemName, // 以物品名称进行检索
         status: this.searchOptions.status, // 查出所有选择的审核状态数据
         createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
-      };
-      if (listQuery.status === null || listQuery.status === "") {
+      }
+      if (listQuery.status === null || listQuery.status === '') {
         // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
         // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
-        listQuery.status = -1; // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
+        listQuery.status = -1 // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
       paginationForMy(listQuery).then(response => {
-        const data = response.data.responseData;
-        this.list = data.list;
-        this.totalCount = data.total;
-        this.listLoading = false;
-      });
+        const data = response.data.responseData
+        this.list = data.list
+        this.totalCount = data.total
+        this.listLoading = false
+      })
     }
   } // 这是方法末尾花括号
-};
+}
 </script>

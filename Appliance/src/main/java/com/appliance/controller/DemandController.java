@@ -99,7 +99,8 @@ public class DemandController {
 	 * @throws IOException
 	 */
 	@GetMapping(value = "/excelDemand", produces = { "application/json" })
-	public String excelDemand(HttpServletResponse httpServletResponse, @RequestParam("status") int status) throws IOException {
+	public String excelDemand(HttpServletResponse httpServletResponse, @RequestParam("status") int status)
+			throws IOException {
 		log.info("执行excelDemand");
 		DemandDto demandDto = new DemandDto();
 		demandDto.setStatus(status);
@@ -117,7 +118,13 @@ public class DemandController {
 		log.info("excelDemand返回的JSON: {}", resultToString);
 		return resultToString;
 	}
-	
+
+	/**
+	 * 我的采购
+	 * 
+	 * @param demandDto
+	 * @return
+	 */
 	@PostMapping(value = "/myDemand", produces = { "application/json" })
 	public String myApply(@RequestBody DemandDto demandDto) {
 		log.info("执行myDemand");

@@ -222,18 +222,21 @@ public class DemandServiceImpl implements DemandService {
 		}
 	}
 
+	/**
+	 * 我的采购
+	 */
 	@Override
 	public BaseResponse<PageInfo<DemandVo>> myDemand(DemandDto demandDto) {
 		try {
-				if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
-					// 从数组中分离出起始和结束日期
-					String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
-					String createTimeBegin = createTimeBeginAndEnd[0];
-					String createTimeEnd = createTimeBeginAndEnd[1];
-					// 将日期赋值给对象
-					demandDto.setCreateTimeBegin(createTimeBegin);
-					demandDto.setCreateTimeEnd(createTimeEnd);
-				}
+			if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+				// 从数组中分离出起始和结束日期
+				String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
+				String createTimeBegin = createTimeBeginAndEnd[0];
+				String createTimeEnd = createTimeBeginAndEnd[1];
+				// 将日期赋值给对象
+				demandDto.setCreateTimeBegin(createTimeBegin);
+				demandDto.setCreateTimeEnd(createTimeEnd);
+			}
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			demandDto.setCreator(userVo.getName());
