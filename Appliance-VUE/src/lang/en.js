@@ -8,7 +8,8 @@ export default {
     reviewApply: 'Review Apply',
     myApply: 'My Apply',
     myDemand: 'My Deamand',
-    userManagement: 'User Management'
+    userManagement: 'User Management',
+    aboutMe: 'About Me'
   },
   navbar: {
     logOut: 'Log Out',

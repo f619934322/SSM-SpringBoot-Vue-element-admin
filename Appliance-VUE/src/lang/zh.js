@@ -8,7 +8,8 @@ export default {
     reviewApply: '申请领取审核清单',
     myApply: '我的申请-领取',
     myDemand: '我的申请-采购',
-    userManagement: '用户管理'
+    userManagement: '用户管理',
+    aboutMe: '我的申请'
   },
   navbar: {
     logOut: '退出登录',
