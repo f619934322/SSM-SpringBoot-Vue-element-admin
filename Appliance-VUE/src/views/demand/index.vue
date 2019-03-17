@@ -133,8 +133,9 @@
               <span v-if="scope.row.addedFlag === 1">需要新增</span>
             </template>
           </el-table-column>
+          <el-table-column prop="creator" label="申请人" min-width="120px;" sortable/>
           <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-          <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
+          <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
           <el-table-column align="center" label="操作" width="250">
             <template slot-scope="scope">
               <el-dropdown trigger="click">

@@ -5,28 +5,27 @@
 	<select id="userLogin"
 		parameterType="com.appliance.pojo.dto.UserDto"
 		resultType="com.appliance.pojo.vo.UserVo">
-		SELECT
-		Staff_Number AS staffNo,
+		SELECT Staff_Number AS staffNo,
 		Name AS name,
 		Password AS
 		password,
 		User_Type AS userType
-		FROM staff_info WHERE Delete_Flag = 0
-		AND Staff_Number = #{staffNo,jdbcType=VARCHAR}
+		FROM staff_info
+		WHERE Delete_Flag = 0
+		AND
+		Staff_Number = #{staffNo,jdbcType=VARCHAR}
 	</select>
 	<!-- 用户列表获取 -->
 	<select id="userList"
 		parameterType="com.appliance.pojo.dto.UserDto"
 		resultType="com.appliance.pojo.vo.UserVo">
-		SELECT
-		ID AS id,
+		SELECT ID AS id,
 		Staff_Number AS staffNo,
 		Name AS name,
-		Password AS
-		password,
+		Password AS password,
 		User_Type AS userType
-		FROM staff_info WHERE
-		Delete_Flag = 0
+		FROM staff_info
+		WHERE Delete_Flag = 0
 		<if test="name != null and name !=''">AND Name LIKE '%${name}%'</if>
 		<if test="staffNo != null and staffNo !=''">AND Staff_Number LIKE '%${staffNo}%'</if>
 		<if test="userType != null and userType != 0">AND User_Type = #{userType}</if>

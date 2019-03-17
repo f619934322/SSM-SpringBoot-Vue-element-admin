@@ -6,12 +6,10 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-
+        <lang-select class="international right-menu-item"/>
         <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
-
-        <lang-select class="international right-menu-item"/>
 
       </template>
 
@@ -43,11 +41,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
-import LangSelect from '@/components/LangSelect'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import Screenfull from "@/components/Screenfull";
+import LangSelect from "@/components/LangSelect";
 
 export default {
   components: {
@@ -57,24 +55,19 @@ export default {
     LangSelect
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar',
-      'device'
-    ])
+    ...mapGetters(["sidebar", "name", "avatar", "device"])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+      this.$store.dispatch("toggleSideBar");
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
-      })
+      this.$store.dispatch("LogOut").then(() => {
+        location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
+      });
     }
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -88,7 +81,7 @@ export default {
     float: left;
     padding: 0 10px;
   }
-  .breadcrumb-container{
+  .breadcrumb-container {
     float: left;
   }
   .errLog-container {
@@ -98,8 +91,8 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
-    &:focus{
-     outline: none;
+    &:focus {
+      outline: none;
     }
     .right-menu-item {
       display: inline-block;
@@ -107,9 +100,10 @@ export default {
     }
     .screenfull {
       height: 20px;
+      vertical-align: middle;
     }
-    .international{
-      vertical-align: top;
+    .international {
+      vertical-align: middle;
     }
     .theme-switch {
       vertical-align: 15px;

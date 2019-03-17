@@ -113,7 +113,7 @@
         <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
         <el-table-column prop="reviewer" label="审核人" min-width="120px;" sortable/>
         <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
-        <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
+        <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
         <el-table-column align="center" label="操作" width="250">
           <template slot-scope="scope">
             <el-dropdown trigger="click">
@@ -130,7 +130,7 @@
                     type="warning"
                     icon="el-icon-info"
                     plain
-                    @click="openDialogApplyReview(scope.row.id,scope.row.inventoryId,scope.row.status,scope.row.itemCount);"
+                    @click="openDialogApplyReview(scope.row.id,scope.row.inventoryId,scope.row.status,scope.row.itemCount,scope.row.reviewCommit);"
                   >进行审核</el-button>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -258,13 +258,14 @@ export default {
       this.$refs.applyForm.resetFields()
     },
     // 审核弹窗打开
-    openDialogApplyReview(applyId, inventoryId, status, itemCount) {
+    openDialogApplyReview(applyId, inventoryId, status, itemCount, reviewCommit) {
       // 获取到该条数据的参数，传值给对象最后会将这个对象给后端
       this.applyObj.id = applyId
       this.applyObj.inventoryId = inventoryId
       this.applyObj.status = status
       this.applyStatus = status
       this.applyObj.itemCount = itemCount
+      this.applyObj.reviewCommit = reviewCommit
       this.dialogApplyReview = true
     },
     // 进行审核

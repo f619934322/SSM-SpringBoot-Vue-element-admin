@@ -293,6 +293,7 @@
                   size="mini"
                   type="success"
                   icon="el-icon-plus"
+                  :disabled="scope.row.itemCount === 0"
                   plain
                   @click="openDialogApply(scope.row.id,scope.row.itemName,scope.row.itemCount);"
                 >申请领取</el-button>
