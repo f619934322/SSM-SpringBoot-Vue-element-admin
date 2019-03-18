@@ -53,8 +53,7 @@
 	<select id="demandList"
 		parameterType="com.appliance.pojo.dto.DemandDto"
 		resultType="com.appliance.pojo.vo.DemandVo">
-		SELECT
-		ID AS id,
+		SELECT ID AS id,
 		Inventory_ID AS inventoryId,
 		Added_Flag AS addedFlag,
 		Item_Name AS itemName,
@@ -62,18 +61,15 @@
 		Status AS status,
 		Purchase_Price AS purchasePrice,
 		Item_Count AS itemCount,
-		Commit AS
-		commit,
+		Commit AS commit,
 		Reviewer AS reviewer,
 		Review_Time AS reviewTime,
-		Review_Commit AS
-		reviewCommit,
+		Review_Commit AS reviewCommit,
 		Create_Time AS createTime,
 		Creator AS creator
-		FROM
-		appliance_demand
+		FROM appliance_demand
 		WHERE Delete_Flag = 0
-				<if test="creator != null and creator !=''">AND Creator = #{creator}</if>
+		<if test="creator != null and creator !=''">AND Creator = #{creator}</if>
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 		<if test="status != null and status != -1">AND Status = #{status}</if>
 		<if test="createTimeBegin != null and createTimeBegin !=''">AND
@@ -98,7 +94,8 @@
 		Reviewer = #{reviewer,jdbcType=VARCHAR},
 		Review_Time =
 		#{reviewTime,jdbcType=VARCHAR},
-		Review_Commit = #{reviewCommit,jdbcType=VARCHAR},
+		Review_Commit =
+		#{reviewCommit,jdbcType=VARCHAR},
 		Updator =
 		#{updator,jdbcType=VARCHAR},
 		Update_Time =

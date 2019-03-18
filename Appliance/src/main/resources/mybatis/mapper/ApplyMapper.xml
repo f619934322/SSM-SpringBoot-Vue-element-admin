@@ -5,33 +5,22 @@
 	<select id="applyList"
 		parameterType="com.appliance.pojo.dto.ApplyDto"
 		resultType="com.appliance.pojo.vo.ApplyVo">
-		SELECT
-		aa.ID AS id,
+		SELECT aa.ID AS id,
 		aa.Inventory_ID AS inventoryId,
-		aa.Item_Name AS
-		itemName,
+		aa.Item_Name AS itemName,
 		aa.Status AS status,
 		ai.item_Type AS itemType,
-		aa.Item_Count AS
-		itemCount,
-		aa.Commit AS
-		commit,
+		aa.Item_Count AS itemCount,
+		aa.Commit AS commit,
 		aa.Reviewer AS reviewer,
-		aa.Review_Time AS
-		reviewTime,
-		aa.Review_Commit AS
-		reviewCommit,
-		aa.Create_Time AS
-		createTime,
+		aa.Review_Time AS reviewTime,
+		aa.Review_Commit AS reviewCommit,
+		aa.Create_Time AS createTime,
 		aa.Creator AS creator
-		FROM
-		appliance_apply
-		aa
-		LEFT JOIN
-		appliance_inventory ai ON aa.Inventory_ID = ai.ID
-		WHERE
-		aa.Delete_Flag =
-		0
+		FROM appliance_apply aa
+		LEFT JOIN appliance_inventory ai
+		ON aa.Inventory_ID = ai.ID
+		WHERE aa.Delete_Flag = 0
 		<if test="creator != null and creator !=''">AND aa.Creator = #{creator}</if>
 		<if test="status != null and status != -1">AND aa.Status = #{status}</if>
 		<if test="createTimeBegin != null and createTimeBegin !=''">AND
@@ -93,7 +82,7 @@
 		SELECT Item_Count AS itemCount
 		FROM appliance_apply
 		WHERE
-		Delete_Flag = 0 AND ID
-		= #{id}
+		Delete_Flag = 0
+		AND ID = #{id}
 	</select>
 </mapper>

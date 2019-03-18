@@ -1,6 +1,7 @@
 package com.appliance.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -106,14 +107,23 @@ public class DemandController {
 		demandDto.setStatus(status);
 		BaseResponse<List<DemandVo>> response = demandService.excelDemand(demandDto);
 		List<DemandVo> demandVoList = response.getResponseData();
+		List<DemandVo> demandVoListForexcel = new ArrayList<>();
+		for (DemandVo demandVo : demandVoList) {
+			if (demandVo.getAddedFlag() == 0) {
+				demandVo.setAddedFlagStr("需要补充");// 0代表补充
+			} else {
+				demandVo.setAddedFlagStr("需要新增");// 1代表新增
+			}
+			demandVoListForexcel.add(demandVo);// 由于excel导出需要看到采购标识是中文，而不是数字代号，所以这里遍历集合并给元素赋值
+		}
 		String fileName = "采购需求清单";
 		// 列名
 		String[] columnNames = { "ID", "物品名称", "需求标识", "采购需求数量", "物品类型", "采购金额", "审核状态", "采购需求原因", "采购需求提起人",
 				"采购需求发起时间", "审核人", "审核时间", "审核备注" };
 		// map中的key
-		String[] keys = { "id", "itemName", "addedFlag", "itemCount", "itemType", "purchasePrice", "status", "commit",
-				"creator", "createTime", "reviewer", "reviewTime", "reviewCommit" };
-		ExportPOIUtils.startDownload(httpServletResponse, fileName, demandVoList, columnNames, keys);
+		String[] keys = { "id", "itemName", "addedFlagStr", "itemCount", "itemType", "purchasePrice", "status",
+				"commit", "creator", "createTime", "reviewer", "reviewTime", "reviewCommit" };
+		ExportPOIUtils.startDownload(httpServletResponse, fileName, demandVoListForexcel, columnNames, keys);
 		String resultToString = JSON.toJSONString(response);
 		log.info("excelDemand返回的JSON: {}", resultToString);
 		return resultToString;
