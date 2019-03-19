@@ -14,10 +14,10 @@
       </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
-       
+
         <div class="avatar-wrapper">
-           <!-- 顶部菜单栏配置 -->
-          <span class="display_name">当前用户：{{ name }}</span>
+          <!-- 顶部菜单栏配置 -->
+          <span class="display_name">{{ $t('navbar.userName') + name }}</span>
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -28,7 +28,7 @@
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
-              {{ $t('navbar.github')}}
+              {{ $t('navbar.github') }}
             </el-dropdown-item>
           </a>
           <el-dropdown-item divided>
@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import Screenfull from "@/components/Screenfull";
-import LangSelect from "@/components/LangSelect";
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import Screenfull from '@/components/Screenfull'
+import LangSelect from '@/components/LangSelect'
 
 export default {
   components: {
@@ -55,19 +55,19 @@ export default {
     LangSelect
   },
   computed: {
-    ...mapGetters(["sidebar", "name", "avatar", "device"])
+    ...mapGetters(['sidebar', 'name', 'avatar', 'device'])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("toggleSideBar");
+      this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      this.$store.dispatch("LogOut").then(() => {
-        location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
-      });
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // In order to re-instantiate the vue-router object to avoid bugs
+      })
     }
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

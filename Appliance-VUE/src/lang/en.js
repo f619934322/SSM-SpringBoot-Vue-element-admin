@@ -17,7 +17,8 @@ export default {
     github: 'Github',
     screenfull: 'Screenfull',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
+    userName: 'User Name:'
   },
   login: {
     title: 'Login Form',
