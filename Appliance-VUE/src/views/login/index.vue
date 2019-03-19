@@ -124,55 +124,6 @@ export default {
       redirect: undefined
     }
   },
-  // computed: {
-  //   getCode() {
-  //     var code = ''
-  //     var codeLength = 4 // 验证码的长度
-  //     var random = [
-  //       0,
-  //       1,
-  //       2,
-  //       3,
-  //       4,
-  //       5,
-  //       6,
-  //       7,
-  //       8,
-  //       9,
-  //       'A',
-  //       'B',
-  //       'C',
-  //       'D',
-  //       'E',
-  //       'F',
-  //       'G',
-  //       'H',
-  //       'I',
-  //       'J',
-  //       'K',
-  //       'M',
-  //       'N',
-  //       'P',
-  //       'Q',
-  //       'R',
-  //       'S',
-  //       'T',
-  //       'U',
-  //       'V',
-  //       'W',
-  //       'X',
-  //       'Y',
-  //       'Z'
-  //     ] // 随机数
-  //     for (var i = 0; i < codeLength; i++) {
-  //       // 循环操作
-  //       var index = Math.floor(Math.random() * 34) // 取得随机数的索引（0~33）
-  //       code += random[index] // 根据索引取得随机数加到code上
-  //     }
-  //     this.checkCode = code // 把code值赋给验证码
-  //     return this.checkCode
-  //   }
-  // },
   watch: {
     $route: {
       handler: function(route) {
