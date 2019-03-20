@@ -1,7 +1,5 @@
 package com.appliance.service;
 
-import java.util.List;
-
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.ApplyDto;
 import com.appliance.pojo.vo.ApplyVo;
@@ -39,5 +37,5 @@ public interface ApplyService {
 	 * @param applyDto
 	 * @return
 	 */
-	public BaseResponse<List<ApplyVo>> myApply(ApplyDto applyDto);
+	public BaseResponse<PageInfo<ApplyVo>> myApply(ApplyDto applyDto);
 }

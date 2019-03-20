@@ -5,8 +5,7 @@
 	<select id="inventoryList"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
-		ID AS id,
+		SELECT ID AS id,
 		Item_Name AS itemName,
 		Item_Count AS itemCount,
 		Item_Type AS itemType,
@@ -14,8 +13,7 @@
 		Creator AS creator,
 		Updator AS
 		updator
-		FROM
-		appliance_inventory
+		FROM appliance_inventory
 		WHERE Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 	</select>
@@ -38,8 +36,10 @@
 		#{itemName,jdbcType=VARCHAR},
 		Item_Count =
 		#{itemCount,jdbcType=INTEGER},
-		Item_Type =
-		#{itemType,jdbcType=VARCHAR},
+		<if test="itemType != null and itemType !=''">
+			Item_Type =
+			#{itemType,jdbcType=VARCHAR},
+		</if>
 		<if test="commit != null and commit !=''"> Commit = #{commit,jdbcType=VARCHAR},</if>
 		Updator = #{updator,jdbcType=VARCHAR},
 		Update_Time =
@@ -50,11 +50,10 @@
 	<!-- 教学用品库存单品详情获取 -->
 	<select id="inventoryDetail" parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.DemandVo">
-		SELECT
-		ad.ID AS id,
+		SELECT ad.ID AS id,
 		ad.Item_Name AS itemName,
-		ad.Item_Count AS
-		itemCount,
+		ad.Item_Count
+		AS itemCount,
 		ad.Status AS status,
 		ad.Commit AS commit,
 		ad.Creator AS
@@ -62,20 +61,18 @@
 		ad.Reviewer AS reviewer,
 		ad.Create_Time AS createTime,
 		ad.Review_Time AS reviewTime
-		FROM
-		appliance_inventory ai
+		FROM appliance_inventory ai
 		LEFT JOIN
-		appliance_demand ad ON (ai.ID = ad.Inventory_ID)
+		appliance_demand ad
+		ON (ai.ID = ad.Inventory_ID)
 		WHERE ai.ID = #{id}
 	</select>
 	<!-- 根据需求表ID查出对应库存表数据 -->
 	<select id="selectInventoryByDemandId"
 		parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
-		ID AS id
-		FROM
-		appliance_inventory
+		SELECT ID AS id
+		FROM appliance_inventory
 		WHERE Demand_ID =
 		#{demandid}
 	</select>
@@ -119,13 +116,10 @@
 	<!-- 根据库存表ID查出一条数据 -->
 	<select id="selectInventoryById" parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
-		ID AS id,
+		SELECT ID AS id,
 		Item_Name AS itemName,
-		Item_Type AS itemtype,
 		Item_Count AS itemCount
-		FROM
-		appliance_inventory
+		FROM appliance_inventory
 		WHERE ID = #{id}
 	</select>
 </mapper>

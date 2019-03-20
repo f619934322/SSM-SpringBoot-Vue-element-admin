@@ -1,9 +1,6 @@
 package com.appliance.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,10 +74,10 @@ public class ApplyController {
 	 * @param applyDto
 	 * @return
 	 */
-	@GetMapping(value = "/myApply", produces = { "application/json" })//TODO 前端未写
+	@PostMapping(value = "/myApply", produces = { "application/json" })
 	public String myApply(@RequestBody ApplyDto applyDto) {
 		log.info("执行myApply");
-		BaseResponse<List<ApplyVo>> response = applyService.myApply(applyDto);
+		BaseResponse<PageInfo<ApplyVo>> response = applyService.myApply(applyDto);
 		String resultToString = JSON.toJSONString(response);
 		log.info("myApply返回的JSON: {}", resultToString);
 		return resultToString;

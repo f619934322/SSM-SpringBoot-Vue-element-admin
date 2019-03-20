@@ -6,6 +6,7 @@
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
             v-model.trim="searchOptions.itemName"
+            clearable
             style="width: 200px;"
             class="filter-item"
             placeholder="物品名称"
@@ -13,6 +14,8 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
+          clearable
+          size="mini"
           value-format="yyyy-MM-dd"
           type="datetimerange"
           range-separator="至"
@@ -21,6 +24,7 @@
         />
         <el-select
           v-model="searchOptions.status"
+          clearable
           class="filter-item"
           filterable
           placeholder="请选择审核状态"
@@ -109,7 +113,7 @@
         <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
         <el-table-column prop="reviewer" label="审核人" min-width="120px;" sortable/>
         <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
-        <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
+        <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
         <el-table-column align="center" label="操作" width="250">
           <template slot-scope="scope">
             <el-dropdown trigger="click">
@@ -126,7 +130,7 @@
                     type="warning"
                     icon="el-icon-info"
                     plain
-                    @click="openDialogApplyReview(scope.row.id,scope.row.inventoryId,scope.row.status,scope.row.itemCount);"
+                    @click="openDialogApplyReview(scope.row.id,scope.row.inventoryId,scope.row.status,scope.row.itemCount,scope.row.reviewCommit);"
                   >进行审核</el-button>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -135,6 +139,7 @@
         </el-table-column>
       </el-table>
       <!-- /主表格 -->
+      <!-- 分页选项 -->
       <div align="center">
         <el-pagination
           :current-page="currentPage"
@@ -165,6 +170,7 @@ export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
     return {
+      listLoading: true,
       dialogApplyReview: false, // 审核弹窗，默认false
       list: null, // 这是分页list
       applyStatus: null, // 这是审核弹窗的状态
@@ -234,7 +240,8 @@ export default {
         status: this.searchOptions.status, // 查出所有选择的审核状态数据
         createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
       }
-      if (listQuery.status === null) {
+      if (listQuery.status === null || listQuery.status === '') {
+        // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
         // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
         listQuery.status = -1 // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
@@ -251,64 +258,66 @@ export default {
       this.$refs.applyForm.resetFields()
     },
     // 审核弹窗打开
-    openDialogApplyReview(applyId, inventoryId, status, itemCount) {
+    openDialogApplyReview(applyId, inventoryId, status, itemCount, reviewCommit) {
       // 获取到该条数据的参数，传值给对象最后会将这个对象给后端
       this.applyObj.id = applyId
       this.applyObj.inventoryId = inventoryId
       this.applyObj.status = status
       this.applyStatus = status
       this.applyObj.itemCount = itemCount
+      this.applyObj.reviewCommit = reviewCommit
       this.dialogApplyReview = true
     },
     // 进行审核
     reviewApply(formName) {
-      if (this.applyObj.status === this.applyStatus) {
+      if (parseInt(this.applyObj.status) === parseInt(this.applyStatus)) {
+        // 必须采用转换，因为两者类型可能会不一样导致业务逻辑失效
         Message({
           message: '请选择下一状态！',
-          type: 'warn',
+          type: 'warning',
           duration: 5 * 1000
         })
         return
       } else {
-        this.applyObj.status = this.applyStatus // 因为直接绑定this.demandObj.status会导致选择判断bug（页面展示上的），所以另外声明一个this.demandStatus来接收前端选择的状态
-      }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.applyObj.status = parseInt(this.applyObj.status) // 状态码转为数字
-          reviewApply(this.applyObj)
-            .then(response => {
-              const data = response.data
-              this.listLoading = false
-              if (data.statusCode === 200) {
-                Message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 5 * 1000
-                })
-                this.$refs[formName].resetFields()
-                this.dialogApplyReview = false
-                this.applyObj = Object.assign({}, applyObj) // 重新给修改用对象赋值初始化，demandObj为全局const对象
-                this.fetchData()
-              } else {
+        this.applyObj.status = this.applyStatus // 因为直接绑定this.applyObj.status会导致选择判断bug（页面展示上）
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.applyObj.status = parseInt(this.applyObj.status) // 状态码转为数字
+            reviewApply(this.applyObj)
+              .then(response => {
+                const data = response.data
+                this.listLoading = false
+                if (data.statusCode === 200) {
+                  Message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 5 * 1000
+                  })
+                  this.$refs[formName].resetFields()
+                  this.dialogApplyReview = false
+                  this.applyObj = Object.assign({}, applyObj) // 重新给修改用对象赋值初始化，applyObj为全局const对象
+                  this.fetchData()
+                } else {
+                  this.loading = false
+                  Message({
+                    message: '操作失败',
+                    type: 'error',
+                    duration: 5 * 1000
+                  })
+                }
+              })
+              .catch(() => {
                 this.loading = false
                 Message({
                   message: '操作失败',
                   type: 'error',
                   duration: 5 * 1000
                 })
-              }
-            })
-            .catch(() => {
-              this.loading = false
-              Message({
-                message: '操作失败',
-                type: 'error',
-                duration: 5 * 1000
               })
-            })
-        }
-      })
-    }
-  } // 这是方法末尾花括号
+          }
+        })
+      }
+    } // 这是方法末尾花括号
+  }
 }
 </script>

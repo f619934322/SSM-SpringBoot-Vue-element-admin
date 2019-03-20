@@ -1,8 +1,15 @@
 export default {
-  // 这里修改多语言
+  // 这里修改多语言（英文）
   route: {
     dashboard: 'Dashboard',
-    inventory: 'Inventory'
+    inventoryInfo: 'Inventory Info',
+    pageForAdmin: 'Page For Admin',
+    reviewDemand: 'Review Demand',
+    reviewApply: 'Review Apply',
+    myApply: 'My Apply',
+    myDemand: 'My Deamand',
+    userManagement: 'User Management',
+    aboutMe: 'About Me'
   },
   navbar: {
     logOut: 'Log Out',
@@ -10,7 +17,8 @@ export default {
     github: 'Github',
     screenfull: 'Screenfull',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
+    userName: 'User Name:'
   },
   login: {
     title: 'Login Form',

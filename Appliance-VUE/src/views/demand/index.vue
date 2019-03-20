@@ -6,6 +6,7 @@
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
             v-model.trim="searchOptions.itemName"
+            clearable
             style="width: 200px;"
             class="filter-item"
             placeholder="物品名称"
@@ -13,6 +14,8 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
+          size="mini"
+          clearable
           value-format="yyyy-MM-dd"
           type="datetimerange"
           range-separator="至"
@@ -21,6 +24,7 @@
         />
         <el-select
           v-model="searchOptions.status"
+          clearable
           class="filter-item"
           filterable
           placeholder="请选择审核状态"
@@ -41,135 +45,136 @@
         <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
         <el-button class="filter-item" type="primary" icon="el-icon-download" @click="excelClick">导出</el-button>
       </div>
-    </div>
-    <!-- /检索等顶部选项 -->
-    <div>
-      <!-- 审核弹窗 -->
-      <el-dialog
-        :visible.sync="dialogDemandReview"
-        :before-close="handleCloseReview"
-        :rules="editRule"
-        title="审核管理"
-      >
-        <el-form
-          ref="reviewForm"
-          :model="demandObj"
+      <!-- /检索等顶部选项 -->
+      <div>
+        <!-- 审核弹窗 -->
+        <el-dialog
+          :visible.sync="dialogDemandReview"
+          :before-close="handleCloseReview"
           :rules="editRule"
-          class="small-space"
-          label-position="left"
-          label-width="120px"
-          style="width: 600px; margin-left:120px;"
+          title="审核管理"
         >
-          <el-form-item label="选择审核状态" prop="status">
-            <div align="left">
-              <el-radio-group v-model="demandStatus" size="mini">
-                <el-radio-button :disabled="demandObj.status === 2" label="1">驳回</el-radio-button>
-                <el-radio-button label="2">通过未采购</el-radio-button>
-                <el-radio-button label="3">采购失败</el-radio-button>
-                <el-radio-button label="4">采购完成</el-radio-button>
-              </el-radio-group>
-            </div>
-          </el-form-item>
-          <el-form-item label="采购价格" prop="purchasePrice">
-            <el-input v-model="demandObj.purchasePrice" placeholder="请输入物品价格（如果驳回，请输入0）"/>
-          </el-form-item>
-          <el-form-item label="采购数量" prop="itemCount">
-            <el-input v-model="demandObj.itemCount" placeholder="请输入物品数量（如果驳回，请输入0）"/>
-          </el-form-item>
-          <el-form-item label="审核备注" prop="reviewCommit">
-            <el-input
-              v-model="demandObj.reviewCommit"
-              :autosize="{ minRows: 3, maxRows: 5}"
-              placeholder="请输入备注信息"
-              type="textarea"
-            />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="handleCloseReview()">取消</el-button>
-          <el-button type="primary" @click="reviewDemand('reviewForm')">确 定</el-button>
+          <el-form
+            ref="reviewForm"
+            :model="demandObj"
+            :rules="editRule"
+            class="small-space"
+            label-position="left"
+            label-width="120px"
+            style="width: 600px; margin-left:120px;"
+          >
+            <el-form-item label="选择审核状态" prop="status">
+              <div align="left">
+                <el-radio-group v-model="demandStatus" size="mini">
+                  <el-radio-button :disabled="demandObj.status === 2" label="1">驳回</el-radio-button>
+                  <el-radio-button label="2">通过未采购</el-radio-button>
+                  <el-radio-button label="3">采购失败</el-radio-button>
+                  <el-radio-button label="4">采购完成</el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-form-item>
+            <el-form-item label="采购价格" prop="purchasePrice">
+              <el-input v-model="demandObj.purchasePrice" placeholder="请输入物品价格（如果驳回，请输入0）"/>
+            </el-form-item>
+            <el-form-item label="采购数量" prop="itemCount">
+              <el-input v-model.number="demandObj.itemCount" placeholder="请输入物品数量（如果驳回，请输入0）"/>
+            </el-form-item>
+            <el-form-item label="审核备注" prop="reviewCommit">
+              <el-input
+                v-model="demandObj.reviewCommit"
+                :autosize="{ minRows: 3, maxRows: 5}"
+                placeholder="请输入备注信息"
+                type="textarea"
+              />
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="handleCloseReview()">取消</el-button>
+            <el-button type="primary" @click="reviewDemand('reviewForm')">确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- /审核弹窗 -->
+        <!-- 导出弹窗 -->
+        <el-dialog :visible.sync="dialogVisibleExeclForDemand" title="导出需求清单">
+          <code>这将导出审核通过但为完成采购的需求清单。</code>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisibleExeclForDemand = false;">取 消</el-button>
+            <el-button type="primary" @click="execlForDemand">确认导出</el-button>
+          </div>
+        </el-dialog>
+        <!-- /导出弹窗 -->
+        <!-- 主表格 -->
+        <el-table
+          v-loading.body="listLoading"
+          ref="multipleTable"
+          :data="list"
+          element-loading-text="拼命加载中"
+          border
+          fit
+          highlight-current-row
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" align="center"/>
+          <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
+          <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
+          <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
+          <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === 0">未审核</span>
+              <span v-if="scope.row.status === 1">驳回</span>
+              <span v-if="scope.row.status === 2">审核通过未采购</span>
+              <span v-if="scope.row.status === 3">采购失败</span>
+              <span v-if="scope.row.status === 4">采购完成</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable>
+            <template slot-scope="scope">
+              <span v-if="scope.row.addedFlag === 0">需要补充</span>
+              <span v-if="scope.row.addedFlag === 1">需要新增</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="creator" label="申请人" min-width="120px;" sortable/>
+          <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
+          <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
+          <el-table-column align="center" label="操作" width="250">
+            <template slot-scope="scope">
+              <el-dropdown trigger="click">
+                <el-button type="primary">
+                  操作选项
+                  <i class="el-icon-arrow-down el-icon--right"/>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>
+                    <el-button
+                      v-permission="['admin']"
+                      :disabled="scope.row.status === 1 || scope.row.status === 3 || scope.row.status === 4"
+                      size="mini"
+                      type="warning"
+                      icon="el-icon-info"
+                      plain
+                      @click="openDialogDemandReview(scope.row.id,scope.row.inventoryId,scope.row.purchasePrice,scope.row.itemCount,scope.row.addedFlag,scope.row.itemName,scope.row.itemType,scope.row.status,scope.row.reviewCommit);"
+                    >进行审核</el-button>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- /主表格 -->
+        <!-- 分页选项 -->
+        <div align="center">
+          <el-pagination
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pagesize"
+            :total="totalCount"
+            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
-      </el-dialog>
-      <!-- /审核弹窗 -->
-      <!-- 导出弹窗 -->
-      <el-dialog :visible.sync="dialogVisibleExeclForDemand" title="导出需求清单">
-        <code>这将导出审核通过但为完成采购的需求清单。</code>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisibleExeclForDemand = false;">取 消</el-button>
-          <el-button type="primary" @click="execlForDemand">确认导出</el-button>
-        </div>
-      </el-dialog>
-      <!-- /导出弹窗 -->
-      <!-- 主表格 -->
-      <el-table
-        v-loading.body="listLoading"
-        ref="multipleTable"
-        :data="list"
-        element-loading-text="拼命加载中"
-        border
-        fit
-        highlight-current-row
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" align="center"/>
-        <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
-        <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
-        <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
-        <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
-          <template slot-scope="scope">
-            <span v-if="scope.row.status === 0">未审核</span>
-            <span v-if="scope.row.status === 1">驳回</span>
-            <span v-if="scope.row.status === 2">审核通过未采购</span>
-            <span v-if="scope.row.status === 3">采购失败</span>
-            <span v-if="scope.row.status === 4">采购完成</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable>
-          <template slot-scope="scope">
-            <span v-if="scope.row.addedFlag === 0">需要补充</span>
-            <span v-if="scope.row.addedFlag === 1">需要新增</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-        <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
-        <el-table-column align="center" label="操作" width="250">
-          <template slot-scope="scope">
-            <el-dropdown trigger="click">
-              <el-button type="primary">
-                操作选项
-                <i class="el-icon-arrow-down el-icon--right"/>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <el-button
-                    v-permission="['admin']"
-                    :disabled="scope.row.status === 1 || scope.row.status === 3 || scope.row.status === 4"
-                    size="mini"
-                    type="warning"
-                    icon="el-icon-info"
-                    plain
-                    @click="openDialogDemandReview(scope.row.id,scope.row.inventoryId,scope.row.purchasePrice,scope.row.itemCount,scope.row.addedFlag,scope.row.itemName,scope.row.itemType,scope.row.status,scope.row.reviewCommit);"
-                  >进行审核</el-button>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- /主表格 -->
-      <!-- 分页选项 -->
-      <div align="center">
-        <el-pagination
-          :current-page="currentPage"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pagesize"
-          :total="totalCount"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <!-- /分页选项 -->
       </div>
-      <!-- /分页选项 -->
     </div>
   </div>
 </template>
@@ -194,6 +199,7 @@ export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
     return {
+      listLoading: true,
       dialogDemandReview: false, // 这是审核操作窗口，默认false
       dialogVisibleExeclForDemand: false, // 这是导出弹窗，默认false
       list: null, // 这是申请一览的list，打开页面会去找接口获取数据并赋值，默认null
@@ -225,12 +231,38 @@ export default {
             required: true,
             message: '请输入物品数量（如果驳回，请输入0）',
             trigger: 'blur'
+          },
+          {
+            validator(rule, value, callback) {
+              // 表单验证-正整数
+              if (
+                Number.isInteger(Number(value)) &&
+                Number(value) > 0 &&
+                Number(value) < 999
+              ) {
+                callback()
+              } else {
+                callback(new Error('请输入1-999的正整数'))
+              }
+            },
+            trigger: 'blur'
           }
         ],
         purchasePrice: [
           {
             required: true,
             message: '请输入采购价格（如果驳回，请输入0）',
+            trigger: 'blur'
+          },
+          {
+            validator(rule, value, callback) {
+              var reg = /^-?\d{1,5}(?:\.\d{1,3})?$/
+              if (reg.test(value)) {
+                callback()
+              } else {
+                callback(new Error('请输入大于零小于十万不超过三位小数的数字'))
+              }
+            },
             trigger: 'blur'
           }
         ]
@@ -294,7 +326,8 @@ export default {
         status: this.searchOptions.status, // 查出所有选择的审核状态数据
         createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
       }
-      if (listQuery.status === null) {
+      if (listQuery.status === null || listQuery.status === '') {
+        // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
         // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
         listQuery.status = -1 // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
@@ -340,10 +373,11 @@ export default {
     },
     // 审核
     reviewDemand(formName) {
-      if (this.demandObj.status === this.demandStatus) {
+      if (parseInt(this.demandObj.status) === parseInt(this.demandStatus)) {
+        // 必须采用转换，因为两者类型可能会不一样导致业务逻辑失效
         Message({
           message: '请选择下一状态！',
-          type: 'warn',
+          type: 'warning',
           duration: 5 * 1000
         })
         return

@@ -1,14 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.appliance.mapper.UserMapper">
+	<!-- 用户登录 -->
 	<select id="userLogin"
 		parameterType="com.appliance.pojo.dto.UserDto"
 		resultType="com.appliance.pojo.vo.UserVo">
-		SELECT 
+		SELECT Staff_Number AS staffNo,
+		Name AS name,
+		Password AS
+		password,
+		User_Type AS userType
+		FROM staff_info
+		WHERE Delete_Flag = 0
+		AND
+		Staff_Number = #{staffNo,jdbcType=VARCHAR}
+	</select>
+	<!-- 用户列表获取 -->
+	<select id="userList"
+		parameterType="com.appliance.pojo.dto.UserDto"
+		resultType="com.appliance.pojo.vo.UserVo">
+		SELECT ID AS id,
 		Staff_Number AS staffNo,
 		Name AS name,
 		Password AS password,
 		User_Type AS userType
-		FROM staff_info WHERE Staff_Number = #{staffNo,jdbcType=VARCHAR}
+		FROM staff_info
+		WHERE Delete_Flag = 0
+		<if test="name != null and name !=''">AND Name LIKE '%${name}%'</if>
+		<if test="staffNo != null and staffNo !=''">AND Staff_Number LIKE '%${staffNo}%'</if>
+		<if test="userType != null and userType != 0">AND User_Type = #{userType}</if>
 	</select>
+	<!-- 新增用户 -->
+	<insert id="insertUser"
+		parameterType="com.appliance.pojo.dto.UserDto">
+		INSERT INTO staff_info
+		(Staff_Number,
+		Name,
+		Password,
+		User_Type,
+		Creator,
+		Create_Time,
+		Delete_Flag
+		)
+		values
+		(#{staffNo,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{userType,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR},
+		0
+		)
+	</insert>
+	<!-- 用户更新 -->
+	<update id="updateUser"
+		parameterType="com.appliance.pojo.dto.UserDto">
+		UPDATE staff_info SET
+		Staff_Number =
+		#{staffNo,jdbcType=VARCHAR},
+		Name =
+		#{name,jdbcType=VARCHAR},
+		Password =
+		#{password,jdbcType=VARCHAR},
+		User_Type = #{userType,jdbcType=INTEGER},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		ID = #{id}
+	</update>
+	<!-- 判断数据库中是否有存在要注册的用户 -->
+	<select id="selectUserByStaffNo"
+		parameterType="com.appliance.pojo.dto.UserDto"
+		resultType="java.lang.Integer">
+		SELECT
+		count(*) AS count
+		FROM staff_info WHERE Delete_Flag =
+		0
+		AND Staff_Number = #{staffNo}
+	</select>
+	<!-- 用户删除 -->
+	<update id="deleteUser"
+		parameterType="com.appliance.pojo.dto.UserDto">
+		UPDATE staff_info SET
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR},
+		Delete_Flag = 1
+		WHERE
+		ID = #{id}
+	</update>
 </mapper>

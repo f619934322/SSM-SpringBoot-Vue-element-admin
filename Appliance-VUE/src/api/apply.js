@@ -26,3 +26,12 @@ export function insertNewApply(data) {
     data
   })
 }
+
+// 我的申领
+export function paginationForMy(data) {
+  return request({
+    url: '/appliance/apply/myApply',
+    method: 'post',
+    data
+  })
+}

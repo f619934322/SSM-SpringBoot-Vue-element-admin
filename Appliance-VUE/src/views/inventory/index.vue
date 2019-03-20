@@ -6,6 +6,7 @@
         <el-tooltip class="item" effect="light" content="物品名称" placement="top">
           <el-input
             v-model.trim="searchOptions.itemName"
+            clearable
             style="width: 200px;"
             class="filter-item"
             placeholder="物品名称"
@@ -38,7 +39,12 @@
     <!-- /检索等顶部选项 -->
     <!-- 物品批量删除弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDelBatch" title="物品批量删除">
-      <code>您确认要删除这些物品吗？ {{ multipleSelection }}</code>
+      <code>您确认要删除这些物品吗？
+        <div v-for="item in multipleSelection" :key="item.id" :value="item.itemName">
+          ID:{{ item.id }}，物品名称：{{ item.itemName }}
+          <div v-if="item.itemCount !== 0">该物品仍不为空！</div>
+        </div>
+      </code>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibleDelBatch = false;multipleSelection = null">取 消</el-button>
         <el-button type="danger" @click="bacthDeleteItemSubmit">确认删除</el-button>
@@ -47,7 +53,10 @@
     <!-- /物品批量删除弹窗 -->
     <!-- 物品单选删除弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDel" title="物品删除">
-      <code>您确认要删除此物品吗？ ID：{{ delItemId }}</code>
+      <code>
+        您确认要删除此物品吗？ ID:{{ delItemId }}
+        <div v-if="itemCount !== 0">该物品仍不为空！</div>
+      </code>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibleDel = false;delItemId = null">取 消</el-button>
         <el-button type="danger" @click="itemDeleteSubmit">确认删除</el-button>
@@ -59,7 +68,7 @@
       :visible.sync="dialogItemUpdate"
       :before-close="handleCloseEdit"
       :rules="editRule"
-      title="申请发起新采购"
+      title="编辑物品"
     >
       <el-form
         ref="editForm"
@@ -77,7 +86,7 @@
           <el-input v-model="itemUpdateObj.itemName" placeholder="请输入物品名称"/>
         </el-form-item>
         <el-form-item label="物品总数" prop="itemCount">
-          <el-input v-model="itemUpdateObj.itemCount" placeholder="请输入物品数量"/>
+          <el-input v-model.number="itemUpdateObj.itemCount" placeholder="请输入物品数量"/>
         </el-form-item>
         <el-form-item label="物品类型" prop="itemType">
           <el-select
@@ -154,13 +163,11 @@
     <el-dialog
       :visible.sync="dialogSupplementDemand"
       :before-close="handleCloseSupplement"
-      :rules="addRule"
       title="申请补充库存"
     >
       <el-form
         ref="supplementForm"
         :model="demandObj"
-        :rules="addRule"
         class="small-space"
         label-position="left"
         label-width="80px"
@@ -186,18 +193,21 @@
     <el-dialog
       :visible.sync="dialogApply"
       :before-close="handleCloseApply"
+      :rules="addRule"
       title="申请领取"
     >
       <el-form
         ref="applyForm"
+        :rules="addRule"
         :model="demandObj"
+        prop="count"
         class="small-space"
         label-position="left"
         label-width="80px"
         style="width: 400px; margin-left:50px;"
       >
         <el-form-item label="申请数量" prop="itemCount">
-          <el-input v-model="demandObj.itemCount" placeholder="请输入物品数量"/>
+          <el-input v-model.number="demandObj.itemCount" type="count" placeholder="请输入物品数量"/>
         </el-form-item>
         <el-form-item label="申请原因" prop="commit">
           <el-input
@@ -283,8 +293,9 @@
                   size="mini"
                   type="success"
                   icon="el-icon-plus"
+                  :disabled="scope.row.itemCount === 0"
                   plain
-                  @click="openDialogApply(scope.row.id,scope.row.itemName);"
+                  @click="openDialogApply(scope.row.id,scope.row.itemName,scope.row.itemCount);"
                 >申请领取</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
@@ -313,7 +324,7 @@
                   type="danger"
                   icon="el-icon-delete"
                   plain
-                  @click="deleteItem(scope.row.id);"
+                  @click="deleteItem(scope.row.id,scope.row.itemCount);"
                 >删除物品</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -381,6 +392,7 @@ export default {
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
       tableDetail: null, // 这是库存详情的list，默认null
       delItemId: null, // 这是单选删除的物品id
+      itemCount: null, // 这是单选删除的物品数量
       itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
       itemUpdateObj: Object.assign({}, inventoryObj),
@@ -399,7 +411,22 @@ export default {
           { required: true, message: '请输入物品名称', trigger: 'blur' }
         ],
         itemCount: [
-          { required: true, message: '请输入物品数量', trigger: 'blur' }
+          { required: true, message: '请输入物品数量', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              // 表单验证-正整数
+              if (
+                Number.isInteger(Number(value)) &&
+                Number(value) > 0 &&
+                Number(value) < 999
+              ) {
+                callback()
+              } else {
+                callback(new Error('请输入1-999的正整数'))
+              }
+            },
+            trigger: 'blur'
+          }
         ],
         itemType: [
           { required: true, message: '请选择物品类型', trigger: 'blur' }
@@ -413,7 +440,27 @@ export default {
           { required: true, message: '请输入物品名称', trigger: 'blur' }
         ],
         itemCount: [
-          { required: true, message: '请输入物品数量', trigger: 'blur' }
+          {
+            type: 'number',
+            required: true,
+            message: '请输入物品数量(必须是整数)',
+            trigger: 'blur'
+          },
+          {
+            validator(rule, value, callback) {
+              // 表单验证-正整数
+              if (
+                Number.isInteger(Number(value)) &&
+                Number(value) > 0 &&
+                Number(value) < 999
+              ) {
+                callback()
+              } else {
+                callback(new Error('请输入1-999的正整数'))
+              }
+            },
+            trigger: 'blur'
+          }
         ],
         itemType: [
           { required: true, message: '请选择物品类型', trigger: 'blur' }
@@ -524,9 +571,10 @@ export default {
         })
     },
     // 单项删除确认弹窗显示
-    deleteItem(id) {
+    deleteItem(id, itemCount) {
       this.dialogVisibleDel = true
       this.delItemId = id
+      this.itemCount = itemCount
     },
     // 单项删除
     itemDeleteSubmit() {
@@ -641,9 +689,10 @@ export default {
         })
     },
     // 库存申领弹窗
-    openDialogApply(id, itemName) {
+    openDialogApply(id, itemName, itemCount) {
       this.demandObj.inventoryId = id
       this.demandObj.itemName = itemName
+      this.itemCount = itemCount // 用于判断demandObj中的数量是否小于申请的数量
       this.dialogApply = true
     },
     // 库存申领弹窗关闭
@@ -653,6 +702,14 @@ export default {
     },
     // 执行申请领取
     insertNewApply(formName) {
+      if (this.demandObj.itemCount > this.itemCount) {
+        Message({
+          message: '申请的数量不得超过现有数量',
+          type: 'warning',
+          duration: 5 * 1000
+        })
+        return
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           insertNewApply(this.demandObj)
