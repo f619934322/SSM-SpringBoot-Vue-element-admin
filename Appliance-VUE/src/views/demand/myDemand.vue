@@ -14,8 +14,8 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
-          clearable
           size="mini"
+          clearable
           value-format="yyyy-MM-dd"
           type="datetimerange"
           range-separator="至"
@@ -45,60 +45,65 @@
         <el-button class="filter-item" @click="clearSearchOptions">清空搜索选项</el-button>
       </div>
       <!-- /检索等顶部选项 -->
-      <!-- 主表格 -->
-      <el-table
-        v-loading.body="listLoading"
-        ref="multipleTable"
-        :data="list"
-        element-loading-text="拼命加载中"
-        border
-        fit
-        highlight-current-row
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" align="center"/>
-        <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
-        <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
-        <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
-        <el-table-column prop="itemCount" label="申领数量" min-width="120px;" sortable/>
-        <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
-          <template slot-scope="scope">
-            <span v-if="scope.row.status === 0">未审核</span>
-            <span v-if="scope.row.status === 1">驳回</span>
-            <span v-if="scope.row.status === 2">通过但未领取</span>
-            <span v-if="scope.row.status === 3">领取完成</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="creator" label="申领人" min-width="120px;" sortable/>
-        <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-        <el-table-column prop="reviewer" label="审核人" min-width="120px;" sortable/>
-        <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
-        <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
-      </el-table>
-      <!-- /主表格 -->
-      <!-- 分页选项 -->
-      <div align="center">
-        <el-pagination
-          :current-page="currentPage"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pagesize"
-          :total="totalCount"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+      <div>
+        <!-- 主表格 -->
+        <el-table
+          v-loading.body="listLoading"
+          ref="multipleTable"
+          :data="list"
+          element-loading-text="拼命加载中"
+          border
+          fit
+          highlight-current-row
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" align="center"/>
+          <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
+          <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
+          <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
+          <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === 0">未审核</span>
+              <span v-if="scope.row.status === 1">驳回</span>
+              <span v-if="scope.row.status === 2">审核通过未采购</span>
+              <span v-if="scope.row.status === 3">采购失败</span>
+              <span v-if="scope.row.status === 4">采购完成</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable>
+            <template slot-scope="scope">
+              <span v-if="scope.row.addedFlag === 0">需要补充</span>
+              <span v-if="scope.row.addedFlag === 1">需要新增</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
+          <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
+        </el-table>
+        <!-- /主表格 -->
+        <!-- 分页选项 -->
+        <div align="center">
+          <el-pagination
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pagesize"
+            :total="totalCount"
+            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
+        <!-- /分页选项 -->
       </div>
-      <!-- /分页选项 -->
     </div>
   </div>
 </template>
 <script>
-import { paginationForMy } from '@/api/apply'
+import { paginationForMy } from '@/api/demand'
 export default {
   data() {
     return {
       listLoading: true,
-      list: null, // 这是分页list
+      list: null, // 这是申请一览的list，打开页面会去找接口获取数据并赋值，默认null
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
@@ -111,9 +116,10 @@ export default {
       itemStatusList: [
         { key: 0, status: 0, statusName: '未审核' },
         { key: 1, status: 1, statusName: '驳回' },
-        { key: 2, status: 2, statusName: '审核但未领取' },
-        { key: 3, status: 3, statusName: '领取完毕' }
-      ]
+        { key: 2, status: 2, statusName: '审核但未采购' },
+        { key: 3, status: 3, statusName: '采购失败' },
+        { key: 4, status: 4, statusName: '采购成功' }
+      ] // 这是下拉框选项的审核状态,label绑定statusName，在下拉框中显示中文状态名称
     }
   },
   created() {
@@ -135,12 +141,6 @@ export default {
       this.currentPage = val
       this.fetchData() // 每次切换页码的时候调用fetchData方法
     },
-    // 带检索条件去查询列表（带检索用参数）
-    searchData() {
-      this.currentPage = 1
-      this.listLoading = true
-      this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
-    },
     // 清空搜索选项
     clearSearchOptions() {
       this.searchOptions = {
@@ -150,6 +150,12 @@ export default {
         status: null // 这是下拉框的审核状态
       }
     },
+    // 带检索条件去查询列表（带检索用参数）
+    searchData() {
+      this.currentPage = 1
+      this.listLoading = true
+      this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
+    }, // 列表数据获取（默认不带检索用参数）
     fetchData() {
       this.listLoading = false
       const listQuery = {
@@ -171,6 +177,6 @@ export default {
         this.listLoading = false
       })
     }
-  } // 这是方法末尾花括号
+  }
 }
 </script>

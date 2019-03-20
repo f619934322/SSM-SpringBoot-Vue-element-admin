@@ -57,6 +57,7 @@ export const constantRouterMap = [
     component: () => import('@/views/errorPage/401'),
     hidden: true
   },
+  // 首页
   {
     path: '',
     component: Layout,
@@ -70,6 +71,8 @@ export const constantRouterMap = [
       }
     ]
   },
+  // 首页/
+  // 库存
   {
     path: '/inventory',
     component: Layout,
@@ -83,19 +86,32 @@ export const constantRouterMap = [
       }
     ]
   },
+  // 库存/
+  // 关于我的
   {
-    path: '/myApply',
+    path: '/aboutMe',
     component: Layout,
-    redirect: 'myApply',
+    redirect: '/aboutMe',
+    meta: {
+      title: 'aboutMe',
+      icon: 'table'
+    },
     children: [
       {
         path: 'myApply',
         component: () => import('@/views/apply/myApply'),
-        name: '我的申领',
-        meta: { title: 'MyApply', icon: 'table', noCache: true }
+        name: '我的申请-领取',
+        meta: { title: 'myApply', noCache: true }
+      },
+      {
+        path: 'myDemand',
+        component: () => import('@/views/demand/myDemand'),
+        name: '我的申请-采购',
+        meta: { title: 'myDemand', noCache: true }
       }
     ]
   }
+  // 关于我的/
 ]
 
 export default new Router({
@@ -106,6 +122,7 @@ export default new Router({
 
 // 以下是异步路由，通过判断meta内的roles来控制是否显示左侧某项路由
 export const asyncRouterMap = [
+  // 管理员权限页
   {
     path: '/reviewForAdmin',
     component: Layout,
@@ -134,8 +151,18 @@ export const asyncRouterMap = [
           title: 'reviewApply',
           roles: ['admin'] // or you can only set roles in sub nav
         }
+      },
+      {
+        path: 'userManagement',
+        component: () => import('@/views/user/userManagement'),
+        name: '用户管理',
+        meta: {
+          title: 'userManagement',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },
+  // 管理员权限页/
   { path: '*', redirect: '/404', hidden: true }
 ]

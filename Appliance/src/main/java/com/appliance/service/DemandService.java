@@ -40,11 +40,20 @@ public interface DemandService {
 	 * @return
 	 */
 	public BaseResponse<String> reviewDemand(DemandDto demandDto);
-	
+
 	/**
 	 * 导出需求表
+	 * 
 	 * @param demandDto
 	 * @return
 	 */
 	public BaseResponse<List<DemandVo>> excelDemand(DemandDto demandDto);
+
+	/**
+	 * 我的采购
+	 * 
+	 * @param demandDto
+	 * @return
+	 */
+	public BaseResponse<PageInfo<DemandVo>> myDemand(DemandDto demandDto);
 }

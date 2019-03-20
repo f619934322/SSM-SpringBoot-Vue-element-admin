@@ -149,6 +149,15 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	public BaseResponse<PageInfo<ApplyVo>> myApply(ApplyDto applyDto) {
 		try {
+			if (applyDto.getCreateTimeBeginToEnd() != null && applyDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+				// 从数组中分离出起始和结束日期
+				String[] createTimeBeginAndEnd = applyDto.getCreateTimeBeginToEnd();
+				String createTimeBegin = createTimeBeginAndEnd[0];
+				String createTimeEnd = createTimeBeginAndEnd[1];
+				// 将日期赋值给对象
+				applyDto.setCreateTimeBegin(createTimeBegin);
+				applyDto.setCreateTimeEnd(createTimeEnd);
+			}
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			applyDto.setCreator(userVo.getName());

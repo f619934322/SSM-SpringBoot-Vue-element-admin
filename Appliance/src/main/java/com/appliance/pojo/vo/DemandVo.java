@@ -33,6 +33,11 @@ public class DemandVo implements Serializable {
 	private int addedFlag;
 
 	/**
+	 * 补充或新增标识字符串（用于导出显示）
+	 */
+	private String addedFlagStr;
+	
+	/**
 	 * 采购需求数量
 	 */
 	private int itemCount;

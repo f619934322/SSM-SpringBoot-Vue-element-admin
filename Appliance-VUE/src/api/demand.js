@@ -18,3 +18,12 @@ export function reviewDemand(data) {
   })
 }
 
+// 我的采购
+export function paginationForMy(data) {
+  return request({
+    url: '/appliance/demand/myDemand',
+    method: 'post',
+    data
+  })
+}
+
