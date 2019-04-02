@@ -39,7 +39,8 @@
     <!-- /检索等顶部选项 -->
     <!-- 物品批量删除弹窗 -->
     <el-dialog :visible.sync="dialogVisibleDelBatch" title="物品批量删除">
-      <code>您确认要删除这些物品吗？
+      <code>
+        您确认要删除这些物品吗？
         <div v-for="item in multipleSelection" :key="item.id" :value="item.itemName">
           ID:{{ item.id }}，物品名称：{{ item.itemName }}
           <div v-if="item.itemCount !== 0">该物品仍不为空！</div>
@@ -163,10 +164,12 @@
     <el-dialog
       :visible.sync="dialogSupplementDemand"
       :before-close="handleCloseSupplement"
+      :rules="addRule"
       title="申请补充库存"
     >
       <el-form
         ref="supplementForm"
+        :rules="addRule"
         :model="demandObj"
         class="small-space"
         label-position="left"
@@ -290,10 +293,10 @@
               </el-dropdown-item>
               <el-dropdown-item>
                 <el-button
+                  :disabled="scope.row.itemCount === 0"
                   size="mini"
                   type="success"
                   icon="el-icon-plus"
-                  :disabled="scope.row.itemCount === 0"
                   plain
                   @click="openDialogApply(scope.row.id,scope.row.itemName,scope.row.itemCount);"
                 >申请领取</el-button>
@@ -443,7 +446,7 @@ export default {
           {
             type: 'number',
             required: true,
-            message: '请输入物品数量(必须是整数)',
+            message: '物品数量必须为整数(如果输入正确仍有此提示请刷新页面)',
             trigger: 'blur'
           },
           {
