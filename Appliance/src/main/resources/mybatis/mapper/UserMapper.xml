@@ -93,6 +93,7 @@
 		WHERE
 		ID = #{id}
 	</update>
+	<!-- 用户密码修改 -->
 	<update id="passwordUpdate"
 		parameterType="com.appliance.pojo.dto.UserDto">
 		UPDATE staff_info SET
