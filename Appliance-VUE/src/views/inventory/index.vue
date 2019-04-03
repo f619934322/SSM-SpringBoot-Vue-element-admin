@@ -437,7 +437,13 @@ export default {
       applyDetailList: null, // 这是库存领取详情list，默认null
       delItemId: null, // 这是单选删除的物品id
       itemCount: null, // 这是单选删除的物品数量
-      itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
+      itemTypeList: [
+        { key: 1, itemType: '桌椅柜' },
+        { key: 2, itemType: '文具' },
+        { key: 3, itemType: '电子设备' },
+        { key: 4, itemType: '书籍资料' },
+        { key: 5, itemType: '其他' }
+      ], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
       itemUpdateObj: Object.assign({}, inventoryObj),
       // 这是新增采购用对象
