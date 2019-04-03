@@ -22,7 +22,8 @@
 		SELECT ID AS id,
 		Staff_Number AS staffNo,
 		Name AS name,
-		Password AS password,
+		Password AS
+		password,
 		User_Type AS userType
 		FROM staff_info
 		WHERE Delete_Flag = 0
@@ -91,5 +92,18 @@
 		Delete_Flag = 1
 		WHERE
 		ID = #{id}
+	</update>
+	<update id="passwordUpdate"
+		parameterType="com.appliance.pojo.dto.UserDto">
+		UPDATE staff_info SET
+		Password =
+		#{password,jdbcType=VARCHAR},
+		Updator =
+		#{updator,jdbcType=VARCHAR},
+		Update_Time =
+		#{updateTime,jdbcType=VARCHAR}
+		WHERE
+		Staff_Number =
+		#{staffNo}
 	</update>
 </mapper>
