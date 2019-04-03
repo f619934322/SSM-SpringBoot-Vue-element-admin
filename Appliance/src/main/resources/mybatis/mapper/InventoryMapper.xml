@@ -64,7 +64,7 @@
 		FROM appliance_inventory ai
 		LEFT JOIN
 		appliance_demand ad
-		ON (ai.ID = ad.Inventory_ID)
+		ON ai.ID = ad.Inventory_ID
 		WHERE ai.ID = #{id}
 	</select>
 	<!-- 根据需求表ID查出对应库存表数据 -->
