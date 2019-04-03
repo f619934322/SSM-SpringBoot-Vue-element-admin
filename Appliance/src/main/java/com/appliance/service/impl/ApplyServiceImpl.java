@@ -116,7 +116,7 @@ public class ApplyServiceImpl implements ApplyService {
 			applyDto.setReviewer(userVo.getName());
 			applyDto.setUpdator(userVo.getName());
 			applyMapper.reviewApply(applyDto);
-			if (applyDto.getStatus() == 2) {
+			if (applyDto.getStatus() == 2 || applyDto.getStatus() == 3) {
 				InventoryVo inventoryVo = inventoryMapper.selectInventoryById(applyDto.getInventoryId());// 查出该条库存的数量
 				int inventoryItemCount = inventoryVo.getItemCount();
 				ApplyVo applyVo = applyMapper.selectApplyById(applyDto.getId());// 查出需求的数量
