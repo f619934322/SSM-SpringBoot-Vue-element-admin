@@ -228,11 +228,11 @@
       </div>
     </el-dialog>
     <!-- /库存申领弹窗 -->
-    <!-- 库存详情弹窗 -->
-    <el-dialog :visible.sync="dialogVisibleDetail" title="库存详情">
+    <!-- 库存采购详情弹窗 -->
+    <el-dialog :visible.sync="dialogDemandDetail" title="库存采购详情">
       <el-table
         v-loading.body="listLoading"
-        :data="tableDetail"
+        :data="demandDetailList"
         height="300"
         border
         style="width: 100%"
@@ -256,7 +256,35 @@
         <el-table-column prop="commit" label="备注" width="200"/>
       </el-table>
     </el-dialog>
-    <!-- /库存详情弹窗 -->
+    <!-- /库存采购详情弹窗 -->
+    <!-- 库存领取详情弹窗 -->
+    <el-dialog :visible.sync="dialogApplyDetail" title="库存领取详情">
+      <el-table
+        v-loading.body="listLoading"
+        :data="applyDetailList"
+        height="300"
+        border
+        style="width: 100%"
+      >
+        <el-table-column prop="id" label="id" width="50"/>
+        <el-table-column prop="itemName" label="物品名称" width="100"/>
+        <el-table-column prop="itemCount" label="该次领取数量" width="120"/>
+        <el-table-column prop="creator" label="领取人" width="120"/>
+        <el-table-column prop="reviewer" label="审核人" width="120"/>
+        <el-table-column prop="createTime" label="申请时间" width="120"/>
+        <el-table-column prop="reviewTime" label="领取时间" width="120"/>
+        <el-table-column prop="status" label="审核状态" width="120">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status === 0">未审核</span>
+            <span v-if="scope.row.status === 1">驳回</span>
+            <span v-if="scope.row.status === 2">通过未领取</span>
+            <span v-if="scope.row.status === 3">已领取</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="commit" label="备注" width="200"/>
+      </el-table>
+    </el-dialog>
+    <!-- /库存领取详情弹窗 -->
     <!-- 主表格 -->
     <el-table
       v-loading.body="listLoading"
@@ -307,8 +335,18 @@
                   type="info"
                   icon="el-icon-tickets"
                   plain
-                  @click="detail(scope.row.id);"
+                  @click="detailForDemand(scope.row.id);"
                 >采购详情</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-button
+                  v-permission="['admin']"
+                  size="mini"
+                  type="info"
+                  icon="el-icon-tickets"
+                  plain
+                  @click="detailForApply(scope.row.id);"
+                >领取详情</el-button>
               </el-dropdown-item>
               <el-dropdown-item>
                 <el-button
@@ -359,7 +397,8 @@ import {
   bacthDeleteItem,
   deleteItem,
   updateItem,
-  detailForInventory,
+  inventoryDetailForDemand,
+  inventoryDetailForApply,
   insertNewDemand,
   supplementDemand
 } from '@/api/inventory'
@@ -388,12 +427,14 @@ export default {
       dialogVisibleDel: false, // 这是单选删除的弹窗，默认false
       dialogItemUpdate: false, // 这是编辑的弹窗，默认false
       dialogApply: false, // 这是申请领取的弹窗，默认false
-      dialogVisibleDetail: false, // 这是库存详情的弹窗，默认false
+      dialogDemandDetail: false, // 这是库存采购详情的弹窗，默认false
+      dialogApplyDetail: false, // 这是库存领取详情的弹窗，默认false
       dialogNewDemand: false, // 这是新增采购的弹窗，默认false
       dialogSupplementDemand: false, // 这是采购补充的弹窗，默认false
       multipleSelection: [], // 存放勾选对象的数组
       list: null, // 这是库存一览的list，打开页面会去找接口获取数据并赋值，默认null
-      tableDetail: null, // 这是库存详情的list，默认null
+      demandDetailList: null, // 这是库存采购详情的list，默认null
+      applyDetailList: null, // 这是库存领取详情list，默认null
       delItemId: null, // 这是单选删除的物品id
       itemCount: null, // 这是单选删除的物品数量
       itemTypeList: [{ key: 1, itemType: 'TS' }], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
@@ -664,16 +705,43 @@ export default {
         }
       })
     },
-    // 库存物品详情弹窗显示
-    detail(id) {
+    // 库存物品采购详情弹窗显示
+    detailForDemand(id) {
       // 先获取详情数据，再展示窗口
-      detailForInventory(id)
+      inventoryDetailForDemand(id)
         .then(response => {
           const data = response.data
           this.listLoading = false
           if (data.statusCode === 200) {
-            this.tableDetail = data.responseData
-            this.dialogVisibleDetail = true
+            this.demandDetailList = data.responseData
+            this.dialogDemandDetail = true
+          } else {
+            Message({
+              message: '获取详情失败',
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
+        })
+        .catch(() => {
+          this.loading = false
+          Message({
+            message: '获取详情失败',
+            type: 'error',
+            duration: 5 * 1000
+          })
+        })
+    },
+    // 库存领取详情弹窗显示
+    detailForApply(id) {
+      // 先获取详情数据，再展示窗口
+      inventoryDetailForApply(id)
+        .then(response => {
+          const data = response.data
+          this.listLoading = false
+          if (data.statusCode === 200) {
+            this.applyDetailList = data.responseData
+            this.dialogApplyDetail = true
           } else {
             Message({
               message: '获取详情失败',

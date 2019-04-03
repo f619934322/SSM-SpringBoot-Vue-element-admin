@@ -39,10 +39,22 @@ export function updateItem(data) {
   })
 }
 
-// 获取库存单项详情
-export function detailForInventory(data) {
+// 获取库存单项采购详情
+export function inventoryDetailForDemand(data) {
   return request({
-    url: '/appliance/inventory/inventoryDetail',
+    url: '/appliance/inventory/inventoryDetailForDemand',
+    method: 'post',
+    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
+      'Content-Type': 'application/json'
+    },
+    data
+  })
+}
+
+// 获取库存单项领取详情
+export function inventoryDetailForApply(data) {
+  return request({
+    url: '/appliance/inventory/inventoryDetailForApply',
     method: 'post',
     headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
       'Content-Type': 'application/json'

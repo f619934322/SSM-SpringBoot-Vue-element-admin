@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.appliance.mapper.InventoryMapper;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.ApplyVo;
 import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.pojo.vo.UserVo;
@@ -144,12 +145,12 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	/**
-	 * 库存物品的详情
+	 * 库存物品的采购详情
 	 */
 	@Override
-	public BaseResponse<List<DemandVo>> inventoryDetail(Long id) {
+	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(Long id) {
 		try {
-			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetail(id);
+			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetailForDemand(id);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryDetail);
 			response.setStatusCode(200);
@@ -157,6 +158,26 @@ public class InventoryServiceImpl implements InventoryService {
 			return response;
 		} catch (Exception e) {
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("获取库存表详情失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 库存领取详情
+	 */
+	@Override
+	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(Long id) {
+		try {
+			List<ApplyVo> inventoryDetail = inventoryMapper.inventoryDetailForApply(id);
+			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
+			response.setResponseData(inventoryDetail);
+			response.setStatusCode(200);
+			response.setStatusMsg("获取库存表详情成功");
+			return response;
+		} catch (Exception e) {
+			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
 			response.setStatusCode(201);
 			response.setStatusMsg("获取库存表详情失败");
 			return response;

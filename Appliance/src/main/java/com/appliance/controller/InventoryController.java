@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.ApplyVo;
 import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.service.InventoryService;
@@ -87,17 +88,32 @@ public class InventoryController {
 	}
 
 	/**
-	 * 库存物品的详情
+	 * 库存物品的采购详情
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@PostMapping(value = "/inventoryDetail", produces = { "application/json;charset=utf-8" })
-	public String inventoryDetail(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
-		log.info("执行inventoryDetail");
-		BaseResponse<List<DemandVo>> response = inventoryService.inventoryDetail(id);
+	@PostMapping(value = "/inventoryDetailForDemand", produces = { "application/json;charset=utf-8" })
+	public String inventoryDetailForDemand(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
+		log.info("执行inventoryDetailForDemand");
+		BaseResponse<List<DemandVo>> response = inventoryService.inventoryDetailForDemand(id);
 		String resultToString = JSON.toJSONString(response);
-		log.info("inventoryDetail返回的JSON: {}", resultToString);
+		log.info("inventoryDetailForDemand返回的JSON: {}", resultToString);
+		return resultToString;
+	}
+
+	/**
+	 * 库存物品领取详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PostMapping(value = "/inventoryDetailForApply", produces = { "application/json;charset=utf-8" })
+	public String inventoryDetailForApply(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
+		log.info("执行inventoryDetailForApply");
+		BaseResponse<List<ApplyVo>> response = inventoryService.inventoryDetailForApply(id);
+		String resultToString = JSON.toJSONString(response);
+		log.info("inventoryDetailForApply返回的JSON: {}", resultToString);
 		return resultToString;
 	}
 

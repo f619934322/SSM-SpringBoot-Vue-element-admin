@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.ApplyVo;
 import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.github.pagehelper.PageInfo;
@@ -43,9 +44,18 @@ public interface InventoryService {
 	public BaseResponse<String> updateInventory(InventoryDto inventoryDto);
 
 	/**
-	 * 库存物品的详情
+	 * 库存物品的采购详情
+	 * 
 	 * @param id
 	 * @return
 	 */
-	public BaseResponse<List<DemandVo>> inventoryDetail(Long id);
+	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(Long id);
+
+	/**
+	 * 库存物品领取详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(Long id);
 }

@@ -3,6 +3,7 @@ package com.appliance.mapper;
 import java.util.List;
 
 import com.appliance.pojo.dto.InventoryDto;
+import com.appliance.pojo.vo.ApplyVo;
 import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 
@@ -31,12 +32,12 @@ public interface InventoryMapper {
 	public void updateInventory(InventoryDto inventoryDto);
 
 	/**
-	 * 库存物品的详情
+	 * 库存物品的采购详情
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<DemandVo> inventoryDetail(Long id);
+	public List<DemandVo> inventoryDetailForDemand(Long id);
 
 	/**
 	 * 新增库存
@@ -67,4 +68,12 @@ public interface InventoryMapper {
 	 * @return
 	 */
 	public InventoryVo selectInventoryById(Long id);
+
+	/**
+	 * 库存领取详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<ApplyVo> inventoryDetailForApply(Long id);
 }
