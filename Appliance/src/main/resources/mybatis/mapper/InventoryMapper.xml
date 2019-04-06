@@ -75,7 +75,7 @@
 		SELECT ID AS id
 		FROM appliance_inventory
 		WHERE Demand_ID =
-		#{demandid}
+		#{demandId}
 	</select>
 	<!-- 更新库存表数量 -->
 	<update id="updateInventoryForitemCount"

@@ -38,6 +38,7 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	public BaseResponse<PageInfo<InventoryVo>> inventoryList(InventoryDto inventoryDto) {
 		try {
+			// 执行分页查询
 			PageHelper.startPage(inventoryDto.getPageNum(), inventoryDto.getPageSize());
 			List<InventoryVo> inventoryList = inventoryMapper.inventoryList(inventoryDto);
 			PageInfo<InventoryVo> pageInfo = new PageInfo<>(inventoryList);
