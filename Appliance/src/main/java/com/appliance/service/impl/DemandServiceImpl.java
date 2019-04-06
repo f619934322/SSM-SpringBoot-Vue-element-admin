@@ -158,8 +158,8 @@ public class DemandServiceImpl implements DemandService {
 					demandDto.setReviewTime(nowTime);
 					demandMapper.reviewDemand(demandDto);
 					if(inventoryMapper.selectInventoryByDemandId(demandDto.getId()) == null) { // 如果不为null，则意味着其他管理员已经进行了审核，此次进行了重复审核（并发）
-					log.info("执行insertNewInventory插入一条新的库存表数据");
-					inventoryMapper.insertNewInventory(inventoryDto);
+						log.info("执行insertNewInventory插入一条新的库存表数据");
+						inventoryMapper.insertNewInventory(inventoryDto);
 					}
 					log.info("执行selectInventoryByDemandId获取唯一一条库存数据");
 					InventoryVo inventoryVo = inventoryMapper.selectInventoryByDemandId(demandDto.getId());
