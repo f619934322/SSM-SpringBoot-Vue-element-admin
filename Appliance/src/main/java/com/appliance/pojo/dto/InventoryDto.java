@@ -5,8 +5,10 @@ import java.io.Serializable;
 import com.appliance.model.PaginationBase;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class InventoryDto extends PaginationBase implements Serializable {
 	/**
 	* 
