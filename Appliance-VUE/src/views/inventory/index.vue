@@ -775,6 +775,7 @@ export default {
     // 库存申领弹窗关闭
     handleCloseApply() {
       this.dialogApply = false
+      this.demandObj = Object.assign({}, demandObj) // 必须重置对象初始值，否则新增采购就会有不应有的值
       this.$refs.applyForm.resetFields()
     },
     // 执行申请领取
@@ -864,6 +865,7 @@ export default {
     }, // 补充采购弹窗关闭
     handleCloseSupplement() {
       this.dialogSupplementDemand = false
+      this.demandObj = Object.assign({}, demandObj) // 必须重置对象初始值，否则新增采购就会有不应有的值
       this.$refs.supplementForm.resetFields()
     },
     // 打开采购新增表单
@@ -873,6 +875,7 @@ export default {
       this.demandObj.itemName = itemName
       this.demandObj.itemType = itemType
     },
+    // 补充申请提交
     supplementDemand(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

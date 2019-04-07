@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.appliance.mapper.DemandMapper;
@@ -128,7 +129,7 @@ public class DemandServiceImpl implements DemandService {
 	/**
 	 * 采购审核操作
 	 */
-	@Transactional
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	@Override
 	public BaseResponse<String> reviewDemand(DemandDto demandDto) {
 		try {
@@ -157,10 +158,8 @@ public class DemandServiceImpl implements DemandService {
 					demandDto.setReviewer(userVo.getName());
 					demandDto.setReviewTime(nowTime);
 					demandMapper.reviewDemand(demandDto);
-					if(inventoryMapper.selectInventoryByDemandId(demandDto.getId()) == null) { // 如果不为null，则意味着其他管理员已经进行了审核，此次进行了重复审核（并发）
-						log.info("执行insertNewInventory插入一条新的库存表数据");
-						inventoryMapper.insertNewInventory(inventoryDto);
-					}
+					log.info("执行insertNewInventory插入一条新的库存表数据");
+					inventoryMapper.insertNewInventory(inventoryDto);
 					log.info("执行selectInventoryByDemandId获取唯一一条库存数据");
 					InventoryVo inventoryVo = inventoryMapper.selectInventoryByDemandId(demandDto.getId());
 					demandDto.setInventoryId(inventoryVo.getId());

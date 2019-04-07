@@ -131,11 +131,13 @@
 		SELECT
 		aa.ID AS id,
 		aa.Item_Name AS itemName,
-		aa.Item_Count AS itemCount,
+		aa.Item_Count AS
+		itemCount,
 		aa.Status
 		AS status,
 		aa.Commit AS commit,
-		aa.Creator AS creator,
+		aa.Creator AS
+		creator,
 		aa.Create_Time AS createTime,
 		aa.Reviewer AS reviewer,
 		aa.Review_Commit AS reviewCommit,
@@ -146,6 +148,6 @@
 		appliance_apply aa
 		ON ai.ID =
 		aa.Inventory_ID
-		WHERE ai.ID = #{id} AND aa.Status = 3
+		WHERE ai.ID = #{id} AND (aa.Status = 2 ||aa.Status = 3)
 	</select>
 </mapper>
