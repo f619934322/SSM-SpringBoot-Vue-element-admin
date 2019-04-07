@@ -43,7 +43,7 @@ public class UserRealm extends AuthorizingRealm {
 			info.addStringPermission("perm:normal");// 资源权限赋权
 			info.addStringPermission("perm:admin");// 资源权限赋权
 		}
-		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms，刷新时间
+		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 6L);// 设置超时时长，超时后自动logout。单位ms，刷新时间
 		return info;
 	}
 
@@ -57,7 +57,7 @@ public class UserRealm extends AuthorizingRealm {
 		UserDto userDto = new UserDto();
 		userDto.setStaffNo(thisToken.getUsername());
 		UserVo userVo = userMapper.userLogin(userDto);// 根据员工号查询数据库对应数据
-		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 1L);// 设置超时时长，超时后自动logout。单位ms
+		SecurityUtils.getSubject().getSession().setTimeout(1000 * 60 * 60 * 6L);// 设置超时时长，超时后自动logout。单位ms
 		if (userVo != null) {
 			return new SimpleAuthenticationInfo(userVo, userVo.getPassword(), "UserRealm");// Shiro判断密码是否一致,并存储Principal,可能抛出IncorrectCredentialsException在service
 		} else {
