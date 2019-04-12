@@ -77,7 +77,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-          <el-table-column prop="commit" label="备注" min-width="150px;" sortable/>
+          <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
+          <el-table-column prop="reviewCommit" label="审核批注" min-width="150px;" sortable/>
         </el-table>
         <!-- /主表格 -->
         <!-- 分页选项 -->

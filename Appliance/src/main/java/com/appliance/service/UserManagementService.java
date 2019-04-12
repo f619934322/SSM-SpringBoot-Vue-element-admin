@@ -38,4 +38,12 @@ public interface UserManagementService {
 	 * @return
 	 */
 	public BaseResponse<String> deleteUser(Long id);
+
+	/**
+	 * 用户修改密码
+	 * 
+	 * @param userDto
+	 * @return
+	 */
+	public BaseResponse<String> passwordUpdate(UserDto userDto);
 }

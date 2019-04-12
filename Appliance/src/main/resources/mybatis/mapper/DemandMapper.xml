@@ -53,7 +53,8 @@
 	<select id="demandList"
 		parameterType="com.appliance.pojo.dto.DemandDto"
 		resultType="com.appliance.pojo.vo.DemandVo">
-		SELECT ID AS id,
+		SELECT
+		ID AS id,
 		Inventory_ID AS inventoryId,
 		Added_Flag AS addedFlag,
 		Item_Name AS itemName,
@@ -67,8 +68,10 @@
 		Review_Commit AS reviewCommit,
 		Create_Time AS createTime,
 		Creator AS creator
-		FROM appliance_demand
-		WHERE Delete_Flag = 0
+		FROM
+		appliance_demand
+		WHERE
+		Delete_Flag = 0
 		<if test="creator != null and creator !=''">AND Creator = #{creator}</if>
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 		<if test="status != null and status != -1">AND Status = #{status}</if>

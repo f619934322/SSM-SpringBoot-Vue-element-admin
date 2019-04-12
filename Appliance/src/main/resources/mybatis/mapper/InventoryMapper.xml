@@ -5,16 +5,18 @@
 	<select id="inventoryList"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT ID AS id,
+		SELECT
+		ID AS id,
 		Item_Name AS itemName,
 		Item_Count AS itemCount,
 		Item_Type AS itemType,
 		Commit AS commit,
 		Creator AS creator,
-		Updator AS
-		updator
-		FROM appliance_inventory
-		WHERE Delete_Flag = 0
+		Updator AS updator
+		FROM
+		appliance_inventory
+		WHERE
+		Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 	</select>
 	<!-- 逻辑删除教学用品库存 -->
@@ -47,34 +49,36 @@
 		WHERE
 		ID = #{id}
 	</update>
-	<!-- 教学用品库存单品详情获取 -->
-	<select id="inventoryDetail" parameterType="java.lang.Long"
+	<!-- 教学用品库存单品采购详情获取 -->
+	<select id="inventoryDetailForDemand"
+		parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.DemandVo">
-		SELECT ad.ID AS id,
+		SELECT
+		ad.ID AS id,
 		ad.Item_Name AS itemName,
-		ad.Item_Count
-		AS itemCount,
+		ad.Item_Count AS itemCount,
 		ad.Status AS status,
 		ad.Commit AS commit,
-		ad.Creator AS
-		creator,
+		ad.Creator AS creator,
 		ad.Reviewer AS reviewer,
 		ad.Create_Time AS createTime,
 		ad.Review_Time AS reviewTime
-		FROM appliance_inventory ai
-		LEFT JOIN
-		appliance_demand ad
-		ON (ai.ID = ad.Inventory_ID)
-		WHERE ai.ID = #{id}
+		FROM
+		appliance_inventory ai
+		LEFT JOIN appliance_demand ad ON ai.ID = ad.Inventory_ID
+		WHERE
+		ai.ID = #{id}
 	</select>
 	<!-- 根据需求表ID查出对应库存表数据 -->
 	<select id="selectInventoryByDemandId"
 		parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT ID AS id
-		FROM appliance_inventory
-		WHERE Demand_ID =
-		#{demandid}
+		SELECT
+		ID AS id
+		FROM
+		appliance_inventory
+		WHERE
+		Demand_ID = #{demandId}
 	</select>
 	<!-- 更新库存表数量 -->
 	<update id="updateInventoryForitemCount"
@@ -116,10 +120,34 @@
 	<!-- 根据库存表ID查出一条数据 -->
 	<select id="selectInventoryById" parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT ID AS id,
+		SELECT
+		ID AS id,
 		Item_Name AS itemName,
 		Item_Count AS itemCount
-		FROM appliance_inventory
-		WHERE ID = #{id}
+		FROM
+		appliance_inventory
+		WHERE
+		ID = #{id}
+	</select>
+	<!-- 查询库存领取详情 -->
+	<select id="inventoryDetailForApply"
+		parameterType="java.lang.Long"
+		resultType="com.appliance.pojo.vo.ApplyVo">
+		SELECT
+		aa.ID AS id,
+		aa.Item_Name AS itemName,
+		aa.Item_Count AS itemCount,
+		aa.Status AS status,
+		aa.Commit AS commit,
+		aa.Creator AS creator,
+		aa.Create_Time AS createTime,
+		aa.Reviewer AS reviewer,
+		aa.Review_Commit AS reviewCommit,
+		aa.Review_Time AS reviewTime
+		FROM
+		appliance_inventory ai
+		LEFT JOIN appliance_apply aa ON ai.ID = aa.Inventory_ID
+		WHERE
+		ai.ID = #{id} AND (aa.Status = 2 ||aa.Status = 3)
 	</select>
 </mapper>

@@ -82,14 +82,14 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 5) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('用户名不得少于5位'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不得少于6位'))
       } else {
         callback()
       }

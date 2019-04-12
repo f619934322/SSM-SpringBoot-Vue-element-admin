@@ -7,7 +7,7 @@ const app = {
       withoutAnimation: false
     },
     device: 'desktop',
-    language: Cookies.get('language') || 'en',
+    language: Cookies.get('language') || 'zh', // 使得上方选择语言为中文（此时中文不可选），不然已经显示了中文还能选定中文
     size: Cookies.get('size') || 'medium'
   },
   mutations: {

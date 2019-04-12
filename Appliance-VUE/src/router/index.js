@@ -79,7 +79,7 @@ export const constantRouterMap = [
     redirect: 'inventory',
     children: [
       {
-        path: 'inventory_index',
+        path: 'inventoryIndex',
         component: () => import('@/views/inventory/index'),
         name: '教学用品物品一览',
         meta: { title: 'inventoryInfo', icon: 'table', noCache: true }
