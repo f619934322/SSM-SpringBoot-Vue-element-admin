@@ -20,6 +20,7 @@ import com.appliance.pojo.vo.ApplyVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.ApplyService;
+import com.appliance.utils.DictionaryEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -58,13 +59,13 @@ public class ApplyServiceImpl implements ApplyService {
 			PageInfo<ApplyVo> pageInfo = new PageInfo<>(applyList);
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取applyList数据成功");
 			return response;
 		} catch (Exception e) {
 			log.error("获取applyList数据失败,信息{}", e);
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取applyList数据失败");
 			return response;
 		}
@@ -87,13 +88,13 @@ public class ApplyServiceImpl implements ApplyService {
 			applyDto.setCreator(userVo.getName());
 			applyMapper.insertApply(applyDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("执行insertApply成功");
 			return response;
 		} catch (Exception e) {
 			log.error("执行insertApply失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行insertApply失败");
 			return response;
 		}
@@ -132,13 +133,13 @@ public class ApplyServiceImpl implements ApplyService {
 				inventoryMapper.updateInventory(inventoryDto);// 更新库存数量
 			}
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("执行reviewApply成功");
 			return response;
 		} catch (Exception e) {
 			log.error("执行reviewApply失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行reviewApply失败");
 			return response;
 		}
@@ -168,12 +169,12 @@ public class ApplyServiceImpl implements ApplyService {
 			PageInfo<ApplyVo> pageInfo = new PageInfo<>(applyList);
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取myApply数据成功");
 			return response;
 		} catch (Exception e) {
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取myApply数据失败");
 			return response;
 		}

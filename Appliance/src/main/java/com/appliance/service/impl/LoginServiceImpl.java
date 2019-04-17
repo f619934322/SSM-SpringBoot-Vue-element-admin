@@ -11,6 +11,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.LoginService;
+import com.appliance.utils.DictionaryEnum;
 import com.appliance.utils.MD5;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,23 +36,28 @@ public class LoginServiceImpl implements LoginService {
 		try {
 			subject.login(token);// 进入com.appliance.shiro.UserRealm中执行Shiro认证
 			BaseResponse<UserVo> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("登录成功");
 			return response;
 		} catch (UnknownAccountException e) {
 			log.warn("用户名不存在");
 			BaseResponse<UserVo> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("用户名不存在");
 			return response;
 		} catch (IncorrectCredentialsException e) {
 			log.warn("密码错误");
 			BaseResponse<UserVo> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("密码错误");
 			return response;
+		} catch (Exception e) {
+			log.warn("服务器异常！原因：{}", e);
+			BaseResponse<UserVo> response = new BaseResponse<>();
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
+			response.setStatusMsg("服务器异常！");
+			return response;
 		}
-
 	}
 
 	/**
@@ -63,14 +69,14 @@ public class LoginServiceImpl implements LoginService {
 		try {
 			subject.logout();// 执行登出
 			BaseResponse<UserVo> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("登出成功");
 			return response;
 		} catch (Exception e) {
 			BaseResponse<UserVo> response = new BaseResponse<>();
-			response.setStatusCode(200);
-			response.setStatusMsg("登出失败，检查服务端异常：" + e);
-			log.warn("登出失败，检查服务端异常:{}", e);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
+			response.setStatusMsg("登出失败，检查服务端异常!");
+			log.warn("登出失败，检查服务端异常，异常:{}", e);
 			return response;
 		}
 	}
@@ -80,31 +86,36 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	@Override
 	public BaseResponse<UserVo> getUserInfo() {
-		Subject subject = SecurityUtils.getSubject();
-		UserVo userVo = (UserVo) subject.getPrincipal();
-		BaseResponse<UserVo> response = new BaseResponse<>();
-		if (userVo != null) { // 假如用户未登录，此处的userVo为null，前端将自动跳转到登陆界面
-			if (userVo.getUserType() == 2) {
-				String[] roles = { "admin" };
-				userVo.setRoles(roles);
-				response.setResponseData(userVo);
-				response.setStatusCode(200);
-				response.setStatusMsg("用户信息返回成功");
-			} else if (userVo.getUserType() == 1) {
-				String[] roles = { "normal" };
-				userVo.setRoles(roles);
-				response.setResponseData(userVo);
-				response.setStatusCode(200);
-				response.setStatusMsg("用户信息返回成功");
-			} else {
-				response.setStatusCode(201);
-				response.setStatusMsg("用户信息返回失败");
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			BaseResponse<UserVo> response = new BaseResponse<>();
+			if (userVo != null) { // 假如用户未登录，此处的userVo为null，前端将自动跳转到登陆界面
+				if (userVo.getUserType() == 2) {
+					String[] roles = { "admin" };
+					userVo.setRoles(roles);
+					response.setResponseData(userVo);
+					response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
+					response.setStatusMsg("用户信息返回成功");
+					return response;
+				} else if (userVo.getUserType() == 1) {
+					String[] roles = { "normal" };
+					userVo.setRoles(roles);
+					response.setResponseData(userVo);
+					response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
+					response.setStatusMsg("用户信息返回成功");
+					return response;
+				}
 			}
-		} else {
-			response.setStatusCode(201);
+			// userVo为空，用户信息无效
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("用户信息返回失败");
+			return response;
+		} catch (Exception e) {
+			BaseResponse<UserVo> response = new BaseResponse<>();
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
+			response.setStatusMsg("用户信息返回失败");
+			return response;
 		}
-		return response;
 	}
-
 }

@@ -10,6 +10,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.DemoPojo;
 import com.appliance.pojo.dto.DemoDto;
 import com.appliance.service.DemoService;
+import com.appliance.utils.DictionaryEnum;
 import com.appliance.utils.MD5;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -31,13 +32,13 @@ public class DemoServiceImpl implements DemoService {
 			BaseResponse<DemoPojo> result = new BaseResponse<>();
 			demoLogin.setPassword(null);
 			result.setResponseData(demoLogin);
-			result.setStatusCode(200);
+			result.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			result.setStatusMsg("SUCCESS");
 			return result;
 		} else {
 			BaseResponse<DemoPojo> result = new BaseResponse<>();
 			result.setResponseData(demoLogin);
-			result.setStatusCode(201);
+			result.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			result.setStatusMsg("FAILED");
 			return result;
 		}
@@ -51,13 +52,13 @@ public class DemoServiceImpl implements DemoService {
 			PageInfo<DemoPojo> pageInfo = new PageInfo<>(demoList);
 			BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
 			result.setResponseData(pageInfo);
-			result.setStatusCode(200);
+			result.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			result.setStatusMsg("SUCCESS");
 			return result;
 		} catch (Exception e) {
 			log.error("测试分页失败,信息{}", e);
 			BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
-			result.setStatusCode(201);
+			result.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			result.setStatusMsg("FAILED");
 			return result;
 		}

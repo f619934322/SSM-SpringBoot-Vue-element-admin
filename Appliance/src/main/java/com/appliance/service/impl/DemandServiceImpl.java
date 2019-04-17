@@ -20,6 +20,7 @@ import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.DemandService;
+import com.appliance.utils.DictionaryEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -53,13 +54,13 @@ public class DemandServiceImpl implements DemandService {
 			demandDto.setCreateTime(nowTime);
 			demandMapper.insertNewDemand(demandDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("insertNewDemand插入成功");
 			return response;
 		} catch (Exception e) {
 			log.error("insertNewDemand失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("insertNewDemand插入失败");
 			return response;
 		}
@@ -81,13 +82,13 @@ public class DemandServiceImpl implements DemandService {
 			demandDto.setCreateTime(nowTime);
 			demandMapper.insertSupplementDemand(demandDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("insertSupplementDemand插入成功");
 			return response;
 		} catch (Exception e) {
 			log.error("insertSupplementDemand失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("insertSupplementDemand插入失败");
 			return response;
 		}
@@ -114,13 +115,13 @@ public class DemandServiceImpl implements DemandService {
 			PageInfo<DemandVo> pageInfo = new PageInfo<>(inventoryList);
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取demandList数据成功");
 			return response;
 		} catch (Exception e) {
 			log.error("获取demandList数据失败,信息{}", e);
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取demandList数据失败");
 			return response;
 		}
@@ -193,13 +194,13 @@ public class DemandServiceImpl implements DemandService {
 			}
 
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("reviewDemand操作成功");
 			return response;
 		} catch (Exception e) {
 			log.error("reviewDemand失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("reviewDemand操作失败");
 			return response;
 		}
@@ -214,13 +215,13 @@ public class DemandServiceImpl implements DemandService {
 			List<DemandVo> inventoryList = demandMapper.demandList(demandDto);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryList);
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("excelDemand导出成功");
 			return response;
 		} catch (Exception e) {
 			log.info("执行excelDemand异常，信息{}", e);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("excelDemand导出失败");
 			return response;
 		}
@@ -250,12 +251,12 @@ public class DemandServiceImpl implements DemandService {
 			PageInfo<DemandVo> pageInfo = new PageInfo<>(demandList);
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取myDemand数据成功");
 			return response;
 		} catch (Exception e) {
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取myDemand数据失败");
 			return response;
 		}

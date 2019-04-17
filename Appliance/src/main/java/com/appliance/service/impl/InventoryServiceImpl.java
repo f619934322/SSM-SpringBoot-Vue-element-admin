@@ -18,6 +18,7 @@ import com.appliance.pojo.vo.DemandVo;
 import com.appliance.pojo.vo.InventoryVo;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.InventoryService;
+import com.appliance.utils.DictionaryEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -44,13 +45,13 @@ public class InventoryServiceImpl implements InventoryService {
 			PageInfo<InventoryVo> pageInfo = new PageInfo<>(inventoryList);
 			BaseResponse<PageInfo<InventoryVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取inventoryList数据成功");
 			return response;
 		} catch (Exception e) {
 			log.error("获取inventoryList数据失败,信息{}", e);
 			BaseResponse<PageInfo<InventoryVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取inventoryList数据失败");
 			return response;
 		}
@@ -76,13 +77,13 @@ public class InventoryServiceImpl implements InventoryService {
 				inventoryMapper.deleteInventory(inventoryDto); // 将Long数组遍历然后对每一个id进行删除操作
 			}
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("批量删除成功");
 			return response;
 		} catch (Exception e) {
 			log.error("batchDeleteInventory批量删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("批量删除失败");
 			return response;
 		}
@@ -106,13 +107,13 @@ public class InventoryServiceImpl implements InventoryService {
 			inventoryDto.setId(id);
 			inventoryMapper.deleteInventory(inventoryDto); // 对传入的id进行删除操作
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("deleteInventory单选删除成功");
 			return response;
 		} catch (Exception e) {
 			log.error("deleteInventory单选删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("deleteInventory单选删除失败");
 			return response;
 		}
@@ -133,13 +134,13 @@ public class InventoryServiceImpl implements InventoryService {
 			inventoryDto.setUpdateTime(nowTime);
 			inventoryMapper.updateInventory(inventoryDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("对库存表进行编辑成功");
 			return response;
 		} catch (Exception e) {
 			log.error("updateInventory对库存表进行编辑失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("对库存表进行编辑失败");
 			return response;
 		}
@@ -154,12 +155,12 @@ public class InventoryServiceImpl implements InventoryService {
 			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetailForDemand(id);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryDetail);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取库存表详情成功");
 			return response;
 		} catch (Exception e) {
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取库存表详情失败");
 			return response;
 		}
@@ -174,12 +175,12 @@ public class InventoryServiceImpl implements InventoryService {
 			List<ApplyVo> inventoryDetail = inventoryMapper.inventoryDetailForApply(id);
 			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryDetail);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取库存表详情成功");
 			return response;
 		} catch (Exception e) {
 			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取库存表详情失败");
 			return response;
 		}

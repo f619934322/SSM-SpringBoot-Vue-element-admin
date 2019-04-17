@@ -14,6 +14,7 @@ import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.UserManagementService;
+import com.appliance.utils.DictionaryEnum;
 import com.appliance.utils.MD5;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,13 +42,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			PageInfo<UserVo> pageInfo = new PageInfo<>(userList);
 			BaseResponse<PageInfo<UserVo>> response = new BaseResponse<>();
 			response.setResponseData(pageInfo);
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("获取userList数据成功");
 			return response;
 		} catch (Exception e) {
 			log.error("获取userList数据失败,信息{}", e);
 			BaseResponse<PageInfo<UserVo>> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取userList数据失败");
 			return response;
 		}
@@ -63,7 +64,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			if (count != 0) {
 				log.warn("执行insertUser失败,数据库中已经有该用户名");
 				BaseResponse<String> response = new BaseResponse<>();
-				response.setStatusCode(201);
+				response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 				response.setStatusMsg("工号已经重复！");
 				return response;
 			}
@@ -76,13 +77,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			userDto.setPassword(MD5.md5(userDto.getPassword()));// 密码用MD5转换后再插入
 			userMapper.insertUser(userDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("执行insertUser成功");
 			return response;
 		} catch (Exception e) {
 			log.error("执行insertUser失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行insertUser失败");
 			return response;
 		}
@@ -103,13 +104,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			userDto.setPassword(MD5.md5(userDto.getPassword()));// 密码用MD5转换后再插入
 			userMapper.updateUser(userDto);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("执行updateUser成功");
 			return response;
 		} catch (Exception e) {
 			log.error("执行updateUser失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行updateUser失败");
 			return response;
 		}
@@ -132,13 +133,13 @@ public class UserManagementServiceImpl implements UserManagementService {
 			userDto.setId(id);
 			userMapper.deleteUser(userDto); // 对传入的id进行删除操作
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(200);
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 			response.setStatusMsg("deleteUser单选删除成功");
 			return response;
 		} catch (Exception e) {
 			log.error("deleteUser单选删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("deleteUser单选删除失败");
 			return response;
 		}
@@ -160,19 +161,19 @@ public class UserManagementServiceImpl implements UserManagementService {
 			if (userDto.getPassword().equals(userVo.getPassword())) {// 判断入参和当前session中密码是否一致
 				userMapper.passwordUpdate(userDto);// 用户修改密码
 				BaseResponse<String> response = new BaseResponse<>();
-				response.setStatusCode(200);
+				response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
 				response.setStatusMsg("执行passwordUpdate成功");
 				return response;
 			} else {
 				BaseResponse<String> response = new BaseResponse<>();
-				response.setStatusCode(201);
+				response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 				response.setStatusMsg("执行passwordUpdate失败,与修改前密码不一致");
 				return response;
 			}
 		} catch (Exception e) {
 			log.error("执行passwordUpdate失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(201);
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行passwordUpdate失败");
 			return response;
 		}
