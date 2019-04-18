@@ -67,9 +67,10 @@ public class UserManagementController {
 		log.info("updateUser返回的JSON: {}", resultToString);
 		return resultToString;
 	}
-	
+
 	/**
 	 * 单选删除用户
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -79,6 +80,21 @@ public class UserManagementController {
 		BaseResponse<String> response = userManagementService.deleteUser(id);
 		String resultToString = JSON.toJSONString(response);
 		log.info("deleteUser返回的JSON: {}", resultToString);
+		return resultToString;
+	}
+
+	/**
+	 * 用户修改密码
+	 * 
+	 * @param userDto
+	 * @return
+	 */
+	@PostMapping(value = "/passwordUpdate", produces = { "application/json" })
+	public String passwordUpdate(@RequestBody UserDto userDto) {
+		log.info("执行passwordUpdate");
+		BaseResponse<String> response = userManagementService.passwordUpdate(userDto);
+		String resultToString = JSON.toJSONString(response);
+		log.info("passwordUpdate返回的JSON: {}", resultToString);
 		return resultToString;
 	}
 }

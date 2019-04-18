@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:8011/', // api 的 base_url 这里是后端的接口base路径
+  baseURL: process.env.BASE_API, // api 的 base_url 这里是后端的接口base路径
   timeout: 5000 // request timeout
 })
 

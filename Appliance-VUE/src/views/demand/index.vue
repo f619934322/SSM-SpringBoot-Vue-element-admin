@@ -68,8 +68,8 @@
                 <el-radio-group v-model="demandStatus" size="mini">
                   <el-radio-button :disabled="demandObj.status === 2" label="1">驳回</el-radio-button>
                   <el-radio-button label="2">通过未采购</el-radio-button>
-                  <el-radio-button label="3">采购失败</el-radio-button>
-                  <el-radio-button label="4">采购完成</el-radio-button>
+                  <el-radio-button :disabled="demandObj.status === 0" label="3">采购失败</el-radio-button>
+                  <el-radio-button :disabled="demandObj.status === 0" label="4">采购完成</el-radio-button>
                 </el-radio-group>
               </div>
             </el-form-item>

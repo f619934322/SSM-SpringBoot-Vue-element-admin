@@ -33,13 +33,22 @@ public class ShiroConfig {
 		// 添加Shiro内置过滤器
 		Map<String, String> filterMap = new LinkedHashMap<>();
 		/**
-		 * Shiro 内置过滤器，过滤链定义，从上向下顺序执行 常用的过滤器： anon:无需认证（登录）可以访问 authc:必须认证才可以访问
-		 * user:只要登录过，并且记住了密码，如果设置了rememberMe的功能可以直接访问 perms:该资源必须得到资源权限才可以访问
-		 * role:该资源必须得到角色的权限才可以访问
+		 * Shiro 内置过滤器，过滤链定义，从上向下顺序执行 常用的过滤器：
+		 * 
+		 * anon:无需认证（登录）可以访问 ；
+		 * 
+		 * authc:必须认证才可以访问；
+		 * 
+		 * user:只要登录过，并且记住了密码，如果设置了rememberMe的功能可以直接访问 ；
+		 * 
+		 * perms:该资源必须得到资源权限才可以访问；
+		 * 
+		 * role:该资源必须得到角色的权限才可以访问。
 		 */
 		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效，一般将 /**放在最为下边
 		filterMap.put("/appliance/inventory/inventoryList", PERMNORMAL);
-		filterMap.put("/appliance/inventory/inventoryDetail", PERMNORMAL);
+		filterMap.put("/appliance/inventory/inventoryDetailForDemand", PERMNORMAL);
+		filterMap.put("/appliance/inventory/inventoryDetailForApply", PERMADMIN);
 		filterMap.put("/appliance/inventory/batchDeleteInventory", PERMADMIN);
 		filterMap.put("/appliance/inventory/deleteInventory", PERMADMIN);
 		filterMap.put("/appliance/inventory/updateInventory", PERMADMIN);

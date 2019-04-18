@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.appliance.mapper.ApplyMapper;
@@ -101,7 +102,7 @@ public class ApplyServiceImpl implements ApplyService {
 	/**
 	 * 审核申领
 	 */
-	@Transactional
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	@Override
 	public BaseResponse<String> reviewApply(ApplyDto applyDto) {
 		try {

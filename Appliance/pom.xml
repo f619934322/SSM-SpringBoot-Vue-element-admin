@@ -48,7 +48,6 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.13</version>
 		</dependency>
 		<!-- lombok -->
 		<dependency>
@@ -106,4 +105,13 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>8.0.13</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

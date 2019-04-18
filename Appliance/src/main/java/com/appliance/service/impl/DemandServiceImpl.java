@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.appliance.mapper.DemandMapper;
@@ -128,7 +129,7 @@ public class DemandServiceImpl implements DemandService {
 	/**
 	 * 采购审核操作
 	 */
-	@Transactional
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	@Override
 	public BaseResponse<String> reviewDemand(DemandDto demandDto) {
 		try {
@@ -137,8 +138,11 @@ public class DemandServiceImpl implements DemandService {
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			/*
-			 * 当审核状态为4时，执行如下步骤： 1.库存表新增一天消息，入参来自于demandDto，给inventoryDto的成员赋值；
-			 * 2.用入参对象的需求表id查出唯一一条库存表id，用inventoryVo保留 3.根据2中得到的库存id和demandDto中的id更新需求表对应的数据
+			 * 当审核状态为4时且需求标识为1时，执行如下步骤：
+			 * 
+			 * 1.库存表新增一条数据，入参来自于demandDto，给inventoryDto的成员赋值；
+			 * 2.用入参对象的需求表id查出唯一一条库存表id，用inventoryVo保留；
+			 * 3.根据2中得到的库存id和demandDto中的id更新需求表对应的数据。
 			 */
 			if (demandDto.getStatus() == 4) {
 				if (demandDto.getAddedFlag() == 1) {// 需求标识为1时为新增，执行上述步骤

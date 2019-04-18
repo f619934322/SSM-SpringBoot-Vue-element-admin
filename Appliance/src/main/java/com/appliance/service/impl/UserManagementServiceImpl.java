@@ -143,4 +143,38 @@ public class UserManagementServiceImpl implements UserManagementService {
 			return response;
 		}
 	}
+
+	/**
+	 * 用户修改密码
+	 */
+	@Override
+	public BaseResponse<String> passwordUpdate(UserDto userDto) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			userDto.setUpdator(userVo.getName());
+			userDto.setUpdateTime(nowTime);
+			userDto.setPassword(MD5.md5(userDto.getPassword()));// 入参MD5加密
+			if (userDto.getPassword().equals(userVo.getPassword())) {// 判断入参和当前session中密码是否一致
+				userMapper.passwordUpdate(userDto);// 用户修改密码
+				BaseResponse<String> response = new BaseResponse<>();
+				response.setStatusCode(200);
+				response.setStatusMsg("执行passwordUpdate成功");
+				return response;
+			} else {
+				BaseResponse<String> response = new BaseResponse<>();
+				response.setStatusCode(201);
+				response.setStatusMsg("执行passwordUpdate失败,与修改前密码不一致");
+				return response;
+			}
+		} catch (Exception e) {
+			log.error("执行passwordUpdate失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(201);
+			response.setStatusMsg("执行passwordUpdate失败");
+			return response;
+		}
+	}
 }

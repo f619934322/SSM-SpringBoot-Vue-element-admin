@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExportPOIUtils {
 
 	private static final String ERROR = "Error:{}";
-	
+
 	private ExportPOIUtils() {
 		// 私有构造函数
 	}
@@ -47,7 +47,7 @@ public class ExportPOIUtils {
 			// 将转换成的Workbook对象通过流形式下载
 			createWorkBook(list, keys, columnNames).write(os);
 		} catch (IOException e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 		}
 		byte[] content = os.toByteArray();
 		InputStream is = new ByteArrayInputStream(content);
@@ -70,7 +70,7 @@ public class ExportPOIUtils {
 			bis.close();
 			bos.close();
 		} catch (final IOException e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 			throw e;
 		}
 	}
@@ -85,7 +85,7 @@ public class ExportPOIUtils {
 			project = projects.get(j);
 			Map<String, Object> mapValue = new HashMap<>();
 			for (int i = 0; i < keys.length; i++) {
-				mapValue.put(keys[i], getFieldValueByName(keys[i], project));
+				mapValue.put(keys[i], getFieldValueByName(keys[i], project, new Class<?>[] {}, new Object[] {}));
 			}
 
 			listmap.add(mapValue);
@@ -96,14 +96,14 @@ public class ExportPOIUtils {
 	/**
 	 * 利用反射 根据属性名获取属性值
 	 */
-	private static Object getFieldValueByName(String fieldName, Object o) {
+	private static Object getFieldValueByName(String fieldName, Object o, Class<?>[] c, Object[] oa) { //sonar Noncompliant修复2019-04-04 18:05:25
 		try {
 			String firstLetter = fieldName.substring(0, 1).toUpperCase();
 			String getter = "get" + firstLetter + fieldName.substring(1);
-			Method method = o.getClass().getMethod(getter, new Class[] {});
-			return method.invoke(o, new Object[] {});
+			Method method = o.getClass().getMethod(getter, c);
+			return method.invoke(o, oa);
 		} catch (Exception e) {
-			log.warn(ERROR,e);
+			log.warn(ERROR, e);
 			return null;
 		}
 	}
@@ -161,7 +161,7 @@ public class ExportPOIUtils {
 		cs2.setBorderTop(CellStyle.BORDER_THIN);
 		cs2.setBorderBottom(CellStyle.BORDER_THIN);
 		cs2.setAlignment(CellStyle.ALIGN_CENTER);
-		
+
 		// 设置列名
 		for (int i = 0; i < columnNames.length; i++) {
 			Cell cell = row.createCell(i);

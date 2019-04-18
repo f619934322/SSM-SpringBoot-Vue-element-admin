@@ -66,7 +66,7 @@
               <el-radio-group v-model="applyStatus" size="mini">
                 <el-radio-button :disabled="applyObj.status === 2" label="1">驳回</el-radio-button>
                 <el-radio-button label="2">通过未领取</el-radio-button>
-                <el-radio-button label="3">已领取</el-radio-button>
+                <el-radio-button :disabled="applyObj.status === 0 || applyObj.status === 1" label="3">已领取</el-radio-button>
               </el-radio-group>
             </div>
           </el-form-item>

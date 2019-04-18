@@ -51,4 +51,11 @@ public interface UserMapper {
 	 * @param userDto
 	 */
 	public void deleteUser(UserDto userDto);
+
+	/**
+	 * 用户修改密码
+	 * 
+	 * @param userDto
+	 */
+	public void passwordUpdate(UserDto userDto);
 }
