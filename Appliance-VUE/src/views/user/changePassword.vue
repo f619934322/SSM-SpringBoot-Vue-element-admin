@@ -107,15 +107,22 @@ export default {
               const data = response.data
               this.listLoading = false
               if (data.statusCode === 200) {
-                Message({
-                  message: '密码修改成功',
-                  type: 'success',
-                  duration: 5 * 1000
+                this.$alert('密码修改成功，即将登出', '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$message({
+                      type: 'success',
+                      message: `密码修改成功，即将登出`
+                    })
+                    this.$refs[formName].resetFields()
+                    this.changePasswordObj = Object.assign(
+                      {},
+                      changePasswordObj
+                    ) // 重新给修改用对象赋值初始化，changePasswordObj为全局const对象
+                    this.$router.push('/') // 修改成功后跳转到主页
+                    this.logout() // 然后登出
+                  }
                 })
-                this.$refs[formName].resetFields()
-                this.changePasswordObj = Object.assign({}, changePasswordObj) // 重新给修改用对象赋值初始化，changePasswordObj为全局const对象
-                this.$router.push('/')// 修改成功后跳转到主页
-                this.logout() // 然后登出
               } else {
                 this.loading = false
                 Message({
@@ -137,11 +144,6 @@ export default {
       })
     },
     logout() {
-      Message({
-        message: '密码修改成功',
-        type: 'success',
-        duration: 5 * 1000
-      })
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // In order to re-instantiate the vue-router object to avoid bugs
       })
