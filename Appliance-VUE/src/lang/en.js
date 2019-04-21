@@ -18,7 +18,8 @@ export default {
     screenfull: 'Screenfull',
     theme: 'Theme',
     size: 'Global Size',
-    userName: 'User Name:'
+    userName: 'User Name:',
+    changePassword: 'Change Password'
   },
   login: {
     title: 'Login Form',

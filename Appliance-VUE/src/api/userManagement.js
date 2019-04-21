@@ -39,3 +39,15 @@ export function userDelete(data) {
   })
 }
 
+// 用户自行修改密码
+export function changePassword(data) {
+  return request({
+    url: '/appliance/userManagement/passwordUpdate',
+    method: 'post',
+    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
+      'Content-Type': 'application/json'
+    },
+    data
+  })
+}
+
