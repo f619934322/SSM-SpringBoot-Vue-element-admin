@@ -155,10 +155,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
+			userDto.setStaffNo(userVo.getStaffNo()); // 获取工号，修改对应工号的密码
 			userDto.setUpdator(userVo.getName());
 			userDto.setUpdateTime(nowTime);
-			userDto.setPassword(MD5.md5(userDto.getPassword()));// 入参MD5加密
-			if (userDto.getPassword().equals(userVo.getPassword())) {// 判断入参和当前session中密码是否一致
+			userDto.setOldPassword(MD5.md5(userDto.getOldPassword()));// 旧密码加密后与session中密码进行比较
+			userDto.setPassword(MD5.md5(userDto.getNewPassword()));// 入参MD5加密
+			if (userDto.getOldPassword().equals(userVo.getPassword())) {// 判断入参和当前session中密码是否一致
 				userMapper.passwordUpdate(userDto);// 用户修改密码
 				BaseResponse<String> response = new BaseResponse<>();
 				response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());

@@ -18,7 +18,8 @@ export default {
     screenfull: '全屏',
     theme: '换肤',
     size: '布局大小',
-    userName: '当前用户：'
+    userName: '当前用户：',
+    changePassword: '修改密码'
   },
   login: {
     title: '系统登录',

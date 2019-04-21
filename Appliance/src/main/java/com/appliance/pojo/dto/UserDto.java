@@ -37,6 +37,16 @@ public class UserDto extends PaginationBase implements Serializable {
 	private String password;
 
 	/**
+	 * 新密码（用于用户修改密码）
+	 */
+	private String newPassword;
+
+	/**
+	 * 旧密码（用于用户修改密码）
+	 */
+	private String oldPassword;
+
+	/**
 	 * 个人权限（用户类型）
 	 */
 	private int userType;

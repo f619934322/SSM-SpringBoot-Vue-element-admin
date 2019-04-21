@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -55,6 +56,14 @@ export const constantRouterMap = [
   {
     path: '/401',
     component: () => import('@/views/errorPage/401'),
+    hidden: true
+  },
+  // 修改密码
+  {
+    path: '/user/changePassword',
+    component: Layout,
+    component: () => import('@/views/user/changePassword'),
+    name: '修改密码',
     hidden: true
   },
   // 首页
