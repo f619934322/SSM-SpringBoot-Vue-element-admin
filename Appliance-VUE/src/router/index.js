@@ -61,7 +61,6 @@ export const constantRouterMap = [
   // 修改密码
   {
     path: '/user/changePassword',
-    component: Layout,
     component: () => import('@/views/user/changePassword'),
     name: '修改密码',
     hidden: true
