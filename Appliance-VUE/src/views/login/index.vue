@@ -298,6 +298,9 @@ $light_gray: #eee;
   font-size: 25px;
 }
 .login-container {
+  background: url(https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3); // 可以添加登录界面背景
+  overflow: hidden;
+  background-size: cover;
   min-height: 100%;
   width: 100%;
   background-color: $bg; // 登录界面背景颜色
