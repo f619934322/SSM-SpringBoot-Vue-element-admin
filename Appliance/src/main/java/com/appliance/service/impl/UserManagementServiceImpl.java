@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.appliance.mapper.UserMapper;
 import com.appliance.model.BaseResponse;
+import com.appliance.pojo.dto.InventoryDto;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.UserManagementService;
@@ -177,6 +178,42 @@ public class UserManagementServiceImpl implements UserManagementService {
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行passwordUpdate失败");
+			return response;
+		}
+	}
+
+	/**
+	 * 用户批量删除
+	 */
+	@Override
+	public BaseResponse<String> bacthDeleteUser(Long[] ids) {
+		try {
+			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+			UserDto userDto = new UserDto();
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
+			StringBuilder canNotDelete = new StringBuilder("");// 实例一个StringBuilder对象用于拼接
+			for (Long id : ids) {
+				if (id.longValue() != userVo.getId().longValue()) { // 只删除非当前操作用户，注意Long的比较
+					userDto.setUpdator(userVo.getStaffNo());
+					userDto.setUpdateTime(nowTime);
+					userDto.setId(id);
+					userMapper.deleteUser(userDto); // 将Long数组遍历然后对每一个id进行删除操作
+				} else {
+					canNotDelete.append(userVo.getStaffNo()).append(",是当前操作用户，不可删除");
+				}
+			}
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
+			response.setStatusMsg("批量删除完成" + canNotDelete);
+			return response;
+		} catch (Exception e) {
+			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			BaseResponse<String> response = new BaseResponse<>();
+			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
+			response.setStatusMsg("批量删除失败");
 			return response;
 		}
 	}

@@ -64,13 +64,13 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	public BaseResponse<String> batchDeleteInventory(Long[] ids) {
 		try {
+			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
+			InventoryDto inventoryDto = new InventoryDto();
+			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
+			String nowTime = sdf.format(new Date());
+			Subject subject = SecurityUtils.getSubject();
+			UserVo userVo = (UserVo) subject.getPrincipal();
 			for (Long id : ids) {
-				/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
-				InventoryDto inventoryDto = new InventoryDto();
-				SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
-				String nowTime = sdf.format(new Date());
-				Subject subject = SecurityUtils.getSubject();
-				UserVo userVo = (UserVo) subject.getPrincipal();
 				inventoryDto.setUpdator(userVo.getStaffNo());
 				inventoryDto.setUpdateTime(nowTime);
 				inventoryDto.setId(id);

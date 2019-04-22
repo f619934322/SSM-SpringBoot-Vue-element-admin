@@ -6,6 +6,7 @@
 		parameterType="com.appliance.pojo.dto.UserDto"
 		resultType="com.appliance.pojo.vo.UserVo">
 		SELECT
+		ID AS id,
 		Staff_Number AS staffNo,
 		Name AS name,
 		Password AS password,

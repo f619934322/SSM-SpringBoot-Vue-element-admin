@@ -54,9 +54,7 @@
         border
         fit
         highlight-current-row
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" align="center"/>
         <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
         <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
         <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
@@ -72,8 +70,8 @@
         <el-table-column prop="creator" label="申领人" min-width="120px;" sortable/>
         <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
         <el-table-column prop="reviewer" label="审核人" min-width="120px;" sortable/>
-        <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
         <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
+        <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
         <el-table-column prop="reviewCommit" label="审核批注" min-width="150px;" sortable/>
       </el-table>
       <!-- /主表格 -->
@@ -122,10 +120,6 @@ export default {
     this.fetchData()
   },
   methods: {
-    // ID数组的赋值
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
     // 每页显示数据量变更
     handleSizeChange(val) {
       this.pagesize = val

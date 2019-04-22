@@ -46,4 +46,12 @@ public interface UserManagementService {
 	 * @return
 	 */
 	public BaseResponse<String> passwordUpdate(UserDto userDto);
+
+	/**
+	 * 用户批量删除
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	public BaseResponse<String> bacthDeleteUser(Long[] ids);
 }

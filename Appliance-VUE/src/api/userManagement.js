@@ -44,6 +44,15 @@ export function changePassword(data) {
   return request({
     url: '/appliance/userManagement/passwordUpdate',
     method: 'post',
+    data
+  })
+}
+
+// 批量删除用户
+export function bacthDeleteUser(data) {
+  return request({
+    url: '/appliance/userManagement/bacthDeleteUser',
+    method: 'post',
     headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
       'Content-Type': 'application/json'
     },

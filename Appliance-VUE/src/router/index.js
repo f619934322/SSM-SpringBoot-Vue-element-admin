@@ -65,6 +65,7 @@ export const constantRouterMap = [
     name: '修改密码',
     hidden: true
   },
+  // 修改密码/
   // 首页
   {
     path: '',
@@ -102,7 +103,7 @@ export const constantRouterMap = [
     redirect: '/aboutMe',
     meta: {
       title: 'aboutMe',
-      icon: 'table'
+      icon: 'message'
     },
     children: [
       {

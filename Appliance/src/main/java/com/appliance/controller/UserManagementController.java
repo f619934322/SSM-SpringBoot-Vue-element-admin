@@ -97,4 +97,19 @@ public class UserManagementController {
 		log.info("passwordUpdate返回的JSON: {}", resultToString);
 		return resultToString;
 	}
+
+	/**
+	 * 用户批量删除
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@PostMapping(value = "/bacthDeleteUser", produces = { "application/json" })
+	public String bacthDeleteUser(@RequestBody Long[] ids) {
+		log.info("执行bacthDeleteUser");
+		BaseResponse<String> response = userManagementService.bacthDeleteUser(ids);
+		String resultToString = JSON.toJSONString(response);
+		log.info("bacthDeleteUser返回的JSON: {}", resultToString);
+		return resultToString;
+	}
 }
