@@ -123,20 +123,29 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public BaseResponse<String> deleteUser(Long id) {
 		try {
-			UserDto userDto = new UserDto();
 			/* 这里将缓存中的工号取出来，并取当前时间，最后赋值给对象并传给Mapper方法 */
-			SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
-			String nowTime = sdf.format(new Date());
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
-			userDto.setUpdator(userVo.getStaffNo());
-			userDto.setUpdateTime(nowTime);
-			userDto.setId(id);
-			userMapper.deleteUser(userDto); // 对传入的id进行删除操作
-			BaseResponse<String> response = new BaseResponse<>();
-			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
-			response.setStatusMsg("deleteUser单选删除成功");
-			return response;
+			StringBuilder canNotDelete = new StringBuilder("");// 实例一个StringBuilder对象用于拼接
+			if (id.longValue() != userVo.getId().longValue()) { // 只删除非当前操作用户，注意Long的比较
+				UserDto userDto = new UserDto();
+				SimpleDateFormat sdf = new SimpleDateFormat(TIMEFORMAT);
+				String nowTime = sdf.format(new Date());
+				userDto.setUpdator(userVo.getStaffNo());
+				userDto.setUpdateTime(nowTime);
+				userDto.setId(id);
+				userMapper.deleteUser(userDto); // 对传入的id进行删除操作
+				BaseResponse<String> response = new BaseResponse<>();
+				response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
+				response.setStatusMsg("deleteUser单选删除成功");
+				return response;
+			} else {
+				canNotDelete.append(userVo.getStaffNo()).append(",是当前操作用户，不可删除");
+				BaseResponse<String> response = new BaseResponse<>();
+				response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
+				response.setStatusMsg("deleteUser单选删除失败" + canNotDelete);
+				return response;
+			}
 		} catch (Exception e) {
 			log.error("deleteUser单选删除失败,信息{}", e);
 			BaseResponse<String> response = new BaseResponse<>();

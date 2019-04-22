@@ -476,7 +476,7 @@ export default {
             })
           } else {
             Message({
-              message: '删除失败',
+              message: data.statusMsg,
               type: 'error',
               duration: 5 * 1000
             })
