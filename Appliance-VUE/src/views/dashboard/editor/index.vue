@@ -1,67 +1,57 @@
 <template>
  <!-- 当用户权限不是admin时，主页是这个 -->
   <div class="dashboard-editor-container">
-    <h1>如果你看到这行字，说明你不是管理员</h1>
+    <h1>欢迎使用本采购系统</h1>
     <div class=" clearfix">
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">Staff's Dashboard</span>
       </div>
-    </div>
-    <div>
-      <img :src="emptyGif" class="emptyGif">
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'DashboardEditor',
+  name: "DashboardEditor",
   data() {
-    return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
-    }
+    return {};
   },
   computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
+    ...mapGetters(["name", "roles"])
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .emptyGif {
+.dashboard-editor-container {
+  background: url(../../../img/dashBg.gif); // 可以添加登录界面背景
+  overflow: hidden;
+  min-height: 100%;
+  width: 100%;
+  background-color: #e3e3e3;
+  min-height: 100vh;
+  padding: 50px 60px 0px;
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
     display: block;
-    width: 45%;
-    margin: 0 auto;
   }
-
-  .dashboard-editor-container {
-    background-color: #e3e3e3;
-    min-height: 100vh;
-    padding: 50px 60px 0px;
-    .pan-info-roles {
-      font-size: 12px;
-      font-weight: 700;
-      color: #333;
-      display: block;
-    }
-    .info-container {
-      position: relative;
-      margin-left: 190px;
-      height: 150px;
-      line-height: 200px;
-      .display_name {
-        font-size: 48px;
-        line-height: 48px;
-        color: #212121;
-        position: absolute;
-        top: 25px;
-      }
+  .info-container {
+    position: relative;
+    margin-left: 100px;
+    height: 120px;
+    line-height: 160px;
+    .display_name {
+      font-size: 36px;
+      line-height: 38px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
     }
   }
+}
 </style>
