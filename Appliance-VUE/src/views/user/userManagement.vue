@@ -112,9 +112,7 @@
               :key="item.key"
               :value="item.userType"
               :label="item.label"
-            >
-            {{item.label}}
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
