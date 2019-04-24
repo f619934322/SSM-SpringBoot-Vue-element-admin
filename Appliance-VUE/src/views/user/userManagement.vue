@@ -159,10 +159,7 @@
               :key="item.key"
               :value="item.userType"
               :label="item.label"
-            >
-              <span v-if="item.userType ===1 ">普通职工</span>
-              <span v-if="item.userType ===2 ">管理员/采购人员</span>
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
