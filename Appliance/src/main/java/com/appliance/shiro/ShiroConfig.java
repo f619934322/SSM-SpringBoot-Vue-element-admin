@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Shiro配置类
  * 
- * @author Dell
+ * @author fyhz
  *
  */
 @Configuration

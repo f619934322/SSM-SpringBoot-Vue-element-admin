@@ -9,7 +9,7 @@ import com.github.pagehelper.PageHelper;
 
 /**
  * 分页配置类
- * @author Dell
+ * @author fyhz
  *
  */
 @Configuration
