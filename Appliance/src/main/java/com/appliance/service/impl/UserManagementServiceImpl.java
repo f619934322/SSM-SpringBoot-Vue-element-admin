@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.appliance.mapper.UserMapper;
 import com.appliance.model.BaseResponse;
-import com.appliance.pojo.dto.InventoryDto;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
 import com.appliance.service.UserManagementService;

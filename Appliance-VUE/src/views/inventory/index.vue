@@ -253,7 +253,8 @@
             <span v-if="scope.row.status === 4">采购完成</span>
           </template>
         </el-table-column>
-        <el-table-column prop="commit" label="备注" width="200"/>
+        <el-table-column prop="commit" label="申请原因" width="200"/>
+        <el-table-column prop="reviewCommit" label="审核批注" width="200"/>
       </el-table>
     </el-dialog>
     <!-- /库存采购详情弹窗 -->
@@ -281,7 +282,8 @@
             <span v-if="scope.row.status === 3">已领取</span>
           </template>
         </el-table-column>
-        <el-table-column prop="commit" label="备注" width="200"/>
+        <el-table-column prop="commit" label="申请原因" width="200"/>
+        <el-table-column prop="reviewCommit" label="审核批注" width="200"/>
       </el-table>
     </el-dialog>
     <!-- /库存领取详情弹窗 -->
@@ -301,7 +303,7 @@
       <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
       <el-table-column prop="itemCount" label="物品总数" min-width="120px;" sortable/>
       <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
-      <el-table-column prop="commit" label="最后一次审核批注" min-width="150px;" sortable/>
+      <el-table-column prop="commit" label="第一次审核批注" min-width="150px;" sortable/>
       <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <el-dropdown trigger="click">
@@ -390,8 +392,8 @@
   </div>
 </template>
 <script>
-import { Message } from 'element-ui'
-import permission from '@/directive/permission/index.js' // 权限判断指令
+import { Message } from "element-ui";
+import permission from "@/directive/permission/index.js"; // 权限判断指令
 import {
   pagination,
   bacthDeleteItem,
@@ -401,8 +403,8 @@ import {
   inventoryDetailForApply,
   insertNewDemand,
   supplementDemand
-} from '@/api/inventory'
-import { insertNewApply } from '@/api/apply'
+} from "@/api/inventory";
+import { insertNewApply } from "@/api/apply";
 const inventoryObj = {
   // 插入更新等对象在这初始化
   id: null,
@@ -410,14 +412,14 @@ const inventoryObj = {
   itemCount: null,
   itemType: null,
   commit: null
-}
+};
 // 采购对象初始化
 const demandObj = {
   inventoryId: null,
   itemName: null,
   itemType: null,
   commit: null
-}
+};
 export default {
   directives: { permission }, // 按钮权限判断，不符合权限的不显示按钮
   data() {
@@ -438,11 +440,11 @@ export default {
       delItemId: null, // 这是单选删除的物品id
       itemCount: null, // 这是单选删除的物品数量
       itemTypeList: [
-        { key: 1, itemType: '桌椅柜' },
-        { key: 2, itemType: '文具' },
-        { key: 3, itemType: '电子设备' },
-        { key: 4, itemType: '书籍资料' },
-        { key: 5, itemType: '其他' }
+        { key: 1, itemType: "桌椅柜" },
+        { key: 2, itemType: "文具" },
+        { key: 3, itemType: "电子设备" },
+        { key: 4, itemType: "书籍资料" },
+        { key: 5, itemType: "其他" }
       ], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
       itemUpdateObj: Object.assign({}, inventoryObj),
@@ -458,10 +460,10 @@ export default {
       // 编辑规则,在编辑时强制输入符合规则的内容
       editRule: {
         itemName: [
-          { required: true, message: '请输入物品名称', trigger: 'blur' }
+          { required: true, message: "请输入物品名称", trigger: "blur" }
         ],
         itemCount: [
-          { required: true, message: '请输入物品数量', trigger: 'blur' },
+          { required: true, message: "请输入物品数量", trigger: "blur" },
           {
             validator(rule, value, callback) {
               // 表单验证-正整数
@@ -470,31 +472,31 @@ export default {
                 Number(value) > 0 &&
                 Number(value) < 999
               ) {
-                callback()
+                callback();
               } else {
-                callback(new Error('请输入1-999的正整数'))
+                callback(new Error("请输入1-999的正整数"));
               }
             },
-            trigger: 'blur'
+            trigger: "blur"
           }
         ],
         itemType: [
-          { required: true, message: '请选择物品类型', trigger: 'blur' }
+          { required: true, message: "请选择物品类型", trigger: "blur" }
         ],
         commit: [
-          { required: true, message: '请输入本次修改的备注', trigger: 'blur' }
+          { required: true, message: "请输入本次修改的备注", trigger: "blur" }
         ]
       },
       addRule: {
         itemName: [
-          { required: true, message: '请输入物品名称', trigger: 'blur' }
+          { required: true, message: "请输入物品名称", trigger: "blur" }
         ],
         itemCount: [
           {
-            type: 'number',
+            type: "number",
             required: true,
-            message: '物品数量必须为整数(如果输入正确仍有此提示请刷新页面)',
-            trigger: 'blur'
+            message: "物品数量必须为整数(如果输入正确仍有此提示请刷新页面)",
+            trigger: "blur"
           },
           {
             validator(rule, value, callback) {
@@ -504,330 +506,330 @@ export default {
                 Number(value) > 0 &&
                 Number(value) < 999
               ) {
-                callback()
+                callback();
               } else {
-                callback(new Error('请输入1-999的正整数'))
+                callback(new Error("请输入1-999的正整数"));
               }
             },
-            trigger: 'blur'
+            trigger: "blur"
           }
         ],
         itemType: [
-          { required: true, message: '请选择物品类型', trigger: 'blur' }
+          { required: true, message: "请选择物品类型", trigger: "blur" }
         ],
         commit: [
-          { required: true, message: '请输入申请的备注', trigger: 'blur' }
+          { required: true, message: "请输入申请的备注", trigger: "blur" }
         ]
       }
-    }
+    };
   },
   created() {
     // 这里是设置打开页面自动会调用的方法
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     // ID数组的赋值
     handleSelectionChange(val) {
-      this.multipleSelection = val
+      this.multipleSelection = val;
     },
     // 每页显示数据量变更
     handleSizeChange(val) {
-      this.pagesize = val
-      this.fetchData() // 每次选择一页显示几条的时候调用fetchData方法
+      this.pagesize = val;
+      this.fetchData(); // 每次选择一页显示几条的时候调用fetchData方法
     },
     // 页码变更
     handleCurrentChange(val) {
-      this.currentPage = val
-      this.fetchData() // 每次切换页码的时候调用fetchData方法
+      this.currentPage = val;
+      this.fetchData(); // 每次切换页码的时候调用fetchData方法
     },
     // 清空搜索选项
     clearSearchOptions() {
       this.searchOptions = {
         // 此处用于重置搜索参数
         itemName: null
-      }
+      };
     },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {
-      this.listLoading = false
+      this.listLoading = false;
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
         itemName: this.searchOptions.itemName // 以物品名称进行检索
-      }
+      };
       pagination(listQuery).then(response => {
-        const data = response.data.responseData
-        this.list = data.list
-        this.totalCount = data.total
-        this.listLoading = false
-      })
+        const data = response.data.responseData;
+        this.list = data.list;
+        this.totalCount = data.total;
+        this.listLoading = false;
+      });
     },
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
-      this.currentPage = 1
-      this.listLoading = true
-      this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
+      this.currentPage = 1;
+      this.listLoading = true;
+      this.fetchData(); // 跳回第一页，带条件参数去后端查询列表数据
     },
     // 批量删除确认
     delBacthClick() {
       if (this.multipleSelection.length === 0) {
         // 数组判空
         Message({
-          message: '您还未勾选',
-          type: 'error',
+          message: "您还未勾选",
+          type: "error",
           duration: 5 * 1000
-        })
-        return
+        });
+        return;
       }
-      this.dialogVisibleDelBatch = true
+      this.dialogVisibleDelBatch = true;
     },
     // 批量删除
     bacthDeleteItemSubmit() {
-      const ids = []
+      const ids = [];
       this.multipleSelection.forEach(function(item) {
-        ids.push(item.id)
-      })
+        ids.push(item.id);
+      });
 
-      this.listLoading = true
-      this.dialogVisibleDelBatch = false
+      this.listLoading = true;
+      this.dialogVisibleDelBatch = false;
       bacthDeleteItem(ids)
         .then(response => {
-          const data = response.data
-          this.listLoading = false
+          const data = response.data;
+          this.listLoading = false;
           if (data.statusCode === 200) {
-            this.multipleSelection = []
+            this.multipleSelection = [];
             Message({
-              message: '批量删除成功',
-              type: 'success',
+              message: "批量删除成功",
+              type: "success",
               duration: 5 * 1000
-            })
-            this.fetchData()
+            });
+            this.fetchData();
           } else {
-            this.loading = false
+            this.loading = false;
             Message({
-              message: '批量删除失败',
-              type: 'error',
+              message: "批量删除失败",
+              type: "error",
               duration: 5 * 1000
-            })
+            });
           }
         })
         .catch(() => {
-          this.loading = false
+          this.loading = false;
           Message({
-            message: '批量删除失败',
-            type: 'error',
+            message: "批量删除失败",
+            type: "error",
             duration: 5 * 1000
-          })
-        })
+          });
+        });
     },
     // 单项删除确认弹窗显示
     deleteItem(id, itemCount) {
-      this.dialogVisibleDel = true
-      this.delItemId = id
-      this.itemCount = itemCount
+      this.dialogVisibleDel = true;
+      this.delItemId = id;
+      this.itemCount = itemCount;
     },
     // 单项删除
     itemDeleteSubmit() {
-      this.listLoading = true
-      this.dialogVisibleDel = false
-      const id = this.delItemId
+      this.listLoading = true;
+      this.dialogVisibleDel = false;
+      const id = this.delItemId;
       deleteItem(id)
         .then(response => {
-          const data = response.data
-          this.listLoading = false
+          const data = response.data;
+          this.listLoading = false;
           if (data.statusCode === 200) {
-            this.delItemId = null
+            this.delItemId = null;
             Message({
-              message: '删除成功',
-              type: 'success',
+              message: "删除成功",
+              type: "success",
               duration: 5 * 1000
-            })
+            });
           } else {
             Message({
-              message: '删除失败',
-              type: 'error',
+              message: "删除失败",
+              type: "error",
               duration: 5 * 1000
-            })
+            });
           }
-          this.fetchData()
+          this.fetchData();
         })
         .catch(() => {
-          this.loading = false
+          this.loading = false;
           Message({
-            message: '删除失败',
-            type: 'error',
+            message: "删除失败",
+            type: "error",
             duration: 5 * 1000
-          })
-        })
+          });
+        });
     },
     // 编辑弹窗关闭
     handleCloseEdit() {
-      this.dialogItemUpdate = false
-      this.$refs.editForm.resetFields()
+      this.dialogItemUpdate = false;
+      this.$refs.editForm.resetFields();
     },
     // 编辑弹窗打开和内容赋值
     updateItem(id, itemName, itemCount, commit, itemType) {
-      this.itemUpdateObj.id = id
-      this.itemUpdateObj.itemName = itemName
-      this.itemUpdateObj.itemCount = itemCount
-      this.itemUpdateObj.commit = commit
-      this.itemUpdateObj.itemType = itemType
-      this.dialogItemUpdate = true
+      this.itemUpdateObj.id = id;
+      this.itemUpdateObj.itemName = itemName;
+      this.itemUpdateObj.itemCount = itemCount;
+      this.itemUpdateObj.commit = commit;
+      this.itemUpdateObj.itemType = itemType;
+      this.dialogItemUpdate = true;
     },
     updateItemSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           updateItem(this.itemUpdateObj)
             .then(response => {
-              const data = response.data
-              this.listLoading = false
+              const data = response.data;
+              this.listLoading = false;
               if (data.statusCode === 200) {
                 Message({
-                  message: '编辑成功',
-                  type: 'success',
+                  message: "编辑成功",
+                  type: "success",
                   duration: 5 * 1000
-                })
-                this.$refs[formName].resetFields()
-                this.dialogItemUpdate = false
-                this.itemUpdateObj = Object.assign({}, inventoryObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
-                this.fetchData()
+                });
+                this.$refs[formName].resetFields();
+                this.dialogItemUpdate = false;
+                this.itemUpdateObj = Object.assign({}, inventoryObj); // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
+                this.fetchData();
               } else {
-                this.loading = false
+                this.loading = false;
                 Message({
-                  message: '编辑失败',
-                  type: 'error',
+                  message: "编辑失败",
+                  type: "error",
                   duration: 5 * 1000
-                })
+                });
               }
             })
             .catch(() => {
-              this.loading = false
+              this.loading = false;
               Message({
-                message: '编辑失败',
-                type: 'error',
+                message: "编辑失败",
+                type: "error",
                 duration: 5 * 1000
-              })
-            })
+              });
+            });
         }
-      })
+      });
     },
     // 库存物品采购详情弹窗显示
     detailForDemand(id) {
       // 先获取详情数据，再展示窗口
       inventoryDetailForDemand(id)
         .then(response => {
-          const data = response.data
-          this.listLoading = false
+          const data = response.data;
+          this.listLoading = false;
           if (data.statusCode === 200) {
-            this.demandDetailList = data.responseData
-            this.dialogDemandDetail = true
+            this.demandDetailList = data.responseData;
+            this.dialogDemandDetail = true;
           } else {
             Message({
-              message: '获取详情失败',
-              type: 'error',
+              message: "获取详情失败",
+              type: "error",
               duration: 5 * 1000
-            })
+            });
           }
         })
         .catch(() => {
-          this.loading = false
+          this.loading = false;
           Message({
-            message: '获取详情失败',
-            type: 'error',
+            message: "获取详情失败",
+            type: "error",
             duration: 5 * 1000
-          })
-        })
+          });
+        });
     },
     // 库存领取详情弹窗显示
     detailForApply(id) {
       // 先获取详情数据，再展示窗口
       inventoryDetailForApply(id)
         .then(response => {
-          const data = response.data
-          this.listLoading = false
+          const data = response.data;
+          this.listLoading = false;
           if (data.statusCode === 200) {
-            this.applyDetailList = data.responseData
-            this.dialogApplyDetail = true
+            this.applyDetailList = data.responseData;
+            this.dialogApplyDetail = true;
           } else {
             Message({
-              message: '获取详情失败',
-              type: 'error',
+              message: "获取详情失败",
+              type: "error",
               duration: 5 * 1000
-            })
+            });
           }
         })
         .catch(() => {
-          this.loading = false
+          this.loading = false;
           Message({
-            message: '获取详情失败',
-            type: 'error',
+            message: "获取详情失败",
+            type: "error",
             duration: 5 * 1000
-          })
-        })
+          });
+        });
     },
     // 库存申领弹窗
     openDialogApply(id, itemName, itemCount) {
-      this.demandObj.inventoryId = id
-      this.demandObj.itemName = itemName
-      this.itemCount = itemCount // 用于判断demandObj中的数量是否小于申请的数量
-      this.dialogApply = true
+      this.demandObj.inventoryId = id;
+      this.demandObj.itemName = itemName;
+      this.itemCount = itemCount; // 用于判断demandObj中的数量是否小于申请的数量
+      this.dialogApply = true;
     },
     // 库存申领弹窗关闭
     handleCloseApply() {
-      this.dialogApply = false
-      this.demandObj = Object.assign({}, demandObj) // 必须重置对象初始值，否则新增采购就会有不应有的值
-      this.$refs.applyForm.resetFields()
+      this.dialogApply = false;
+      this.demandObj = Object.assign({}, demandObj); // 必须重置对象初始值，否则新增采购就会有不应有的值
+      this.$refs.applyForm.resetFields();
     },
     // 执行申请领取
     insertNewApply(formName) {
       if (this.demandObj.itemCount > this.itemCount) {
         Message({
-          message: '申请的数量不得超过现有数量',
-          type: 'warning',
+          message: "申请的数量不得超过现有数量",
+          type: "warning",
           duration: 5 * 1000
-        })
-        return
+        });
+        return;
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
           insertNewApply(this.demandObj)
             .then(response => {
-              const data = response.data
-              this.listLoading = false
+              const data = response.data;
+              this.listLoading = false;
               if (data.statusCode === 200) {
-                this.dialogApply = false
+                this.dialogApply = false;
                 Message({
-                  message: '申请成功',
-                  type: 'success',
+                  message: "申请成功",
+                  type: "success",
                   duration: 5 * 1000
-                })
+                });
               } else {
                 Message({
-                  message: '申请失败，检查网络',
-                  type: 'error',
+                  message: "申请失败，检查网络",
+                  type: "error",
                   duration: 5 * 1000
-                })
+                });
               }
             })
             .catch(() => {
-              this.loading = false
+              this.loading = false;
               Message({
-                message: '申请失败，检查网络',
-                type: 'error',
+                message: "申请失败，检查网络",
+                type: "error",
                 duration: 5 * 1000
-              })
-            })
+              });
+            });
         }
-      })
+      });
     },
     // 新增采购弹窗关闭
     handleCloseNewAdd() {
-      this.dialogNewDemand = false
-      this.$refs.addForm.resetFields()
+      this.dialogNewDemand = false;
+      this.$refs.addForm.resetFields();
     },
     // 打开采购新增表单
     openDialogNewDemand() {
-      this.dialogNewDemand = true
+      this.dialogNewDemand = true;
     },
     // 新增采购申请
     insertNewDemand(formName) {
@@ -835,45 +837,45 @@ export default {
         if (valid) {
           insertNewDemand(this.demandObj)
             .then(response => {
-              const data = response.data
-              this.listLoading = false
+              const data = response.data;
+              this.listLoading = false;
               if (data.statusCode === 200) {
-                this.dialogNewDemand = false
+                this.dialogNewDemand = false;
                 Message({
-                  message: '申请成功',
-                  type: 'success',
+                  message: "申请成功",
+                  type: "success",
                   duration: 5 * 1000
-                })
+                });
               } else {
                 Message({
-                  message: '申请失败，检查网络',
-                  type: 'error',
+                  message: "申请失败，检查网络",
+                  type: "error",
                   duration: 5 * 1000
-                })
+                });
               }
             })
             .catch(() => {
-              this.loading = false
+              this.loading = false;
               Message({
-                message: '申请失败，检查网络',
-                type: 'error',
+                message: "申请失败，检查网络",
+                type: "error",
                 duration: 5 * 1000
-              })
-            })
+              });
+            });
         }
-      })
+      });
     }, // 补充采购弹窗关闭
     handleCloseSupplement() {
-      this.dialogSupplementDemand = false
-      this.demandObj = Object.assign({}, demandObj) // 必须重置对象初始值，否则新增采购就会有不应有的值
-      this.$refs.supplementForm.resetFields()
+      this.dialogSupplementDemand = false;
+      this.demandObj = Object.assign({}, demandObj); // 必须重置对象初始值，否则新增采购就会有不应有的值
+      this.$refs.supplementForm.resetFields();
     },
     // 打开采购新增表单
     openDialogSupplementDemand(id, itemName, itemType) {
-      this.dialogSupplementDemand = true
-      this.demandObj.inventoryId = id
-      this.demandObj.itemName = itemName
-      this.demandObj.itemType = itemType
+      this.dialogSupplementDemand = true;
+      this.demandObj.inventoryId = id;
+      this.demandObj.itemName = itemName;
+      this.demandObj.itemType = itemType;
     },
     // 补充申请提交
     supplementDemand(formName) {
@@ -881,35 +883,35 @@ export default {
         if (valid) {
           supplementDemand(this.demandObj)
             .then(response => {
-              const data = response.data
-              this.listLoading = false
+              const data = response.data;
+              this.listLoading = false;
               if (data.statusCode === 200) {
-                this.dialogSupplementDemand = false
-                this.demandObj = Object.assign({}, demandObj) // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
+                this.dialogSupplementDemand = false;
+                this.demandObj = Object.assign({}, demandObj); // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
                 Message({
-                  message: '申请成功',
-                  type: 'success',
+                  message: "申请成功",
+                  type: "success",
                   duration: 5 * 1000
-                })
+                });
               } else {
                 Message({
-                  message: '申请失败，检查网络',
-                  type: 'error',
+                  message: "申请失败，检查网络",
+                  type: "error",
                   duration: 5 * 1000
-                })
+                });
               }
             })
             .catch(() => {
-              this.loading = false
+              this.loading = false;
               Message({
-                message: '申请失败，检查网络',
-                type: 'error',
+                message: "申请失败，检查网络",
+                type: "error",
                 duration: 5 * 1000
-              })
-            })
+              });
+            });
         }
-      })
+      });
     }
   } // 这是方法末尾花括号
-}
+};
 </script>

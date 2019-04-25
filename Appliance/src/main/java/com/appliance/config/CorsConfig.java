@@ -21,7 +21,7 @@ public class CorsConfig {
 	private CorsConfiguration buildConfig() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		List<String> list = new ArrayList<>();
-		list.add("*");// 在list里添加前端的地址
+		list.add("*");// 在list里添加前端的地址（例：http://localhost:9527）
 		corsConfiguration.setAllowedOrigins(list);// 指定list中的前端地址可访问
 		corsConfiguration.addAllowedHeader("*");
 		corsConfiguration.addAllowedMethod("*");

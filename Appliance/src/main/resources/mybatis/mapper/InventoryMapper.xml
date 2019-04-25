@@ -62,7 +62,8 @@
 		ad.Creator AS creator,
 		ad.Reviewer AS reviewer,
 		ad.Create_Time AS createTime,
-		ad.Review_Time AS reviewTime
+		ad.Review_Time AS reviewTime,
+		ad.Review_Commit AS reviewCommit
 		FROM
 		appliance_inventory ai
 		LEFT JOIN appliance_demand ad ON ai.ID = ad.Inventory_ID
