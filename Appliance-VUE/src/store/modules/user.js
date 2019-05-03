@@ -51,10 +51,8 @@ const user = {
       const staffNo = userInfo.staffNo.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(staffNo, userInfo.password).then(response => {
-          const token = response.data.statusCode
-          commit('SET_TOKEN', token) // 由于只需要前端携带Cookie中的JSESSIONID到后端验证，此处token改成statusCode
-          setToken(token)
-          Cookies.set('statusMsg', response.data.statusMsg)
+          commit('SET_TOKEN', Cookies.get('JSESSIONID')) // 只需要前端携带Cookie中的JSESSIONID到后端验证,此处只用于跳转页面判断用
+          setToken(Cookies.get('JSESSIONID'))
           resolve()
         }).catch(error => {
           Message({

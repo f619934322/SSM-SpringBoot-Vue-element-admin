@@ -4,7 +4,6 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
-import Cookies from 'js-cookie'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -20,9 +19,9 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 router.beforeEach((to, from, next) => {
   console.info('从' + from.path + '跳转到:' + to.path)
   NProgress.start() // start progress bar
-  // 这里由于只需要前端携带cookie的JSESSIONID去后端验证，所以此处的token为状态码;假如假如后端并未存储登录状态，前端刷新后将跳转到登录界面，因为GetUserInfo得到statusCode不正确
-  const statusCode = getToken()
-  if (statusCode === '200') { // determine if there has token
+  // 这里由于只需要前端携带cookie的JSESSIONID去后端验证，所以此处的token为JSESSIONID
+  const token = getToken()
+  if (token) { // determine if there has token
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' })
@@ -62,14 +61,6 @@ router.beforeEach((to, from, next) => {
     /* has no token*/
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
-    } else if (statusCode != null && statusCode !== '200') { // 这里判断是否有状态码保存在Cookie中，若没有则意味着从未调用后端接口登录
-      Message({
-        message: Cookies.get('statusMsg'),
-        type: 'error',
-        duration: 5 * 1000
-      })
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
-      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     } else {
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
