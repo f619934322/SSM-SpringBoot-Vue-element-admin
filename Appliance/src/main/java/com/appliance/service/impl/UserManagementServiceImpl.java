@@ -46,7 +46,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			response.setStatusMsg("获取userList数据成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取userList数据失败,信息{}", e);
+			log.error("获取userList数据失败,信息：", e);
 			BaseResponse<PageInfo<UserVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取userList数据失败");
@@ -81,7 +81,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			response.setStatusMsg("执行insertUser成功");
 			return response;
 		} catch (Exception e) {
-			log.error("执行insertUser失败,信息{}", e);
+			log.error("执行insertUser失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行insertUser失败");
@@ -108,7 +108,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			response.setStatusMsg("执行updateUser成功");
 			return response;
 		} catch (Exception e) {
-			log.error("执行updateUser失败,信息{}", e);
+			log.error("执行updateUser失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行updateUser失败");
@@ -146,7 +146,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 				return response;
 			}
 		} catch (Exception e) {
-			log.error("deleteUser单选删除失败,信息{}", e);
+			log.error("deleteUser单选删除失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("deleteUser单选删除失败");
@@ -182,7 +182,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 				return response;
 			}
 		} catch (Exception e) {
-			log.error("执行passwordUpdate失败,信息{}", e);
+			log.error("执行passwordUpdate失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行passwordUpdate失败");
@@ -218,7 +218,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 			response.setStatusMsg("批量删除完成" + canNotDelete);
 			return response;
 		} catch (Exception e) {
-			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			log.error("batchDeleteInventory批量删除失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("批量删除失败");

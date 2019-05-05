@@ -63,7 +63,7 @@ public class ApplyServiceImpl implements ApplyService {
 			response.setStatusMsg("获取applyList数据成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取applyList数据失败,信息{}", e);
+			log.error("获取applyList数据失败,信息：", e);
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取applyList数据失败");
@@ -92,7 +92,7 @@ public class ApplyServiceImpl implements ApplyService {
 			response.setStatusMsg("执行insertApply成功");
 			return response;
 		} catch (Exception e) {
-			log.error("执行insertApply失败,信息{}", e);
+			log.error("执行insertApply失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行insertApply失败");
@@ -137,7 +137,7 @@ public class ApplyServiceImpl implements ApplyService {
 			response.setStatusMsg("执行reviewApply成功");
 			return response;
 		} catch (Exception e) {
-			log.error("执行reviewApply失败,信息{}", e);
+			log.error("执行reviewApply失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("执行reviewApply失败");

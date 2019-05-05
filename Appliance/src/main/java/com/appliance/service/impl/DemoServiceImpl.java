@@ -56,7 +56,7 @@ public class DemoServiceImpl implements DemoService {
 			result.setStatusMsg("SUCCESS");
 			return result;
 		} catch (Exception e) {
-			log.error("测试分页失败,信息{}", e);
+			log.error("测试分页失败,信息：", e);
 			BaseResponse<PageInfo<DemoPojo>> result = new BaseResponse<>();
 			result.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			result.setStatusMsg("FAILED");

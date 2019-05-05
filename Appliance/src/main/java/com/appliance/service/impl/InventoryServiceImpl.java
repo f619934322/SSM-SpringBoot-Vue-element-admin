@@ -49,7 +49,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("获取inventoryList数据成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取inventoryList数据失败,信息{}", e);
+			log.error("获取inventoryList数据失败,信息：", e);
 			BaseResponse<PageInfo<InventoryVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取inventoryList数据失败");
@@ -81,7 +81,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("批量删除成功");
 			return response;
 		} catch (Exception e) {
-			log.error("batchDeleteInventory批量删除失败,信息{}", e);
+			log.error("batchDeleteInventory批量删除失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("批量删除失败");
@@ -111,7 +111,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("deleteInventory单选删除成功");
 			return response;
 		} catch (Exception e) {
-			log.error("deleteInventory单选删除失败,信息{}", e);
+			log.error("deleteInventory单选删除失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("deleteInventory单选删除失败");
@@ -138,7 +138,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("对库存表进行编辑成功");
 			return response;
 		} catch (Exception e) {
-			log.error("updateInventory对库存表进行编辑失败,信息{}", e);
+			log.error("updateInventory对库存表进行编辑失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("对库存表进行编辑失败");

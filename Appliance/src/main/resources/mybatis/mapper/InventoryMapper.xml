@@ -18,6 +18,7 @@
 		WHERE
 		Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
+		<if test="itemType != null and itemType !=''">AND Item_Type =#{itemType}</if>
 	</select>
 	<!-- 逻辑删除教学用品库存 -->
 	<update id="deleteInventory"

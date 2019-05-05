@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
 			response.setStatusMsg("密码错误");
 			return response;
 		} catch (Exception e) {
-			log.warn("服务器异常！原因：{}", e);
+			log.warn("服务器异常！原因：：", e);
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("服务器异常！");
@@ -76,7 +76,7 @@ public class LoginServiceImpl implements LoginService {
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("登出失败，检查服务端异常!");
-			log.warn("登出失败，检查服务端异常，异常:{}", e);
+			log.warn("登出失败，检查服务端异常，异常:：", e);
 			return response;
 		}
 	}

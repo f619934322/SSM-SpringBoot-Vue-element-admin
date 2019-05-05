@@ -58,7 +58,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("insertNewDemand插入成功");
 			return response;
 		} catch (Exception e) {
-			log.error("insertNewDemand失败,信息{}", e);
+			log.error("insertNewDemand失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("insertNewDemand插入失败");
@@ -86,7 +86,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("insertSupplementDemand插入成功");
 			return response;
 		} catch (Exception e) {
-			log.error("insertSupplementDemand失败,信息{}", e);
+			log.error("insertSupplementDemand失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("insertSupplementDemand插入失败");
@@ -119,7 +119,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("获取demandList数据成功");
 			return response;
 		} catch (Exception e) {
-			log.error("获取demandList数据失败,信息{}", e);
+			log.error("获取demandList数据失败,信息：", e);
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取demandList数据失败");
@@ -198,7 +198,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("reviewDemand操作成功");
 			return response;
 		} catch (Exception e) {
-			log.error("reviewDemand失败,信息{}", e);
+			log.error("reviewDemand失败,信息：", e);
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("reviewDemand操作失败");
@@ -219,7 +219,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("excelDemand导出成功");
 			return response;
 		} catch (Exception e) {
-			log.info("执行excelDemand异常，信息{}", e);
+			log.info("执行excelDemand异常，信息：", e);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("excelDemand导出失败");
