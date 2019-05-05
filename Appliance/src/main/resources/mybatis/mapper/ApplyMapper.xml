@@ -33,6 +33,7 @@
 			aa.Create_Time<![CDATA[ <= ]]>
 			#{createTimeEnd}
 		</if>
+		ORDER BY ID DESC
 	</select>
 	<!-- 在库存一览中申请领取 -->
 	<insert id="insertApply"
