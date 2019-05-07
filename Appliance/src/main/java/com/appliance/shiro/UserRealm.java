@@ -18,6 +18,12 @@ import com.appliance.pojo.vo.UserVo;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * shiro Realm
+ * 
+ * @author fyhz
+ *
+ */
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
 
