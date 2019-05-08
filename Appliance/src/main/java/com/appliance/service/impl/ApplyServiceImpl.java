@@ -39,20 +39,29 @@ public class ApplyServiceImpl implements ApplyService {
 	private ApplyMapper applyMapper;
 
 	/**
+	 * 时间范围数组判断公用方法
+	 * 
+	 * @param applyDto
+	 */
+	public void getTimeBeginToEnd(ApplyDto applyDto) {
+		if (applyDto.getCreateTimeBeginToEnd() != null && applyDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+			// 从数组中分离出起始和结束日期
+			String[] createTimeBeginAndEnd = applyDto.getCreateTimeBeginToEnd();
+			String createTimeBegin = createTimeBeginAndEnd[0];
+			String createTimeEnd = createTimeBeginAndEnd[1];
+			// 将日期赋值给对象
+			applyDto.setCreateTimeBegin(createTimeBegin);
+			applyDto.setCreateTimeEnd(createTimeEnd);
+		}
+	}
+
+	/**
 	 * 获取申领表数据
 	 */
 	@Override
 	public BaseResponse<PageInfo<ApplyVo>> applyList(ApplyDto applyDto) {
 		try {
-			if (applyDto.getCreateTimeBeginToEnd() != null && applyDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
-				// 从数组中分离出起始和结束日期
-				String[] createTimeBeginAndEnd = applyDto.getCreateTimeBeginToEnd();
-				String createTimeBegin = createTimeBeginAndEnd[0];
-				String createTimeEnd = createTimeBeginAndEnd[1];
-				// 将日期赋值给对象
-				applyDto.setCreateTimeBegin(createTimeBegin);
-				applyDto.setCreateTimeEnd(createTimeEnd);
-			}
+			getTimeBeginToEnd(applyDto);
 			// 执行分页查询
 			PageHelper.startPage(applyDto.getPageNum(), applyDto.getPageSize());
 			List<ApplyVo> applyList = applyMapper.applyList(applyDto);
@@ -151,15 +160,7 @@ public class ApplyServiceImpl implements ApplyService {
 	@Override
 	public BaseResponse<PageInfo<ApplyVo>> myApply(ApplyDto applyDto) {
 		try {
-			if (applyDto.getCreateTimeBeginToEnd() != null && applyDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
-				// 从数组中分离出起始和结束日期
-				String[] createTimeBeginAndEnd = applyDto.getCreateTimeBeginToEnd();
-				String createTimeBegin = createTimeBeginAndEnd[0];
-				String createTimeEnd = createTimeBeginAndEnd[1];
-				// 将日期赋值给对象
-				applyDto.setCreateTimeBegin(createTimeBegin);
-				applyDto.setCreateTimeEnd(createTimeEnd);
-			}
+			getTimeBeginToEnd(applyDto);
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			applyDto.setCreator(userVo.getName());

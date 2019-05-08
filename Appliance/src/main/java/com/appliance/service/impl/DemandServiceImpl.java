@@ -39,6 +39,23 @@ public class DemandServiceImpl implements DemandService {
 	private InventoryMapper inventoryMapper;
 
 	/**
+	 * 时间范围数组判断公用方法
+	 * 
+	 * @param demandDto
+	 */
+	public void timeBeginToEnd(DemandDto demandDto) {
+		if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
+			// 从数组中分离出起始和结束日期
+			String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
+			String createTimeBegin = createTimeBeginAndEnd[0];
+			String createTimeEnd = createTimeBeginAndEnd[1];
+			// 将日期赋值给对象
+			demandDto.setCreateTimeBegin(createTimeBegin);
+			demandDto.setCreateTimeEnd(createTimeEnd);
+		}
+	}
+
+	/**
 	 * 采购需求新增
 	 */
 	@Transactional
@@ -100,15 +117,7 @@ public class DemandServiceImpl implements DemandService {
 	@Override
 	public BaseResponse<PageInfo<DemandVo>> demandList(DemandDto demandDto) {
 		try {
-			if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
-				// 从数组中分离出起始和结束日期
-				String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
-				String createTimeBegin = createTimeBeginAndEnd[0];
-				String createTimeEnd = createTimeBeginAndEnd[1];
-				// 将日期赋值给对象
-				demandDto.setCreateTimeBegin(createTimeBegin);
-				demandDto.setCreateTimeEnd(createTimeEnd);
-			}
+			timeBeginToEnd(demandDto);
 			// 执行分页查询
 			PageHelper.startPage(demandDto.getPageNum(), demandDto.getPageSize());
 			List<DemandVo> inventoryList = demandMapper.demandList(demandDto);
@@ -233,15 +242,7 @@ public class DemandServiceImpl implements DemandService {
 	@Override
 	public BaseResponse<PageInfo<DemandVo>> myDemand(DemandDto demandDto) {
 		try {
-			if (demandDto.getCreateTimeBeginToEnd() != null && demandDto.getCreateTimeBeginToEnd().length != 0) {// 要判断日期数组是否不为空
-				// 从数组中分离出起始和结束日期
-				String[] createTimeBeginAndEnd = demandDto.getCreateTimeBeginToEnd();
-				String createTimeBegin = createTimeBeginAndEnd[0];
-				String createTimeEnd = createTimeBeginAndEnd[1];
-				// 将日期赋值给对象
-				demandDto.setCreateTimeBegin(createTimeBegin);
-				demandDto.setCreateTimeEnd(createTimeEnd);
-			}
+			timeBeginToEnd(demandDto);
 			Subject subject = SecurityUtils.getSubject();
 			UserVo userVo = (UserVo) subject.getPrincipal();
 			demandDto.setCreator(userVo.getName());
