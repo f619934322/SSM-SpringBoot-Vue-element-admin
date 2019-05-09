@@ -56,6 +56,30 @@
           fit
           highlight-current-row
         >
+          <el-table-column label="详情" type="expand">
+           <template slot-scope="props">
+            <el-form label-position="left" inline class="table-expand">
+              <el-form-item label="申领人">
+                <span>{{ props.row.creator }}</span>
+              </el-form-item>
+              <el-form-item label="申请原因">
+                <span>{{ props.row.commit }}</span>
+              </el-form-item>
+              <el-form-item label="发起时间">
+                <span>{{ props.row.createTime }}</span>
+              </el-form-item>
+              <el-form-item label="审核人">
+                <span>{{ props.row.reviewer }}</span>
+              </el-form-item>
+              <el-form-item label="审核时间">
+                <span>{{ props.row.reviewTime }}</span>
+              </el-form-item>
+              <el-form-item label="审核批注">
+                <span>{{ props.row.reviewCommit }}</span>
+              </el-form-item>
+            </el-form>
+           </template>
+          </el-table-column>
           <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
           <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
           <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
@@ -74,10 +98,6 @@
               <span v-if="scope.row.addedFlag === 1"><el-tag color="#E6E6FA">需要新增</el-tag></span>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-          <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
-          <el-table-column prop="reviewTime" label="审核时间" min-width="120px;" sortable/>
-          <el-table-column prop="reviewCommit" label="审核批注" min-width="150px;" sortable/>
         </el-table>
         <!-- /主表格 -->
         <!-- 分页选项 -->
@@ -98,7 +118,7 @@
   </div>
 </template>
 <script>
-import { paginationForMy } from '@/api/demand'
+import { paginationForMy } from "@/api/demand";
 export default {
   data() {
     return {
@@ -114,28 +134,28 @@ export default {
         status: null // 这是下拉框的审核状态
       },
       itemStatusList: [
-        { key: 0, status: 0, statusName: '未审核' },
-        { key: 1, status: 1, statusName: '驳回' },
-        { key: 2, status: 2, statusName: '审核但未采购' },
-        { key: 3, status: 3, statusName: '采购失败' },
-        { key: 4, status: 4, statusName: '采购成功' }
+        { key: 0, status: 0, statusName: "未审核" },
+        { key: 1, status: 1, statusName: "驳回" },
+        { key: 2, status: 2, statusName: "审核但未采购" },
+        { key: 3, status: 3, statusName: "采购失败" },
+        { key: 4, status: 4, statusName: "采购成功" }
       ] // 这是下拉框选项的审核状态,label绑定statusName，在下拉框中显示中文状态名称
-    }
+    };
   },
   created() {
     // 这里是设置打开页面自动会调用的方法
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     // 每页显示数据量变更
     handleSizeChange(val) {
-      this.pagesize = val
-      this.fetchData() // 每次选择一页显示几条的时候调用fetchData方法
+      this.pagesize = val;
+      this.fetchData(); // 每次选择一页显示几条的时候调用fetchData方法
     },
     // 页码变更
     handleCurrentChange(val) {
-      this.currentPage = val
-      this.fetchData() // 每次切换页码的时候调用fetchData方法
+      this.currentPage = val;
+      this.fetchData(); // 每次切换页码的时候调用fetchData方法
     },
     // 清空搜索选项
     clearSearchOptions() {
@@ -144,35 +164,49 @@ export default {
         itemName: null,
         createTimeBeginToEnd: [], // 这是时间的数组
         status: null // 这是下拉框的审核状态
-      }
+      };
     },
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
-      this.currentPage = 1
-      this.listLoading = true
-      this.fetchData() // 跳回第一页，带条件参数去后端查询列表数据
+      this.currentPage = 1;
+      this.listLoading = true;
+      this.fetchData(); // 跳回第一页，带条件参数去后端查询列表数据
     }, // 列表数据获取（默认不带检索用参数）
     fetchData() {
-      this.listLoading = false
+      this.listLoading = false;
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
         itemName: this.searchOptions.itemName, // 以物品名称进行检索
         status: this.searchOptions.status, // 查出所有选择的审核状态数据
         createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
-      }
-      if (listQuery.status === null || listQuery.status === '') {
+      };
+      if (listQuery.status === null || listQuery.status === "") {
         // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
         // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
-        listQuery.status = -1 // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
+        listQuery.status = -1; // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
       paginationForMy(listQuery).then(response => {
-        const data = response.data.responseData
-        this.list = data.list
-        this.totalCount = data.total
-        this.listLoading = false
-      })
+        const data = response.data.responseData;
+        this.list = data.list;
+        this.totalCount = data.total;
+        this.listLoading = false;
+      });
     }
   }
-}
+};
 </script>
+<style>
+.table-expand {
+  font-size: 0;
+}
+.table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+</style>

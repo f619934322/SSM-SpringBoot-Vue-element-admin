@@ -113,6 +113,30 @@
           fit
           highlight-current-row
         >
+          <el-table-column label="详情" type="expand">
+           <template slot-scope="props">
+            <el-form label-position="left" inline class="table-expand">
+              <el-form-item label="申领人">
+                <span>{{ props.row.creator }}</span>
+              </el-form-item>
+              <el-form-item label="申请原因">
+                <span>{{ props.row.commit }}</span>
+              </el-form-item>
+              <el-form-item label="发起时间">
+                <span>{{ props.row.createTime }}</span>
+              </el-form-item>
+              <el-form-item label="审核人">
+                <span>{{ props.row.reviewer }}</span>
+              </el-form-item>
+              <el-form-item label="审核时间">
+                <span>{{ props.row.reviewTime }}</span>
+              </el-form-item>
+              <el-form-item label="审核批注">
+                <span>{{ props.row.reviewCommit }}</span>
+              </el-form-item>
+            </el-form>
+           </template>
+          </el-table-column>
           <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
           <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
           <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
@@ -131,9 +155,6 @@
               <span v-if="scope.row.addedFlag === 1"><el-tag color="#E6E6FA">需要新增</el-tag></span>
             </template>
           </el-table-column>
-          <el-table-column prop="creator" label="申请人" min-width="120px;" sortable/>
-          <el-table-column prop="createTime" label="发起时间" min-width="120px;" sortable/>
-          <el-table-column prop="commit" label="申请原因" min-width="150px;" sortable/>
           <el-table-column align="center" label="操作" width="250">
             <template slot-scope="scope">
               <el-dropdown trigger="click">
@@ -303,7 +324,7 @@ export default {
     },
     execlForDemand() {
       const status = (this.demandObj.status = 2);
-      const baseURL = process.env.BASE_API
+      const baseURL = process.env.BASE_API;
       // 因为跨域，所以使用外链
       window.location.href =
         baseURL + "/appliance/demand/excelDemand?" + "status=" + status;
@@ -418,3 +439,17 @@ export default {
   } // 这是方法末尾花括号
 };
 </script>
+<style>
+.table-expand {
+  font-size: 0;
+}
+.table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+</style>
