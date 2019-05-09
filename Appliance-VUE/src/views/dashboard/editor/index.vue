@@ -27,8 +27,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard-editor-container {
-  background: url(../../../img/dashBg.gif); // 可以添加登录界面背景
+  background: url(../../../img/bg2.jpg); // 可以添加登录界面背景
   overflow: hidden;
+  background-size: cover;
   min-height: 100%;
   width: 100%;
   background-color: #e3e3e3;

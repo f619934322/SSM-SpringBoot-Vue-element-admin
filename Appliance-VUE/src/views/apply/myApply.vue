@@ -59,12 +59,12 @@
         <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
         <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
         <el-table-column prop="itemCount" label="申领数量" min-width="120px;" sortable/>
-        <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
+        <el-table-column prop="status" label="审核状态" min-width="120px;" align="center" sortable>
           <template slot-scope="scope">
-            <span v-if="scope.row.status === 0">未审核</span>
-            <span v-if="scope.row.status === 1">驳回</span>
-            <span v-if="scope.row.status === 2">通过但未领取</span>
-            <span v-if="scope.row.status === 3">领取完成</span>
+            <span v-if="scope.row.status === 0"><el-tag type="info">未审核</el-tag></span>
+            <span v-if="scope.row.status === 1"><el-tag type="danger">驳回</el-tag></span>
+            <span v-if="scope.row.status === 2"><el-tag type="warning">通过但未领取</el-tag></span>
+            <span v-if="scope.row.status === 3"><el-tag type="success">领取完成</el-tag></span>
           </template>
         </el-table-column>
         <el-table-column prop="creator" label="申领人" min-width="120px;" sortable/>

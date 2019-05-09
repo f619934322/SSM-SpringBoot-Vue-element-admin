@@ -298,7 +298,7 @@ $light_gray: #CCCCCC; // 标题颜色
   font-size: 25px;
 }
 .login-container {
-  background: url(../../img/loginBg.gif); // 可以添加登录界面背景
+  background: url(../../img/bg1.jpg); // 可以添加登录界面背景
   overflow: hidden;
   background-size: cover;
   min-height: 100%;

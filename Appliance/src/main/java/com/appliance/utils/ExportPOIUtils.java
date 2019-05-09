@@ -78,7 +78,7 @@ public class ExportPOIUtils {
 	private static List<Map<String, Object>> createExcelRecord(List<?> projects, String[] keys) {
 		List<Map<String, Object>> listmap = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		map.put("sheetName", "sheet");
+		map.put("sheetName", "采购清单");// 这里修改sheet名称
 		listmap.add(map);
 		Object project = null;
 		for (int j = 0; j < projects.size(); j++) {

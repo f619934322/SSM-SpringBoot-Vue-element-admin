@@ -116,19 +116,19 @@
           <el-table-column prop="id" label="物品ID" min-width="120px;" sortable/>
           <el-table-column prop="itemName" label="物品名称" min-width="150px;" sortable/>
           <el-table-column prop="itemType" label="物品类型" min-width="120px;" sortable/>
-          <el-table-column prop="status" label="审核状态" min-width="120px;" sortable>
+          <el-table-column prop="status" label="审核状态" min-width="120px;" align="center" sortable>
             <template slot-scope="scope">
-              <span v-if="scope.row.status === 0">未审核</span>
-              <span v-if="scope.row.status === 1">驳回</span>
-              <span v-if="scope.row.status === 2">审核通过未采购</span>
-              <span v-if="scope.row.status === 3">采购失败</span>
-              <span v-if="scope.row.status === 4">采购完成</span>
+              <span v-if="scope.row.status === 0"><el-tag type="info">未审核</el-tag></span>
+              <span v-if="scope.row.status === 1"><el-tag type="danger">驳回</el-tag></span>
+              <span v-if="scope.row.status === 2"><el-tag type="warning">审核通过未采购</el-tag></span>
+              <span v-if="scope.row.status === 3"><el-tag type="danger">采购失败</el-tag></span>
+              <span v-if="scope.row.status === 4"><el-tag type="success">采购完成</el-tag></span>
             </template>
           </el-table-column>
-          <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" sortable>
+          <el-table-column prop="addedFlag" label="需求标识" min-width="120px;" align="center" sortable>
             <template slot-scope="scope">
-              <span v-if="scope.row.addedFlag === 0">需要补充</span>
-              <span v-if="scope.row.addedFlag === 1">需要新增</span>
+              <span v-if="scope.row.addedFlag === 0"><el-tag color="#F0FFFF">需要补充</el-tag></span>
+              <span v-if="scope.row.addedFlag === 1"><el-tag color="#E6E6FA">需要新增</el-tag></span>
             </template>
           </el-table-column>
           <el-table-column prop="creator" label="申请人" min-width="120px;" sortable/>

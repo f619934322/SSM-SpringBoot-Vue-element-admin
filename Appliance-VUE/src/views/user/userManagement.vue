@@ -193,10 +193,10 @@
       <el-table-column prop="id" label="用户自增ID" min-width="120px;" sortable/>
       <el-table-column prop="staffNo" label="工号" min-width="150px;" sortable/>
       <el-table-column prop="name" label="姓名" min-width="120px;" sortable/>
-      <el-table-column prop="userType" label="人员类型" min-width="120px;" sortable>
+      <el-table-column prop="userType" label="人员类型" min-width="120px;" align="center" sortable>
         <template slot-scope="scope">
-          <span v-if="scope.row.userType === 1">普通人员</span>
-          <span v-if="scope.row.userType === 2">管理员</span>
+          <span v-if="scope.row.userType === 1"><el-tag type="info">普通人员</el-tag></span>
+          <span v-if="scope.row.userType === 2"><el-tag type="warning">管理员</el-tag></span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="250">
