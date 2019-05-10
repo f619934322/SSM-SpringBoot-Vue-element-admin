@@ -75,6 +75,7 @@
 		<if test="creator != null and creator !=''">AND Creator = #{creator}</if>
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 		<if test="status != null and status != -1">AND Status = #{status}</if>
+		<if test="addedFlag != null and addedFlag != -1">AND Added_Flag = #{addedFlag}</if>
 		<if test="createTimeBegin != null and createTimeBegin !=''">AND
 			Create_Time <![CDATA[ >= ]]>
 			#{createTimeBegin}

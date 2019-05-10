@@ -36,6 +36,20 @@
             :value="item.status"
           />
         </el-select>
+        <el-select
+          v-model="searchOptions.addedFlag"
+          clearable
+          class="filter-item"
+          filterable
+          placeholder="请选择需求标识类型"
+        >
+          <el-option
+            v-for="item in addedFlagList"
+            :key="item.key"
+            :label="item.addedFlagName"
+            :value="item.addedFlag"
+          />
+        </el-select>
         <el-button
           class="filter-item"
           style="margin-left: 6px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"
@@ -232,6 +246,10 @@ export default {
         { key: 3, status: 3, statusName: "采购失败" },
         { key: 4, status: 4, statusName: "采购成功" }
       ], // 这是下拉框选项的审核状态,label绑定statusName，在下拉框中显示中文状态名称
+      addedFlagList: [
+        { key: 0, addedFlag: 0, addedFlagName: "需要补充" },
+        { key: 1, addedFlag: 1, addedFlagName: "需要新增" }
+      ], //这是下拉框选项的需求标识
       totalCount: 0,
       pagesize: 10,
       currentPage: 1,
@@ -239,7 +257,8 @@ export default {
         // 这是传给后端的检索用参数
         itemName: null,
         createTimeBeginToEnd: [], // 这是时间的数组
-        status: null // 这是下拉框的审核状态
+        status: null, // 这是下拉框的审核状态
+        addedFlag: null // 需求标识
       },
       // 审核表单逻辑验证
       editRule: {
@@ -310,7 +329,8 @@ export default {
         // 此处用于重置搜索参数
         itemName: null,
         createTimeBeginToEnd: [], // 这是时间的数组
-        status: null // 这是下拉框的审核状态
+        status: null, // 这是下拉框的审核状态
+        addedFlag: null //需求标识
       };
     },
     // 带检索条件去查询列表（带检索用参数）
@@ -340,12 +360,18 @@ export default {
         pageSize: this.pagesize, // 向后端传的单页条数
         itemName: this.searchOptions.itemName, // 以物品名称进行检索
         status: this.searchOptions.status, // 查出所有选择的审核状态数据
-        createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd // 时间数组
+        createTimeBeginToEnd: this.searchOptions.createTimeBeginToEnd, // 时间数组
+        addedFlag: this.searchOptions.addedFlag // 需求标识
       };
       if (listQuery.status === null || listQuery.status === "") {
         // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
         // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给status
         listQuery.status = -1; // 因为后端status为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
+      }
+      if (listQuery.addedFlag === null || listQuery.addedFlag === "") {
+        // 如果不按清空搜索选项直接打叉（clearable）会导致状态传""，所以这里做一次判断
+        // 如果未选择下拉框的审核状态用于查询，也同样必须赋值给addedFlag
+        listQuery.addedFlag = -1; // 因为后端addedFlag为int，前端如果传null，到后端就会变为默认值0，这样会导致mybtis不按逻辑执行，所以这里设置为-1
       }
       pagination(listQuery).then(response => {
         const data = response.data.responseData;
