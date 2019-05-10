@@ -23,7 +23,7 @@
         </el-select>
         <el-button
           class="filter-item"
-          style="margin-left: 6px;"
+          style="margin-left: 6px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"
           icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
@@ -302,7 +302,7 @@
       ref="multipleTable"
       :data="list"
       element-loading-text="拼命加载中"
-      border
+      stripe
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"
@@ -453,7 +453,8 @@ export default {
         { key: 2, itemType: "文具" },
         { key: 3, itemType: "电子设备" },
         { key: 4, itemType: "书籍资料" },
-        { key: 5, itemType: "其他" }
+        { key: 5, itemType: "体育用具" },
+        { key: 6, itemType: "其他" }
       ], // 这是编辑弹窗里的物品类型下拉框数据，默认写死
       // 这是编辑用的对象
       itemUpdateObj: Object.assign({}, inventoryObj),

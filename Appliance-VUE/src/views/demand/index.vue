@@ -38,7 +38,7 @@
         </el-select>
         <el-button
           class="filter-item"
-          style="margin-left: 6px;"
+          style="margin-left: 6px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"
           icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
@@ -110,6 +110,7 @@
           :data="list"
           element-loading-text="拼命加载中"
           border
+          stripe
           fit
           highlight-current-row
         >
@@ -123,13 +124,13 @@
                 <span>{{ props.row.commit }}</span>
               </el-form-item>
               <el-form-item label="发起时间">
-                <span>{{ props.row.createTime }}</span>
+                <span><i class="el-icon-time"/>{{ props.row.createTime }}</span>
               </el-form-item>
               <el-form-item label="审核人">
                 <span>{{ props.row.reviewer }}</span>
               </el-form-item>
               <el-form-item label="审核时间">
-                <span>{{ props.row.reviewTime }}</span>
+                <span><i class="el-icon-time"/>{{ props.row.reviewTime }}</span>
               </el-form-item>
               <el-form-item label="审核批注">
                 <span>{{ props.row.reviewCommit }}</span>

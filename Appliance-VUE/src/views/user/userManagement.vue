@@ -37,7 +37,7 @@
         </el-select>
         <el-button
           class="filter-item"
-          style="margin-left: 6px;"
+          style="margin-left: 6px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"
           icon="el-icon-search"
           @click="searchData"
         >搜索</el-button>
@@ -184,7 +184,7 @@
       ref="multipleTable"
       :data="list"
       element-loading-text="拼命加载中"
-      border
+      stripe
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"

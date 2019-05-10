@@ -1,6 +1,6 @@
 <template>
 <div class="background">
-  <el-card class="box-card">
+  <el-card class="box-card" style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.4)">
     <div class="from">
       <el-form ref="changePasswordForm" :model="changePasswordObj" :rules="changePasswordRule">
         <h1 align="center">密码修改 </h1>
