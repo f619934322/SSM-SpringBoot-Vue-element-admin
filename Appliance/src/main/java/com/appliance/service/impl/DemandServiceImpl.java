@@ -228,7 +228,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("excelDemand导出成功");
 			return response;
 		} catch (Exception e) {
-			log.info("执行excelDemand异常，信息：", e);
+			log.error("执行excelDemand异常，信息：", e);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("excelDemand导出失败");
@@ -256,6 +256,7 @@ public class DemandServiceImpl implements DemandService {
 			response.setStatusMsg("获取myDemand数据成功");
 			return response;
 		} catch (Exception e) {
+			log.error("执行myDemand异常，信息：", e);
 			BaseResponse<PageInfo<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取myDemand数据失败");

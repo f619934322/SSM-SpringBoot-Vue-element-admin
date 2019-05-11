@@ -159,6 +159,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("获取库存表详情成功");
 			return response;
 		} catch (Exception e) {
+			log.error("inventoryDetailForDemand获取库存表详情失败,信息：", e);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取库存表详情失败");
@@ -179,6 +180,7 @@ public class InventoryServiceImpl implements InventoryService {
 			response.setStatusMsg("获取库存表详情成功");
 			return response;
 		} catch (Exception e) {
+			log.error("inventoryDetailForApply获取库存表详情失败,信息：", e);
 			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取库存表详情失败");

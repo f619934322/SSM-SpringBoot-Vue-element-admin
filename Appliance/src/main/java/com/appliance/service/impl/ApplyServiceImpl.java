@@ -174,6 +174,7 @@ public class ApplyServiceImpl implements ApplyService {
 			response.setStatusMsg("获取myApply数据成功");
 			return response;
 		} catch (Exception e) {
+			log.error("获取myApply数据失败,信息：", e);
 			BaseResponse<PageInfo<ApplyVo>> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("获取myApply数据失败");

@@ -73,10 +73,10 @@ public class LoginServiceImpl implements LoginService {
 			response.setStatusMsg("登出成功");
 			return response;
 		} catch (Exception e) {
+			log.warn("登出失败，检查服务端异常，异常:", e);
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("登出失败，检查服务端异常!");
-			log.warn("登出失败，检查服务端异常，异常:：", e);
 			return response;
 		}
 	}
@@ -112,6 +112,7 @@ public class LoginServiceImpl implements LoginService {
 			response.setStatusMsg("用户信息返回失败");
 			return response;
 		} catch (Exception e) {
+			log.warn("用户信息返回失败，异常:", e);
 			BaseResponse<UserVo> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
 			response.setStatusMsg("用户信息返回失败");
