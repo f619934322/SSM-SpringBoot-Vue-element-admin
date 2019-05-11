@@ -73,67 +73,67 @@
 </template>
 
 <script>
-import LangSelect from "@/components/LangSelect";
-import SocialSign from "./socialsignin";
+import LangSelect from '@/components/LangSelect'
+import SocialSign from './socialsignin'
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: { LangSelect, SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 5) {
-        callback(new Error("用户名不得少于5位"));
+        callback(new Error('用户名不得少于5位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("密码不得少于6位"));
+        callback(new Error('密码不得少于6位'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateCode = (rule, value, callback) => {
       if (value == null || value.length < 1) {
-        callback(new Error("验证码不能为空"));
+        callback(new Error('验证码不能为空'))
       } else if (value.toUpperCase() !== this.checkCode) {
-        callback(new Error("验证码输入错误，请重新输入"));
+        callback(new Error('验证码输入错误，请重新输入'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
-      checkCode: "",
+      checkCode: '',
       loginForm: {
-        staffNo: "",
-        password: "",
+        staffNo: '',
+        password: '',
         code: null
       },
       loginRules: {
         staffNo: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          { required: true, trigger: 'blur', validator: validatePassword }
         ],
-        code: [{ required: true, trigger: "blur", validator: validateCode }]
+        code: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
-      passwordType: "password",
+      passwordType: 'password',
       loading: false,
       redirect: undefined
-    };
+    }
   },
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
+        this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   created() {
-    this.createCode();
+    this.createCode()
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   destroyed() {
@@ -141,35 +141,35 @@ export default {
   },
   methods: {
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("LoginByUsername", this.loginForm)
+            .dispatch('LoginByUsername', this.loginForm)
             .then(() => {
-              this.loading = false;
-              this.$router.push({ path: this.redirect || "/" });
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/' })
             })
             .catch(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     // 图片验证码
     createCode() {
-      var code = "";
-      var codeLength = 4; // 验证码的长度
+      var code = ''
+      var codeLength = 4 // 验证码的长度
       var random = [
         0,
         1,
@@ -181,38 +181,38 @@ export default {
         7,
         8,
         9,
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "M",
-        "N",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ]; // 随机数
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'M',
+        'N',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ] // 随机数
       for (var i = 0; i < codeLength; i++) {
         // 循环操作
-        var index = Math.floor(Math.random() * 34); // 取得随机数的索引（0~33）
-        code += random[index]; // 根据索引取得随机数加到code上
+        var index = Math.floor(Math.random() * 34) // 取得随机数的索引（0~33）
+        code += random[index] // 根据索引取得随机数加到code上
       }
-      this.checkCode = code; // 把code值赋给验证码
-      return this.checkCode;
+      this.checkCode = code // 把code值赋给验证码
+      return this.checkCode
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
@@ -233,7 +233,7 @@ export default {
       // }
     }
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -286,7 +286,7 @@ $cursor: #fff;
 <style rel="stylesheet/scss" lang="scss" scoped>
 $bg: #9c9c9c;
 $dark_gray: #889aa4; // icon颜色
-$light_gray: #CCCCCC; // 标题颜色
+$light_gray: #cccccc; // 标题颜色
 .el-form-code-img {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgb(30, 144, 255);
