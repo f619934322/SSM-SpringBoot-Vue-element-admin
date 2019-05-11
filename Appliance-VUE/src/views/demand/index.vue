@@ -97,7 +97,7 @@
               <el-input
                 v-model="demandObj.reviewCommit"
                 :autosize="{ minRows: 3, maxRows: 5}"
-                placeholder="请输入备注信息"
+                placeholder="请输入物品的数量单位（例如：个、只、张、包），以及审核批注"
                 type="textarea"
               />
             </el-form-item>
@@ -322,6 +322,13 @@ export default {
                 callback(new Error('请输入大于零小于十万不超过三位小数的数字'))
               }
             },
+            trigger: 'blur'
+          }
+        ],
+        reviewCommit: [
+          {
+            required: true,
+            message: '应输入物品的数量单位（例如：个、只、张、包），以及审核批注',
             trigger: 'blur'
           }
         ]
