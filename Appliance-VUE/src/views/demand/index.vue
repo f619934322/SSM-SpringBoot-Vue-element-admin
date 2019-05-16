@@ -381,7 +381,6 @@ export default {
     },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {
-      this.listLoading = false
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
@@ -459,7 +458,6 @@ export default {
           reviewDemand(this.demandObj)
             .then(response => {
               const data = response.data
-              this.listLoading = false
               if (data.statusCode === 200) {
                 Message({
                   message: '操作成功',

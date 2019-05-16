@@ -563,7 +563,6 @@ export default {
     },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {
-      this.listLoading = false;
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
@@ -580,7 +579,6 @@ export default {
     // 带检索条件去查询列表（带检索用参数）
     searchData() {
       this.currentPage = 1;
-      this.listLoading = true;
       this.fetchData(); // 跳回第一页，带条件参数去后端查询列表数据
     },
     // 批量删除确认
@@ -618,7 +616,7 @@ export default {
             });
             this.fetchData();
           } else {
-            this.loading = false;
+            this.listLoading = false;
             Message({
               message: "批量删除失败",
               type: "error",
@@ -627,7 +625,6 @@ export default {
           }
         })
         .catch(() => {
-          this.loading = false;
           Message({
             message: "批量删除失败",
             type: "error",
@@ -667,7 +664,7 @@ export default {
           this.fetchData();
         })
         .catch(() => {
-          this.loading = false;
+          this.listLoading = false;
           Message({
             message: "删除失败",
             type: "error",
@@ -690,6 +687,7 @@ export default {
       this.dialogItemUpdate = true;
     },
     updateItemSubmit(formName) {
+      this.listLoading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
           updateItem(this.itemUpdateObj)
@@ -707,7 +705,7 @@ export default {
                 this.itemUpdateObj = Object.assign({}, inventoryObj); // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
                 this.fetchData();
               } else {
-                this.loading = false;
+                this.listLoading = false;
                 Message({
                   message: "编辑失败",
                   type: "error",
@@ -716,7 +714,7 @@ export default {
               }
             })
             .catch(() => {
-              this.loading = false;
+              this.listLoading = false;
               Message({
                 message: "编辑失败",
                 type: "error",
@@ -732,7 +730,6 @@ export default {
       inventoryDetailForDemand(id)
         .then(response => {
           const data = response.data;
-          this.listLoading = false;
           if (data.statusCode === 200) {
             this.demandDetailList = data.responseData;
             this.dialogDemandDetail = true;
@@ -745,7 +742,6 @@ export default {
           }
         })
         .catch(() => {
-          this.loading = false;
           Message({
             message: "获取详情失败",
             type: "error",
@@ -759,7 +755,6 @@ export default {
       inventoryDetailForApply(id)
         .then(response => {
           const data = response.data;
-          this.listLoading = false;
           if (data.statusCode === 200) {
             this.applyDetailList = data.responseData;
             this.dialogApplyDetail = true;
@@ -772,7 +767,6 @@ export default {
           }
         })
         .catch(() => {
-          this.loading = false;
           Message({
             message: "获取详情失败",
             type: "error",
@@ -808,7 +802,6 @@ export default {
           insertNewApply(this.demandObj)
             .then(response => {
               const data = response.data;
-              this.listLoading = false;
               this.demandObj = Object.assign({}, demandObj); // 重置对象初始值
               if (data.statusCode === 200) {
                 this.dialogApply = false;
@@ -826,7 +819,6 @@ export default {
               }
             })
             .catch(() => {
-              this.loading = false;
               Message({
                 message: "申请失败，检查网络",
                 type: "error",
@@ -853,7 +845,6 @@ export default {
             .then(response => {
               this.demandObj = Object.assign({}, demandObj); // 重置对象初始值
               const data = response.data;
-              this.listLoading = false;
               if (data.statusCode === 200) {
                 this.dialogNewDemand = false;
                 Message({
@@ -870,7 +861,6 @@ export default {
               }
             })
             .catch(() => {
-              this.loading = false;
               Message({
                 message: "申请失败，检查网络",
                 type: "error",
@@ -899,7 +889,6 @@ export default {
           supplementDemand(this.demandObj)
             .then(response => {
               const data = response.data;
-              this.listLoading = false;
               if (data.statusCode === 200) {
                 this.dialogSupplementDemand = false;
                 this.demandObj = Object.assign({}, demandObj); // 重新给修改用对象赋值初始化，inventoryObj为全局const对象
@@ -917,7 +906,6 @@ export default {
               }
             })
             .catch(() => {
-              this.loading = false;
               Message({
                 message: "申请失败，检查网络",
                 type: "error",

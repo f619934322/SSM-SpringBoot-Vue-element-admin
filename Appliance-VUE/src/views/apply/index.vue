@@ -263,7 +263,6 @@ export default {
     },
     // 列表数据获取（默认不带检索用参数）
     fetchData() {
-      this.listLoading = false
       const listQuery = {
         pageNum: this.currentPage, // 向后端传的页码
         pageSize: this.pagesize, // 向后端传的单页条数
@@ -335,7 +334,6 @@ export default {
                   this.applyObj = Object.assign({}, applyObj) // 重新给修改用对象赋值初始化，applyObj为全局const对象
                   this.fetchData()
                 } else {
-                  this.loading = false
                   Message({
                     message: '操作失败',
                     type: 'error',
@@ -344,7 +342,6 @@ export default {
                 }
               })
               .catch(() => {
-                this.loading = false
                 Message({
                   message: '操作失败',
                   type: 'error',
