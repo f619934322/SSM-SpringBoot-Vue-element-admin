@@ -105,6 +105,7 @@ public class DemandController {
 		log.info("执行excelDemand");
 		DemandDto demandDto = new DemandDto();
 		demandDto.setStatus(status);
+		demandDto.setAddedFlag(-1); // 因为mybaits判断用-1来认定未传参数，所以赋值-1
 		BaseResponse<List<DemandVo>> response = demandService.excelDemand(demandDto);
 		List<DemandVo> demandVoList = response.getResponseData();
 		List<DemandVo> demandVoListForexcel = new ArrayList<>();
