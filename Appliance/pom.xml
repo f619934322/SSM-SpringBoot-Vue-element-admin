@@ -13,7 +13,6 @@
 	<artifactId>Appliance</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Appliance</name>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -114,4 +113,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<packaging>war</packaging>
+	<description>Application and management system</description>
 </project>
