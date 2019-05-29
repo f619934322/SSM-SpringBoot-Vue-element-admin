@@ -113,6 +113,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<packaging>war</packaging>
 	<description>Application and management system</description>
 </project>
