@@ -12,7 +12,8 @@
 		Item_Type AS itemType,
 		Commit AS commit,
 		Creator AS creator,
-		Updator AS updator
+		Updator AS
+		updator
 		FROM
 		appliance_inventory
 		WHERE
@@ -52,7 +53,7 @@
 	</update>
 	<!-- 教学用品库存单品采购详情获取 -->
 	<select id="inventoryDetailForDemand"
-		parameterType="java.lang.Long"
+		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.DemandVo">
 		SELECT
 		ad.ID AS id,
@@ -63,13 +64,18 @@
 		ad.Creator AS creator,
 		ad.Reviewer AS reviewer,
 		ad.Create_Time AS createTime,
-		ad.Review_Time AS reviewTime,
+		ad.Review_Time AS
+		reviewTime,
 		ad.Review_Commit AS reviewCommit
 		FROM
 		appliance_inventory ai
 		LEFT JOIN appliance_demand ad ON ai.ID = ad.Inventory_ID
 		WHERE
-		ai.ID = #{id}
+		ai.ID =
+		#{id}
+		<if test="creator != null and creator !=''">
+			AND ad.Creator LIKE '%${creator}%'
+		</if>
 	</select>
 	<!-- 根据需求表ID查出对应库存表数据 -->
 	<select id="selectInventoryByDemandId"
@@ -80,7 +86,8 @@
 		FROM
 		appliance_inventory
 		WHERE
-		Demand_ID = #{demandId}
+		Demand_ID =
+		#{demandId}
 	</select>
 	<!-- 更新库存表数量 -->
 	<update id="updateInventoryForitemCount"
@@ -125,7 +132,8 @@
 		SELECT
 		ID AS id,
 		Item_Name AS itemName,
-		Item_Count AS itemCount
+		Item_Count AS
+		itemCount
 		FROM
 		appliance_inventory
 		WHERE
@@ -133,7 +141,7 @@
 	</select>
 	<!-- 查询库存领取详情 -->
 	<select id="inventoryDetailForApply"
-		parameterType="java.lang.Long"
+		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.ApplyVo">
 		SELECT
 		aa.ID AS id,
@@ -144,12 +152,17 @@
 		aa.Creator AS creator,
 		aa.Create_Time AS createTime,
 		aa.Reviewer AS reviewer,
-		aa.Review_Commit AS reviewCommit,
+		aa.Review_Commit
+		AS reviewCommit,
 		aa.Review_Time AS reviewTime
 		FROM
 		appliance_inventory ai
 		LEFT JOIN appliance_apply aa ON ai.ID = aa.Inventory_ID
 		WHERE
-		ai.ID = #{id} AND (aa.Status = 2 ||aa.Status = 3)
+		ai.ID =
+		#{id} AND (aa.Status = 2 ||aa.Status = 3)
+		<if test="creator != null and creator !=''">
+			AND aa.Creator LIKE '%${creator}%'
+		</if>
 	</select>
 </mapper>

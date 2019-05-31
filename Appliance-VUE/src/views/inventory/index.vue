@@ -239,6 +239,17 @@
     <!-- /库存申领弹窗 -->
     <!-- 库存采购详情弹窗 -->
     <el-dialog :visible.sync="dialogDemandDetail" title="库存采购详情">
+        <el-input
+            v-model.trim="creator"
+            clearable
+            style="width: 200px;"
+            class="filter-item"
+            placeholder="请输入领取人姓名"
+          />
+        <el-button
+          icon="el-icon-search"
+          @click="detailForDemand(id)"
+        >搜索</el-button>
       <el-table
         v-loading.body="listLoading"
         :data="demandDetailList"
@@ -269,6 +280,17 @@
     <!-- /库存采购详情弹窗 -->
     <!-- 库存领取详情弹窗 -->
     <el-dialog :visible.sync="dialogApplyDetail" title="库存领取详情">
+        <el-input
+            v-model.trim="creator"
+            clearable
+            style="width: 200px;"
+            class="filter-item"
+            placeholder="请输入领取人姓名"
+          />
+        <el-button
+          icon="el-icon-search"
+          @click="detailForApply(id)"
+        >搜索</el-button>
       <el-table
         v-loading.body="listLoading"
         :data="applyDetailList"
@@ -448,6 +470,8 @@ export default {
       applyDetailList: null, // 这是库存领取详情list，默认null
       delItemId: null, // 这是单选删除的物品id
       itemCount: null, // 这是单选删除的物品数量
+      id: null, // 用于领取详情的id，因为调用了同一个方法，需要把id保存在data，双向绑定，再次使用
+      creator: null, // 这是领取详情的领取人input绑定的对象
       itemTypeList: [
         { key: 1, itemType: "桌椅柜" },
         { key: 2, itemType: "文具" },
@@ -726,9 +750,15 @@ export default {
     },
     // 库存物品采购详情弹窗显示
     detailForDemand(id) {
+      this.id = id;
+      const search = {
+        id,
+        creator: this.creator
+      };
       // 先获取详情数据，再展示窗口
-      inventoryDetailForDemand(id)
+      inventoryDetailForDemand(search)
         .then(response => {
+          this.creator = null; // 检索完后清空
           const data = response.data;
           if (data.statusCode === 200) {
             this.demandDetailList = data.responseData;
@@ -751,9 +781,15 @@ export default {
     },
     // 库存领取详情弹窗显示
     detailForApply(id) {
+      this.id = id;
+      const search = {
+        id,
+        creator: this.creator
+      };
       // 先获取详情数据，再展示窗口
-      inventoryDetailForApply(id)
+      inventoryDetailForApply(search)
         .then(response => {
+          this.creator = null; // 检索完后清空
           const data = response.data;
           if (data.statusCode === 200) {
             this.applyDetailList = data.responseData;

@@ -94,9 +94,9 @@ public class InventoryController {
 	 * @return
 	 */
 	@PostMapping(value = "/inventoryDetailForDemand", produces = { "application/json;charset=utf-8" })
-	public String inventoryDetailForDemand(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
+	public String inventoryDetailForDemand(@RequestBody InventoryDto inventoryDto) {// 这样写，前端给的不是json格式，而是一个数字
 		log.info("执行inventoryDetailForDemand");
-		BaseResponse<List<DemandVo>> response = inventoryService.inventoryDetailForDemand(id);
+		BaseResponse<List<DemandVo>> response = inventoryService.inventoryDetailForDemand(inventoryDto);
 		String resultToString = JSON.toJSONString(response);
 		log.info("inventoryDetailForDemand返回的JSON: {}", resultToString);
 		return resultToString;
@@ -109,9 +109,9 @@ public class InventoryController {
 	 * @return
 	 */
 	@PostMapping(value = "/inventoryDetailForApply", produces = { "application/json;charset=utf-8" })
-	public String inventoryDetailForApply(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
+	public String inventoryDetailForApply(@RequestBody InventoryDto inventoryDto) {// 这样写，前端给的不是json格式，而是一个数字
 		log.info("执行inventoryDetailForApply");
-		BaseResponse<List<ApplyVo>> response = inventoryService.inventoryDetailForApply(id);
+		BaseResponse<List<ApplyVo>> response = inventoryService.inventoryDetailForApply(inventoryDto);
 		String resultToString = JSON.toJSONString(response);
 		log.info("inventoryDetailForApply返回的JSON: {}", resultToString);
 		return resultToString;

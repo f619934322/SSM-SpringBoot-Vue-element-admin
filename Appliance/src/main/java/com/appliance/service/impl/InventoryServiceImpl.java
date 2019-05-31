@@ -150,9 +150,9 @@ public class InventoryServiceImpl implements InventoryService {
 	 * 库存物品的采购详情
 	 */
 	@Override
-	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(Long id) {
+	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(InventoryDto inventoryDto) {
 		try {
-			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetailForDemand(id);
+			List<DemandVo> inventoryDetail = inventoryMapper.inventoryDetailForDemand(inventoryDto);
 			BaseResponse<List<DemandVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryDetail);
 			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
@@ -171,9 +171,9 @@ public class InventoryServiceImpl implements InventoryService {
 	 * 库存领取详情
 	 */
 	@Override
-	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(Long id) {
+	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(InventoryDto inventoryDto) {
 		try {
-			List<ApplyVo> inventoryDetail = inventoryMapper.inventoryDetailForApply(id);
+			List<ApplyVo> inventoryDetail = inventoryMapper.inventoryDetailForApply(inventoryDto);
 			BaseResponse<List<ApplyVo>> response = new BaseResponse<>();
 			response.setResponseData(inventoryDetail);
 			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());

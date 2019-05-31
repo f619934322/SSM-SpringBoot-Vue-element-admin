@@ -37,7 +37,7 @@ public interface InventoryMapper {
 	 * @param id
 	 * @return
 	 */
-	public List<DemandVo> inventoryDetailForDemand(Long id);
+	public List<DemandVo> inventoryDetailForDemand(InventoryDto inventoryDto);
 
 	/**
 	 * 新增库存
@@ -75,5 +75,5 @@ public interface InventoryMapper {
 	 * @param id
 	 * @return
 	 */
-	public List<ApplyVo> inventoryDetailForApply(Long id);
+	public List<ApplyVo> inventoryDetailForApply(InventoryDto inventoryDto);
 }

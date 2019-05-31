@@ -49,7 +49,7 @@ public interface InventoryService {
 	 * @param id
 	 * @return
 	 */
-	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(Long id);
+	public BaseResponse<List<DemandVo>> inventoryDetailForDemand(InventoryDto inventoryDto);
 
 	/**
 	 * 库存物品领取详情
@@ -57,5 +57,5 @@ public interface InventoryService {
 	 * @param id
 	 * @return
 	 */
-	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(Long id);
+	public BaseResponse<List<ApplyVo>> inventoryDetailForApply(InventoryDto inventoryDto);
 }

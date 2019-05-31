@@ -44,9 +44,6 @@ export function inventoryDetailForDemand(data) {
   return request({
     url: '/appliance/inventory/inventoryDetailForDemand',
     method: 'post',
-    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
-      'Content-Type': 'application/json'
-    },
     data
   })
 }
@@ -56,9 +53,6 @@ export function inventoryDetailForApply(data) {
   return request({
     url: '/appliance/inventory/inventoryDetailForApply',
     method: 'post',
-    headers: { // 自定义Content-Type为json格式，否则此处为application/x-www-form-urlencoded，后端接收不了
-      'Content-Type': 'application/json'
-    },
     data
   })
 }
