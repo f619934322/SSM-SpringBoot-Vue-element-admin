@@ -96,7 +96,8 @@
 		#{purchasePrice,jdbcType=INTEGER},
 		Status =
 		#{status,jdbcType=INTEGER},
-		Reviewer = #{reviewer,jdbcType=VARCHAR},
+		Reviewer = 
+		#{reviewer,jdbcType=VARCHAR},
 		Review_Time =
 		#{reviewTime,jdbcType=VARCHAR},
 		Review_Commit =

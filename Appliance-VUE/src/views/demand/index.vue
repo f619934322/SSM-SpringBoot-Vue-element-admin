@@ -328,7 +328,8 @@ export default {
         reviewCommit: [
           {
             required: true,
-            message: '应输入物品的数量单位（例如：个、只、张、包），以及审核批注',
+            message:
+              '应输入物品的数量单位（例如：个、只、张、包），以及审核批注',
             trigger: 'blur'
           }
         ]

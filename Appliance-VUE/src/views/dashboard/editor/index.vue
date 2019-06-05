@@ -1,5 +1,5 @@
 <template>
- <!-- 当用户权限不是admin时，主页是这个 -->
+  <!-- 当用户权限不是admin时，主页是这个 -->
   <div class="dashboard-editor-container">
     <h1>欢迎使用本采购系统</h1>
     <div class=" clearfix">
@@ -12,17 +12,17 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "DashboardEditor",
+  name: 'DashboardEditor',
   data() {
-    return {};
+    return {}
   },
   computed: {
-    ...mapGetters(["name", "roles"])
+    ...mapGetters(['name', 'roles'])
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

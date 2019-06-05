@@ -29,7 +29,7 @@
           <router-link to="/user/changePassword">
             <el-dropdown-item>{{ $t('navbar.changePassword') }}</el-dropdown-item>
           </router-link>
-<!--           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <!--           <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>{{ $t('navbar.github') }}</el-dropdown-item>
           </a> -->
           <el-dropdown-item divided>

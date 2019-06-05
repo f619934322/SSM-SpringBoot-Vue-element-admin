@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           next()
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true } })
+          next({ path: '/401', replace: true, query: { noGoBack: true }})
         }
         // 可删 ↑
       }

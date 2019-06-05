@@ -5,19 +5,16 @@
 	<select id="inventoryList"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
+		SELECT 
 		ID AS id,
 		Item_Name AS itemName,
 		Item_Count AS itemCount,
 		Item_Type AS itemType,
 		Commit AS commit,
 		Creator AS creator,
-		Updator AS
-		updator
-		FROM
-		appliance_inventory
-		WHERE
-		Delete_Flag = 0
+		Updator AS updator
+		FROM appliance_inventory
+		WHERE Delete_Flag = 0
 		<if test="itemName != null and itemName !=''">AND Item_Name LIKE '%${itemName}%'</if>
 		<if test="itemType != null and itemType !=''">AND Item_Type =#{itemType}</if>
 	</select>
@@ -45,7 +42,8 @@
 			#{itemType,jdbcType=VARCHAR},
 		</if>
 		<if test="commit != null and commit !=''"> Commit = #{commit,jdbcType=VARCHAR},</if>
-		Updator = #{updator,jdbcType=VARCHAR},
+		Updator = 
+		#{updator,jdbcType=VARCHAR},
 		Update_Time =
 		#{updateTime,jdbcType=VARCHAR}
 		WHERE
@@ -55,7 +53,7 @@
 	<select id="inventoryDetailForDemand"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.DemandVo">
-		SELECT
+		SELECT 
 		ad.ID AS id,
 		ad.Item_Name AS itemName,
 		ad.Item_Count AS itemCount,
@@ -64,15 +62,14 @@
 		ad.Creator AS creator,
 		ad.Reviewer AS reviewer,
 		ad.Create_Time AS createTime,
-		ad.Review_Time AS
-		reviewTime,
+		ad.Review_Time AS reviewTime,
 		ad.Review_Commit AS reviewCommit
 		FROM
 		appliance_inventory ai
-		LEFT JOIN appliance_demand ad ON ai.ID = ad.Inventory_ID
-		WHERE
-		ai.ID =
-		#{id}
+		LEFT JOIN appliance_demand ad
+		ON ai.ID =
+		ad.Inventory_ID
+		WHERE ai.ID = #{id}
 		<if test="creator != null and creator !=''">
 			AND ad.Creator LIKE '%${creator}%'
 		</if>
@@ -81,13 +78,10 @@
 	<select id="selectInventoryByDemandId"
 		parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
+		SELECT 
 		ID AS id
-		FROM
-		appliance_inventory
-		WHERE
-		Demand_ID =
-		#{demandId}
+		FROM appliance_inventory
+		WHERE Demand_ID = #{demandId}
 	</select>
 	<!-- 更新库存表数量 -->
 	<update id="updateInventoryForitemCount"
@@ -129,22 +123,18 @@
 	<!-- 根据库存表ID查出一条数据 -->
 	<select id="selectInventoryById" parameterType="java.lang.Long"
 		resultType="com.appliance.pojo.vo.InventoryVo">
-		SELECT
+		SELECT 
 		ID AS id,
 		Item_Name AS itemName,
-		Item_Count AS
-		itemCount
-		FROM
-		appliance_inventory
-		WHERE
-		ID = #{id}
+		Item_Count AS itemCount
+		FROM appliance_inventory
+		WHERE ID = #{id}
 	</select>
 	<!-- 查询库存领取详情 -->
 	<select id="inventoryDetailForApply"
 		parameterType="com.appliance.pojo.dto.InventoryDto"
 		resultType="com.appliance.pojo.vo.ApplyVo">
-		SELECT
-		aa.ID AS id,
+		SELECT aa.ID AS id,
 		aa.Item_Name AS itemName,
 		aa.Item_Count AS itemCount,
 		aa.Status AS status,
@@ -152,15 +142,13 @@
 		aa.Creator AS creator,
 		aa.Create_Time AS createTime,
 		aa.Reviewer AS reviewer,
-		aa.Review_Commit
-		AS reviewCommit,
+		aa.Review_Commit AS reviewCommit,
 		aa.Review_Time AS reviewTime
-		FROM
-		appliance_inventory ai
-		LEFT JOIN appliance_apply aa ON ai.ID = aa.Inventory_ID
-		WHERE
-		ai.ID =
-		#{id} AND (aa.Status = 2 ||aa.Status = 3)
+		FROM appliance_inventory ai
+		LEFT JOIN appliance_apply aa
+		ON ai.ID = aa.Inventory_ID
+		WHERE ai.ID = #{id}
+		AND (aa.Status = 2 ||aa.Status = 3)
 		<if test="creator != null and creator !=''">
 			AND aa.Creator LIKE '%${creator}%'
 		</if>
