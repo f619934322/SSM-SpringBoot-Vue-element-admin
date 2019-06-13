@@ -119,10 +119,10 @@ public class DemandController {
 		}
 		String fileName = "采购需求清单";
 		// 列名
-		String[] columnNames = { "ID", "物品名称", "需求标识", "采购需求数量", "物品类型", "采购金额", "审核状态", "采购需求原因", "采购需求提起人",
+		String[] columnNames = { "ID", "物品名称", "需求标识", "采购需求数量", "物品类型", "采购金额", "采购需求原因", "采购需求提起人",
 				"采购需求发起时间", "审核人", "审核时间", "审核备注" };
 		// map中的key
-		String[] keys = { "id", "itemName", "addedFlagStr", "itemCount", "itemType", "purchasePrice", "status",
+		String[] keys = { "id", "itemName", "addedFlagStr", "itemCount", "itemType", "purchasePrice",
 				"commit", "creator", "createTime", "reviewer", "reviewTime", "reviewCommit" };
 		ExportPOIUtils.startDownload(httpServletResponse, fileName, demandVoListForexcel, columnNames, keys);
 		String resultToString = JSON.toJSONString(response);

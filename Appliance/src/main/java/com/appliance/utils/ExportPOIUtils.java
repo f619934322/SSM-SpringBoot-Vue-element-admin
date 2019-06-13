@@ -57,18 +57,13 @@ public class ExportPOIUtils {
 		response.setHeader("Content-Disposition",
 				"attachment;filename=" + new String((fileName + ".xls").getBytes(), "iso-8859-1"));
 		ServletOutputStream out = response.getOutputStream();
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		try {
-			bis = new BufferedInputStream(is);
-			bos = new BufferedOutputStream(out);
+		try (BufferedInputStream bis = new BufferedInputStream(is);
+				BufferedOutputStream bos = new BufferedOutputStream(out);) {
 			byte[] buff = new byte[2048];
 			int bytesRead;
 			while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
 				bos.write(buff, 0, bytesRead);
 			}
-			bis.close();
-			bos.close();
 		} catch (final IOException e) {
 			log.warn(ERROR, e);
 			throw e;
@@ -96,7 +91,9 @@ public class ExportPOIUtils {
 	/**
 	 * 利用反射 根据属性名获取属性值
 	 */
-	private static Object getFieldValueByName(String fieldName, Object o, Class<?>[] c, Object[] oa) { //sonar Noncompliant修复2019-04-04 18:05:25
+	private static Object getFieldValueByName(String fieldName, Object o, Class<?>[] c, Object[] oa) { // sonar
+																										// Noncompliant修复2019-04-04
+																										// 18:05:25
 		try {
 			String firstLetter = fieldName.substring(0, 1).toUpperCase();
 			String getter = "get" + firstLetter + fieldName.substring(1);
