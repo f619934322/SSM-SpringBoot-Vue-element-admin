@@ -14,12 +14,13 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
-          size="mini"
+          :picker-options="pickerOptions"
           clearable
+          size="mini"
           value-format="yyyy-MM-dd"
-          type="datetimerange"
-          range-separator="至"
+          type="daterange"
           start-placeholder="开始日期"
+          range-separator="至"
           end-placeholder="结束日期"
         />
         <el-select
@@ -179,7 +180,12 @@ export default {
       addedFlagList: [
         { key: 0, addedFlag: 0, addedFlagName: '需要补充' },
         { key: 1, addedFlag: 1, addedFlagName: '需要新增' }
-      ] // 这是下拉框选项的需求标识
+      ], // 这是下拉框选项的需求标识
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6
+        }
+      } // 这是时间选择的限制，设置为当前日期之后的不可选（大于号改小于号是当前日期之前不可选；-8.64e6不包括当前日期，-8.64e7包括当前日期）
     }
   },
   created() {
@@ -240,7 +246,7 @@ export default {
         this.listLoading = false
       })
     }
-  }
+  } // 这是方法末尾花括号
 }
 </script>
 <style>

@@ -14,12 +14,13 @@
         </el-tooltip>
         <el-date-picker
           v-model="searchOptions.createTimeBeginToEnd"
+          :picker-options="pickerOptions"
           clearable
           size="mini"
           value-format="yyyy-MM-dd"
-          type="datetimerange"
-          range-separator="至"
+          type="daterange"
           start-placeholder="开始日期"
+          range-separator="至"
           end-placeholder="结束日期"
         />
         <el-select
@@ -145,7 +146,12 @@ export default {
         { key: 1, status: 1, statusName: '驳回' },
         { key: 2, status: 2, statusName: '审核但未领取' },
         { key: 3, status: 3, statusName: '领取完毕' }
-      ]
+      ],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6
+        }
+      } // 这是时间选择的限制，设置为当前日期之后的不可选（大于号改小于号是当前日期之前不可选；-8.64e6不包括当前日期，-8.64e7包括当前日期）
     }
   },
   created() {
