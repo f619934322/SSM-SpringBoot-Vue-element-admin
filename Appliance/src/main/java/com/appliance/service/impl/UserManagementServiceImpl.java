@@ -139,10 +139,10 @@ public class UserManagementServiceImpl implements UserManagementService {
 				response.setStatusMsg("deleteUser单选删除成功");
 				return response;
 			} else {
-				canNotDelete.append(userVo.getStaffNo()).append(",是当前操作用户，不可删除");
+				canNotDelete.append(userVo.getStaffNo()).append(",").append("是当前操作用户,不可删除");
 				BaseResponse<String> response = new BaseResponse<>();
 				response.setStatusCode(DictionaryEnum.REQUEST_FAILED.getCode());
-				response.setStatusMsg("deleteUser单选删除失败" + canNotDelete);
+				response.setStatusMsg("deleteUser单选删除失败," + canNotDelete);
 				return response;
 			}
 		} catch (Exception e) {
@@ -210,12 +210,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 					userDto.setId(id);
 					userMapper.deleteUser(userDto); // 将Long数组遍历然后对每一个id进行删除操作
 				} else {
-					canNotDelete.append(userVo.getStaffNo()).append(",是当前操作用户，不可删除");
+					canNotDelete.append(userVo.getStaffNo()).append("是当前操作用户,该用户不可删除");
 				}
 			}
 			BaseResponse<String> response = new BaseResponse<>();
 			response.setStatusCode(DictionaryEnum.REQUEST_SUCCESS.getCode());
-			response.setStatusMsg("批量删除完成" + canNotDelete);
+			response.setStatusMsg("批量删除完成," + canNotDelete);
 			return response;
 		} catch (Exception e) {
 			log.error("batchDeleteInventory批量删除失败,信息：", e);

@@ -489,7 +489,7 @@ export default {
           } else {
             Message({
               message: data.statusMsg,
-              type: 'error',
+              type: 'warning',
               duration: 5 * 1000
             })
           }
