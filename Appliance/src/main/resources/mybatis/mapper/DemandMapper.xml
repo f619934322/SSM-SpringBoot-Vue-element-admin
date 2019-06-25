@@ -93,7 +93,7 @@
 		Item_Count =
 		#{itemCount,jdbcType=INTEGER},
 		Purchase_Price =
-		#{purchasePrice,jdbcType=INTEGER},
+		#{purchasePrice,jdbcType=NUMERIC},
 		Status =
 		#{status,jdbcType=INTEGER},
 		Reviewer = 

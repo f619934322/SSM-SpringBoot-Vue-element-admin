@@ -1,6 +1,7 @@
 package com.appliance.pojo.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import lombok.Data;
 
@@ -50,7 +51,7 @@ public class DemandVo implements Serializable {
 	/**
 	 * 采购金额
 	 */
-	private Double purchasePrice;
+	private BigDecimal purchasePrice;
 
 	/**
 	 * 审核状态(0未审核，1驳回，2已通过（等待采购），3采购失败，4采购完成)

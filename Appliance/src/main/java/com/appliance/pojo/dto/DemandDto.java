@@ -1,6 +1,7 @@
 package com.appliance.pojo.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.appliance.model.PaginationBase;
 
@@ -49,7 +50,7 @@ public class DemandDto extends PaginationBase implements Serializable {
 	/**
 	 * 采购金额
 	 */
-	private Double purchasePrice;
+	private BigDecimal purchasePrice;
 
 	/**
 	 * 审核状态(0未审核，1驳回，2已通过（等待采购），3采购失败，4采购完成)
