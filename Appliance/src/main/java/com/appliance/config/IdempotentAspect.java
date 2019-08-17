@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.appliance.annotation.Idempotent;
+import com.appliance.exception.IdempotentException;
 import com.appliance.utils.KeyUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +68,7 @@ public class IdempotentAspect {
 			return joinPoint.proceed();
 		} else {
 			log.debug("Idempotent hits, key=" + key);
-			throw new Exception("Idempotent hits, key=" + key);
+			throw new IdempotentException("Idempotent hits, key=" + key);
 		}
 	}
 }
