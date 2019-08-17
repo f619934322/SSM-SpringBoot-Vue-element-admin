@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.annotation.Idempotent;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
@@ -29,6 +30,7 @@ public class LoginController {
 	 * @param userDto
 	 * @return
 	 */
+	@Idempotent(value = "/userLogin", expireMillis = 1000L)
 	@PostMapping(value = "/userLogin", produces = { "application/json" })
 	public String login(@RequestBody UserDto userDto) {
 		log.info("执行userLogin");
@@ -43,6 +45,7 @@ public class LoginController {
 	 * 
 	 * @return
 	 */
+	@Idempotent(value = "/userLogout", expireMillis = 1000L)
 	@PostMapping(value = "/userLogout", produces = { "application/json" })
 	public String userLogout() {
 		log.info("执行userLogout");
@@ -54,6 +57,7 @@ public class LoginController {
 
 	/**
 	 * 获取用户信息给前端
+	 * 
 	 * @return
 	 */
 	@GetMapping(value = "/getUserInfo", produces = { "application/json" })

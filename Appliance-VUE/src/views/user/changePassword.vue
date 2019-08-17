@@ -8,7 +8,7 @@
             <el-input
               v-model="changePasswordObj.oldPassword"
               :type="passwordType"
-              auto-complete="new-password"
+              auto-complete="old-password"
               placeholder="请输入旧密码"
             />
           </el-form-item>
@@ -46,8 +46,7 @@ const changePasswordObj = {
   // 插入更新等对象在这初始化
   oldPassword: null,
   newPassword: null,
-  newPassword2: null,
-  password: null
+  newPassword2: null
 }
 export default {
   data() {

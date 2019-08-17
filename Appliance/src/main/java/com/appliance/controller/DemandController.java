@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.annotation.Idempotent;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.DemandDto;
 import com.appliance.pojo.vo.DemandVo;
@@ -38,6 +39,7 @@ public class DemandController {
 	 * @param demandDto
 	 * @return
 	 */
+	@Idempotent(value =  "/insertNewDemand", expireMillis = 1000L)
 	@PostMapping(value = "/insertNewDemand", produces = { "application/json" })
 	public String insertNewDemand(@RequestBody DemandDto demandDto) {// 新增采购需求，在需求表里新增一条数据，并且需求标识为1（新增）
 		log.info("执行insertNewDemand");
@@ -53,6 +55,7 @@ public class DemandController {
 	 * @param demandDto
 	 * @return
 	 */
+	@Idempotent(value =  "/insertSupplementDemand", expireMillis = 1000L)
 	@PostMapping(value = "/insertSupplementDemand", produces = { "application/json" })
 	public String insertSupplementDemand(@RequestBody DemandDto demandDto) {// 补充采购需求，在需求表里新增一条数据，并且需求标识为0（补充）
 		log.info("执行insertSupplementDemand");
@@ -83,6 +86,7 @@ public class DemandController {
 	 * @param demandDto
 	 * @return
 	 */
+	@Idempotent(value = "/reviewDemand", expireMillis = 1000L)
 	@PostMapping(value = "/reviewDemand", produces = { "application/json" })
 	public String reviewDemand(@RequestBody DemandDto demandDto) {
 		log.info("执行reviewDemand");

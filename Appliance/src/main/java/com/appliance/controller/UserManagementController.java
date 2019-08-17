@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.annotation.Idempotent;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.UserDto;
 import com.appliance.pojo.vo.UserVo;
@@ -44,6 +45,7 @@ public class UserManagementController {
 	 * @param userDto
 	 * @return
 	 */
+	@Idempotent(value = "/insertUser", expireMillis = 1000L)
 	@PostMapping(value = "/insertUser", produces = { "application/json" })
 	public String insertUser(@RequestBody UserDto userDto) {
 		log.info("执行insertUser");
@@ -59,6 +61,7 @@ public class UserManagementController {
 	 * @param userDto
 	 * @return
 	 */
+	@Idempotent(value = "/updateUser", expireMillis = 1000L)
 	@PostMapping(value = "/updateUser", produces = { "application/json" })
 	public String updateUser(@RequestBody UserDto userDto) {
 		log.info("执行updateUser");
@@ -74,6 +77,7 @@ public class UserManagementController {
 	 * @param id
 	 * @return
 	 */
+	@Idempotent(value = "/deleteUser", expireMillis = 1000L)
 	@PostMapping(value = "/deleteUser", produces = { "application/json;charset=utf-8" })
 	public String deleteUser(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
 		log.info("执行deleteUser");
@@ -89,6 +93,7 @@ public class UserManagementController {
 	 * @param userDto
 	 * @return
 	 */
+	@Idempotent(value = "/passwordUpdate", expireMillis = 1000L)
 	@PostMapping(value = "/passwordUpdate", produces = { "application/json" })
 	public String passwordUpdate(@RequestBody UserDto userDto) {
 		log.info("执行passwordUpdate");
@@ -104,6 +109,7 @@ public class UserManagementController {
 	 * @param ids
 	 * @return
 	 */
+	@Idempotent(value = "/bacthDeleteUser", expireMillis = 1000L)
 	@PostMapping(value = "/bacthDeleteUser", produces = { "application/json" })
 	public String bacthDeleteUser(@RequestBody Long[] ids) {
 		log.info("执行bacthDeleteUser");

@@ -10,6 +10,9 @@ import com.appliance.utils.DictionaryEnum;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 权限不足被shiro重定向
+ */
 @Slf4j
 @RestController
 @RequestMapping("/appliance/fallback")

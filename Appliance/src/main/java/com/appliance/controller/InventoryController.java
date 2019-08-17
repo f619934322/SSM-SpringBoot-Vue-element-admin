@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.annotation.Idempotent;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.InventoryDto;
 import com.appliance.pojo.vo.ApplyVo;
@@ -48,6 +49,7 @@ public class InventoryController {
 	 * @param ids
 	 * @return
 	 */
+	@Idempotent(value =  "/batchDeleteInventory", expireMillis = 1000L)
 	@PostMapping(value = "/batchDeleteInventory", produces = { "application/json;charset=utf-8" })
 	public String batchDeleteInventory(@RequestBody Long[] ids) {
 		log.info("执行batchDeleteInventory");
@@ -63,6 +65,7 @@ public class InventoryController {
 	 * @param id
 	 * @return
 	 */
+	@Idempotent(value =  "/deleteInventory", expireMillis = 1000L)
 	@PostMapping(value = "/deleteInventory", produces = { "application/json;charset=utf-8" })
 	public String deleteInventory(@RequestBody Long id) {// 这样写，前端给的不是json格式，而是一个数字
 		log.info("执行deleteInventory");
@@ -78,6 +81,7 @@ public class InventoryController {
 	 * @param inventoryDto
 	 * @return
 	 */
+	@Idempotent(value = "/updateInventory", expireMillis = 1000L)
 	@PostMapping(value = "/updateInventory", produces = { "application/json;charset=utf-8" })
 	public String updateInventory(@RequestBody InventoryDto inventoryDto) {
 		log.info("执行updateInventory");

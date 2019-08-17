@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.appliance.annotation.Idempotent;
 import com.appliance.model.BaseResponse;
 import com.appliance.pojo.dto.ApplyDto;
 import com.appliance.pojo.vo.ApplyVo;
@@ -44,6 +45,7 @@ public class ApplyController {
 	 * @param applyDto
 	 * @return
 	 */
+	@Idempotent(value = "/insertApply", expireMillis = 1000L)
 	@PostMapping(value = "/insertApply", produces = { "application/json" })
 	public String insertApply(@RequestBody ApplyDto applyDto) {
 		log.info("执行insertApply");
@@ -59,6 +61,7 @@ public class ApplyController {
 	 * @param applyDto
 	 * @return
 	 */
+	@Idempotent(value = "/reviewApply", expireMillis = 1000L)
 	@PostMapping(value = "/reviewApply", produces = { "application/json" })
 	public String reviewApply(@RequestBody ApplyDto applyDto) {
 		log.info("执行reviewApply");
