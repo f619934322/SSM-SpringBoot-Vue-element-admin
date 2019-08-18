@@ -45,6 +45,7 @@ public class ShiroConfig {
 		 * 
 		 * role:该资源必须得到角色的权限才可以访问。
 		 */
+		// 使得所写路径被拦截，需要资源权限;需要多权限写法：perms[a],perms[b],中括号中间字符串为自定义。此处路径若有多个，务必一个个put，一次可以拦截一个类的所有方法
 		filterMap.put("/appliance/user/userLogin", "anon");// 放行的路径必须在拦截的上面编写，否则失效，一般将 /**放在最为下边
 		filterMap.put("/appliance/inventory/inventoryList", PERMNORMAL);
 		filterMap.put("/appliance/inventory/inventoryDetailForDemand", PERMNORMAL);
@@ -58,7 +59,6 @@ public class ShiroConfig {
 		filterMap.put("/appliance/demand/insertNewDemand", PERMNORMAL);
 		filterMap.put("/appliance/demand/insertSupplementDemand", PERMNORMAL);
 		filterMap.put("/appliance/userManagement/passwordUpdate", PERMNORMAL);
-		filterMap.put("/appliance/demo/**", PERMNORMAL);// 使得所写路径被拦截，需要资源权限;需要多权限写法：perms[a],perms[b],中括号中间字符串为自定义。此处路径若有多个，务必一个个put，一次可以拦截一个类的所有方法
 		filterMap.put("/appliance/inventory/**", PERMNORMAL);
 		filterMap.put("/appliance/demand/**", PERMADMIN);
 		filterMap.put("/appliance/apply/**", PERMADMIN);
