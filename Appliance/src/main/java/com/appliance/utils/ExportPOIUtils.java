@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,12 +40,12 @@ public class ExportPOIUtils {
 	public static void startDownload(HttpServletResponse response, String fileName, List<?> projects,
 			String[] columnNames, String[] keys) throws IOException {
 
-		// 将集合中对象的属性 对应到 List<Map<String,Object>>
+		// 将集合中对象的属性 对应到 List<Map<String,Object>>，之后可以以字段名（list.get(keys[i])）获取字段值并赋值单元格
 		List<Map<String, Object>> list = createExcelRecord(projects, keys);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
-			// 将转换成的Workbook对象通过流形式下载
+			// 将转换成的Workbook对象通过流形式下载，只要workbook对象执行.write(输出流)方法即下载
 			createWorkBook(list, keys, columnNames).write(os);
 		} catch (IOException e) {
 			log.warn(ERROR, e);
@@ -114,10 +115,10 @@ public class ExportPOIUtils {
 	 *            excel的列名
 	 */
 	private static Workbook createWorkBook(List<Map<String, Object>> list, String[] keys, String[] columnNames) {
-		// 创建excel工作簿
-		Workbook wb = new HSSFWorkbook();
+		// 创建excel工作簿，采用SXSSFWorkbook，每10000个对象清除内存，防止OOM
+		Workbook sxssWorkbook = new SXSSFWorkbook(10000);
 		// 创建第一个sheet（页），并命名
-		Sheet sheet = wb.createSheet(list.get(0).get("sheetName").toString());
+		Sheet sheet = sxssWorkbook.createSheet(list.get(0).get("sheetName").toString());
 		// 手动设置列宽。第一个参数表示要为第几列设；，第二个参数表示列的宽度，n为列高的像素数。
 		for (int i = 0; i < keys.length; i++) {
 			sheet.setColumnWidth((short) i, (short) (35.7 * 150));
@@ -127,12 +128,12 @@ public class ExportPOIUtils {
 		Row row = sheet.createRow((short) 0);
 
 		// 创建两种单元格格式
-		CellStyle cs = wb.createCellStyle();
-		CellStyle cs2 = wb.createCellStyle();
+		CellStyle cs = sxssWorkbook.createCellStyle();
+		CellStyle cs2 = sxssWorkbook.createCellStyle();
 
 		// 创建两种字体
-		Font f = wb.createFont();
-		Font f2 = wb.createFont();
+		Font f = sxssWorkbook.createFont();
+		Font f2 = sxssWorkbook.createFont();
 
 		// 创建第一种字体样式（用于列名）
 		f.setFontHeightInPoints((short) 10);
@@ -173,11 +174,12 @@ public class ExportPOIUtils {
 			// 在row行上创建一个方格
 			for (short j = 0; j < keys.length; j++) {
 				Cell cell = row1.createCell(j);
+				// 设置每行的每一个单元格
 				cell.setCellValue(list.get(i).get(keys[j]) == null ? " " : list.get(i).get(keys[j]).toString());
 				cell.setCellStyle(cs2);
 			}
 		}
-		return wb;
+		return sxssWorkbook;
 	}
 
 }
