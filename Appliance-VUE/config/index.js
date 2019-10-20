@@ -9,15 +9,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/api': {
-        target: 'http://localhost:8011',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': '/api'
-        }
-      }
-    },
+    // proxyTable: { // 跨域代理，这里的配置暂时用不上
+    //   '/api': {
+    //     target: process.env.BASE_API,
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': '/api'
+    //     }
+    //   }
+    // },
 
     // Various Dev Server settings
 
